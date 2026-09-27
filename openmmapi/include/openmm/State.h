@@ -133,10 +133,15 @@ private:
     friend class StateProxy;
     State(double time, long long stepCount);
     void setPositions(const std::vector<Vec3>& pos);
+    void setPositions(std::vector<Vec3>&& pos);
     void setVelocities(const std::vector<Vec3>& vel);
+    void setVelocities(std::vector<Vec3>&& vel);
     void setForces(const std::vector<Vec3>& force);
+    void setForces(std::vector<Vec3>&& force);
     void setParameters(const std::map<std::string, double>& params);
+    void setParameters(std::map<std::string, double>&& params);
     void setEnergyParameterDerivatives(const std::map<std::string, double>& derivs);
+    void setEnergyParameterDerivatives(std::map<std::string, double>&& derivs);
     void setEnergy(double ke, double pe);
     void setPeriodicBoxVectors(const Vec3& a, const Vec3& b, const Vec3& c);
     SerializationNode& updateIntegratorParameters();
@@ -161,11 +166,18 @@ class OPENMM_EXPORT State::StateBuilder {
 public:
     StateBuilder(double time, long long stepCount);
     State getState();
+    /** Transfer the constructed State without copying its large arrays. */
+    State takeState();
     void setPositions(const std::vector<Vec3>& pos);
+    void setPositions(std::vector<Vec3>&& pos);
     void setVelocities(const std::vector<Vec3>& vel);
+    void setVelocities(std::vector<Vec3>&& vel);
     void setForces(const std::vector<Vec3>& force);
+    void setForces(std::vector<Vec3>&& force);
     void setParameters(const std::map<std::string, double>& params);
+    void setParameters(std::map<std::string, double>&& params);
     void setEnergyParameterDerivatives(const std::map<std::string, double>& params);
+    void setEnergyParameterDerivatives(std::map<std::string, double>&& params);
     void setEnergy(double ke, double pe);
     void setPeriodicBoxVectors(const Vec3& a, const Vec3& b, const Vec3& c);
     SerializationNode& updateIntegratorParameters();

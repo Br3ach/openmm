@@ -33,21 +33,102 @@
 #include "openmm/Platform.h"
 #include "openmm/State.h"
 #include "openmm/Vec3.h"
+#include <cstddef>
+#include <cstdlib>
+#include <cstring>
 #include <map>
 
 using namespace std;
 using namespace OpenMM;
+
+// Implemented in XmlSerializer.cpp.  The normal XmlSerializer<T> template in
+// the already-built caller invokes StateProxy::serialize() first and then calls
+// XmlSerializer::serialize(node, stream).  For very large States we defer the
+// array payload here and let XmlSerializer.cpp stream it directly to XML,
+// avoiding millions of SerializationNode objects without changing the caller.
+namespace OpenMM {
+void clearFastStateXmlSerialization();
+void registerFastStateXmlSerialization(const State* state, SerializationNode* node);
+}
+
+static bool fastXmlEnabledByEnvironment() {
+    const char* value = std::getenv("OPENMM_FAST_XML");
+    if (value == NULL)
+        return true;
+    return !(std::strcmp(value, "0") == 0 ||
+             std::strcmp(value, "false") == 0 ||
+             std::strcmp(value, "FALSE") == 0 ||
+             std::strcmp(value, "off") == 0 ||
+             std::strcmp(value, "OFF") == 0);
+}
+
+static bool fastStateWriteEnabledByEnvironment() {
+    if (!fastXmlEnabledByEnvironment())
+        return false;
+    const char* value = std::getenv("OPENMM_FAST_STATE_WRITE");
+    if (value == NULL)
+        return true; // v7: fast writer is enabled by default.
+    return !(std::strcmp(value, "0") == 0 ||
+             std::strcmp(value, "false") == 0 ||
+             std::strcmp(value, "FALSE") == 0 ||
+             std::strcmp(value, "off") == 0 ||
+             std::strcmp(value, "OFF") == 0);
+}
+
+static bool shouldUseFastStateXml(const State& state, const SerializationNode& node) {
+    if (!fastStateWriteEnabledByEnvironment())
+        return false;
+    // XmlSerializer::clone() invokes the proxy with an unnamed node and then
+    // immediately deserializes that node without passing through the XML
+    // writer.  Likewise, callers may choose an arbitrary XML root name.
+    // Restrict this DLL-only handoff to the canonical State XML serialization
+    // used by existing Core 28 callers.  In particular, clone() and custom-root
+    // serializations retain the normal complete SerializationNode path.
+    if (node.getName() != "State")
+        return false;
+
+    const int types = state.getDataTypes();
+
+    // IntegratorParameters are themselves a SerializationNode tree.  Keep the
+    // stock path for those States so all existing semantics are preserved.
+    if ((types & State::IntegratorParameters) != 0)
+        return false;
+
+    // Restrict the workaround to genuinely large canonical State XML documents.
+    // This keeps ordinary OpenMM serializations on the untouched stock path.
+    const size_t minVectors = 100000;
+    if ((types & State::Positions) != 0 && state.getPositions().size() >= minVectors)
+        return true;
+    if ((types & State::Velocities) != 0 && state.getVelocities().size() >= minVectors)
+        return true;
+    if ((types & State::Forces) != 0 && state.getForces().size() >= minVectors)
+        return true;
+    return false;
+}
 
 StateProxy::StateProxy() : SerializationProxy("State") {
 
 }
 
 void StateProxy::serialize(const void* object, SerializationNode& node) const {
+    // Discard any abandoned handoff from an earlier State serialization on
+    // this thread before registering a new one.
+    clearFastStateXmlSerialization();
+
     node.setIntProperty("version", 1);
     node.setStringProperty("openmmVersion", Platform::getOpenMMVersion());
     const State& s = *reinterpret_cast<const State*>(object);
     node.setDoubleProperty("time", s.getTime());
     node.setLongProperty("stepCount", s.getStepCount());
+
+    if (shouldUseFastStateXml(s, node)) {
+        // Keep only the small root metadata in the node.  The caller will add
+        // type="State" exactly as before, then XmlSerializer.cpp consumes this
+        // deferred State and emits the normal XML schema directly.
+        registerFastStateXmlSerialization(&s, &node);
+        return;
+    }
+
     Vec3 a,b,c;
     s.getPeriodicBoxVectors(a,b,c);
     SerializationNode& boxVectorsNode = node.createChildNode("PeriodicBoxVectors");
