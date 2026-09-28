@@ -30,18 +30,11 @@
 #include <type_traits>
 #include <typeinfo>
 #include <vector>
-#include "irrXML.h"
-#include <cstdlib>
-#include <sstream>
 #include <streambuf>
 #include <utility>
-#include "openmm/CMMotionRemover.h"
-#include "openmm/MonteCarloBarostat.h"
 
 using namespace OpenMM;
 using namespace std;
-using namespace irr;
-using namespace io;
 
 namespace {
 
