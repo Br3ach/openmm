@@ -33,127 +33,171 @@
 #include "openmm/Platform.h"
 #include "openmm/State.h"
 #include "openmm/Vec3.h"
+#include "FastStateXml.h"
+#include <cstddef>
+#include <cstdlib>
+#include <cstring>
 #include <map>
+#include <utility>
+#include <vector>
 
 using namespace std;
 using namespace OpenMM;
 
-StateProxy::StateProxy() : SerializationProxy("State") {
+namespace {
 
+bool environmentFlagEnabled(const char* name, bool defaultValue=true) {
+    const char* value = std::getenv(name);
+    if (value == NULL)
+        return defaultValue;
+    return !(std::strcmp(value, "0") == 0 ||
+             std::strcmp(value, "false") == 0 ||
+             std::strcmp(value, "FALSE") == 0 ||
+             std::strcmp(value, "off") == 0 ||
+             std::strcmp(value, "OFF") == 0);
+}
+
+bool shouldUseFastStateXml(const State& state, const SerializationNode& node) {
+    if (!environmentFlagEnabled("OPENMM_FAST_XML") ||
+            !environmentFlagEnabled("OPENMM_FAST_STATE_WRITE"))
+        return false;
+
+    // XmlSerializer::clone() uses an unnamed node and custom-root callers may
+    // choose another name.  Only intercept canonical State XML output.
+    if (node.getName() != "State")
+        return false;
+
+    const int types = state.getDataTypes();
+    if ((types & State::IntegratorParameters) != 0)
+        return false;
+
+    const size_t minVectors = 100000;
+    return ((types & State::Positions) != 0 && state.getPositions().size() >= minVectors) ||
+           ((types & State::Velocities) != 0 && state.getVelocities().size() >= minVectors) ||
+           ((types & State::Forces) != 0 && state.getForces().size() >= minVectors);
+}
+
+void recordArraySize(size_t size, bool& haveArraySize, size_t& arraySize) {
+    if (!haveArraySize) {
+        arraySize = size;
+        haveArraySize = true;
+    }
+    else if (arraySize != size) {
+        throw OpenMMException("State Deserialization Particle Size Mismatch, check number of particles in Forces, Velocities, Positions!");
+    }
+}
+
+} // anonymous namespace
+
+StateProxy::StateProxy() : SerializationProxy("State") {
 }
 
 void StateProxy::serialize(const void* object, SerializationNode& node) const {
+    // Discard an abandoned handoff from an earlier serialization on this thread.
+    clearFastStateXmlSerialization();
+
     node.setIntProperty("version", 1);
     node.setStringProperty("openmmVersion", Platform::getOpenMMVersion());
-    const State& s = *reinterpret_cast<const State*>(object);
-    node.setDoubleProperty("time", s.getTime());
-    node.setLongProperty("stepCount", s.getStepCount());
-    Vec3 a,b,c;
-    s.getPeriodicBoxVectors(a,b,c);
+    const State& state = *reinterpret_cast<const State*>(object);
+    node.setDoubleProperty("time", state.getTime());
+    node.setLongProperty("stepCount", state.getStepCount());
+
+    if (shouldUseFastStateXml(state, node)) {
+        registerFastStateXmlSerialization(&state, &node);
+        return;
+    }
+
+    Vec3 a, b, c;
+    state.getPeriodicBoxVectors(a, b, c);
     SerializationNode& boxVectorsNode = node.createChildNode("PeriodicBoxVectors");
     boxVectorsNode.createChildNode("A").setDoubleProperty("x", a[0]).setDoubleProperty("y", a[1]).setDoubleProperty("z", a[2]);
     boxVectorsNode.createChildNode("B").setDoubleProperty("x", b[0]).setDoubleProperty("y", b[1]).setDoubleProperty("z", b[2]);
     boxVectorsNode.createChildNode("C").setDoubleProperty("x", c[0]).setDoubleProperty("y", c[1]).setDoubleProperty("z", c[2]);
-    if ((s.getDataTypes()&State::Parameters) != 0) {
-        s.getParameters();
+
+    if ((state.getDataTypes() & State::Parameters) != 0) {
         SerializationNode& parametersNode = node.createChildNode("Parameters");
-        for (auto& param : s.getParameters())
+        for (const auto& param : state.getParameters())
             parametersNode.setDoubleProperty(param.first, param.second);
     }
-    if ((s.getDataTypes()&State::Energy) != 0) {
-        s.getPotentialEnergy();
+    if ((state.getDataTypes() & State::Energy) != 0) {
         SerializationNode& energiesNode = node.createChildNode("Energies");
-        energiesNode.setDoubleProperty("PotentialEnergy", s.getPotentialEnergy());
-        energiesNode.setDoubleProperty("KineticEnergy", s.getKineticEnergy());
+        energiesNode.setDoubleProperty("PotentialEnergy", state.getPotentialEnergy());
+        energiesNode.setDoubleProperty("KineticEnergy", state.getKineticEnergy());
     }
-    if ((s.getDataTypes()&State::Positions) != 0) {
-        s.getPositions();
+    if ((state.getDataTypes() & State::Positions) != 0) {
         SerializationNode& positionsNode = node.createChildNode("Positions");
-        vector<Vec3> statePositions = s.getPositions();
-        for (int i=0; i<statePositions.size();i++) {
-           positionsNode.createChildNode("Position").setDoubleProperty("x", statePositions[i][0]).setDoubleProperty("y", statePositions[i][1]).setDoubleProperty("z", statePositions[i][2]);
-        }
+        for (const Vec3& position : state.getPositions())
+            positionsNode.createChildNode("Position").setDoubleProperty("x", position[0]).setDoubleProperty("y", position[1]).setDoubleProperty("z", position[2]);
     }
-    if ((s.getDataTypes()&State::Velocities) != 0) {
-        s.getVelocities();
+    if ((state.getDataTypes() & State::Velocities) != 0) {
         SerializationNode& velocitiesNode = node.createChildNode("Velocities");
-        vector<Vec3> stateVelocities = s.getVelocities();
-        for (int i=0; i<stateVelocities.size();i++) {
-           velocitiesNode.createChildNode("Velocity").setDoubleProperty("x", stateVelocities[i][0]).setDoubleProperty("y", stateVelocities[i][1]).setDoubleProperty("z", stateVelocities[i][2]);
-        }
+        for (const Vec3& velocity : state.getVelocities())
+            velocitiesNode.createChildNode("Velocity").setDoubleProperty("x", velocity[0]).setDoubleProperty("y", velocity[1]).setDoubleProperty("z", velocity[2]);
     }
-    if ((s.getDataTypes()&State::Forces) != 0) {
-        s.getForces();
+    if ((state.getDataTypes() & State::Forces) != 0) {
         SerializationNode& forcesNode = node.createChildNode("Forces");
-        vector<Vec3> stateForces = s.getForces();
-        for (int i=0; i<stateForces.size();i++) {
-            forcesNode.createChildNode("Force").setDoubleProperty("x", stateForces[i][0]).setDoubleProperty("y", stateForces[i][1]).setDoubleProperty("z", stateForces[i][2]);
-        }
+        for (const Vec3& force : state.getForces())
+            forcesNode.createChildNode("Force").setDoubleProperty("x", force[0]).setDoubleProperty("y", force[1]).setDoubleProperty("z", force[2]);
     }
-    if ((s.getDataTypes()&State::IntegratorParameters) != 0) {
-        node.getChildren().push_back(s.getIntegratorParameters());
-    }
+    if ((state.getDataTypes() & State::IntegratorParameters) != 0)
+        node.getChildren().push_back(state.getIntegratorParameters());
 }
 
 void* StateProxy::deserialize(const SerializationNode& node) const {
     if (node.getIntProperty("version") != 1)
         throw OpenMMException("Unsupported version number");
-    double outTime = node.getDoubleProperty("time");
-    long long outStepCount = node.getLongProperty("stepCount", 0);
+
+    State::StateBuilder builder(node.getDoubleProperty("time"), node.getLongProperty("stepCount", 0));
+
     const SerializationNode& boxVectorsNode = node.getChildNode("PeriodicBoxVectors");
-    const SerializationNode& AVec = boxVectorsNode.getChildNode("A");
-    Vec3 outAVec(AVec.getDoubleProperty("x"),AVec.getDoubleProperty("y"),AVec.getDoubleProperty("z"));
-    const SerializationNode& BVec = boxVectorsNode.getChildNode("B");
-    Vec3 outBVec(BVec.getDoubleProperty("x"),BVec.getDoubleProperty("y"),BVec.getDoubleProperty("z"));
-    const SerializationNode& CVec = boxVectorsNode.getChildNode("C");
-    Vec3 outCVec(CVec.getDoubleProperty("x"),CVec.getDoubleProperty("y"),CVec.getDoubleProperty("z"));
-    int types = 0;
-    vector<int> arraySizes;
-    State::StateBuilder builder(outTime, outStepCount);
-    for (auto& child : node.getChildren()) {
+    const SerializationNode& aNode = boxVectorsNode.getChildNode("A");
+    const SerializationNode& bNode = boxVectorsNode.getChildNode("B");
+    const SerializationNode& cNode = boxVectorsNode.getChildNode("C");
+    builder.setPeriodicBoxVectors(
+        Vec3(aNode.getDoubleProperty("x"), aNode.getDoubleProperty("y"), aNode.getDoubleProperty("z")),
+        Vec3(bNode.getDoubleProperty("x"), bNode.getDoubleProperty("y"), bNode.getDoubleProperty("z")),
+        Vec3(cNode.getDoubleProperty("x"), cNode.getDoubleProperty("y"), cNode.getDoubleProperty("z")));
+
+    bool haveArraySize = false;
+    size_t arraySize = 0;
+    for (const auto& child : node.getChildren()) {
         if (child.getName() == "Parameters") {
-            map<string, double> outStateParams;
-            for (auto& param : child.getProperties())
-                outStateParams[param.first] = child.getDoubleProperty(param.first);
-            builder.setParameters(outStateParams);
+            map<string, double> parameters;
+            for (const auto& param : child.getProperties())
+                parameters[param.first] = child.getDoubleProperty(param.first);
+            builder.setParameters(std::move(parameters));
         }
         else if (child.getName() == "Energies") {
-            double potentialEnergy = child.getDoubleProperty("PotentialEnergy");
-            double kineticEnergy = child.getDoubleProperty("KineticEnergy");
-            builder.setEnergy(kineticEnergy, potentialEnergy);
+            builder.setEnergy(child.getDoubleProperty("KineticEnergy"), child.getDoubleProperty("PotentialEnergy"));
         }
         else if (child.getName() == "Positions") {
-            vector<Vec3> outPositions;
-            for (auto& particle : child.getChildren())
-                outPositions.push_back(Vec3(particle.getDoubleProperty("x"),particle.getDoubleProperty("y"),particle.getDoubleProperty("z")));
-            builder.setPositions(outPositions);
-            arraySizes.push_back(outPositions.size());
+            vector<Vec3> positions;
+            positions.reserve(child.getChildren().size());
+            for (const auto& particle : child.getChildren())
+                positions.push_back(Vec3(particle.getDoubleProperty("x"), particle.getDoubleProperty("y"), particle.getDoubleProperty("z")));
+            recordArraySize(positions.size(), haveArraySize, arraySize);
+            builder.setPositions(std::move(positions));
         }
         else if (child.getName() == "Velocities") {
-            vector<Vec3> outVelocities;
-            for (auto& particle : child.getChildren())
-                outVelocities.push_back(Vec3(particle.getDoubleProperty("x"),particle.getDoubleProperty("y"),particle.getDoubleProperty("z")));
-            builder.setVelocities(outVelocities);
-            arraySizes.push_back(outVelocities.size());
+            vector<Vec3> velocities;
+            velocities.reserve(child.getChildren().size());
+            for (const auto& particle : child.getChildren())
+                velocities.push_back(Vec3(particle.getDoubleProperty("x"), particle.getDoubleProperty("y"), particle.getDoubleProperty("z")));
+            recordArraySize(velocities.size(), haveArraySize, arraySize);
+            builder.setVelocities(std::move(velocities));
         }
         else if (child.getName() == "Forces") {
-            vector<Vec3> outForces;
-            for (auto& particle : child.getChildren())
-                outForces.push_back(Vec3(particle.getDoubleProperty("x"),particle.getDoubleProperty("y"),particle.getDoubleProperty("z")));
-            builder.setForces(outForces);
-            arraySizes.push_back(outForces.size());
+            vector<Vec3> forces;
+            forces.reserve(child.getChildren().size());
+            for (const auto& particle : child.getChildren())
+                forces.push_back(Vec3(particle.getDoubleProperty("x"), particle.getDoubleProperty("y"), particle.getDoubleProperty("z")));
+            recordArraySize(forces.size(), haveArraySize, arraySize);
+            builder.setForces(std::move(forces));
         }
         else if (child.getName() == "IntegratorParameters") {
             builder.updateIntegratorParameters() = child;
         }
     }
-    for (int i = 1; i < arraySizes.size(); i++) {
-        if (arraySizes[i] != arraySizes[i-1]) {
-            throw(OpenMMException("State Deserialization Particle Size Mismatch, check number of particles in Forces, Velocities, Positions!"));
-        }
-    }
-    builder.setPeriodicBoxVectors(outAVec, outBVec, outCVec);
-    State *s = new State();
-    *s = builder.getState();
-    return s;
+
+    return new State(builder.takeState());
 }
