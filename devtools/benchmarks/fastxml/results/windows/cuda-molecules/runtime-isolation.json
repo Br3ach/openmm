@@ -1,0 +1,25 @@
+{
+  "variant": "candidate",
+  "returncode": 0,
+  "stdout": "{\"pme_energy_finite\":true,\"loaded_modules\":{\"OpenMM.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\\\OpenMM.dll\",\"OpenMMCUDA.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\\\OpenMMCUDA.dll\",\"cufft64_12.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\\\cufft64_12.dll\",\"nvrtc64_130_0.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\\\nvrtc64_130_0.dll\",\"nvrtc-builtins64_134.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\\\nvrtc-builtins64_134.dll\"}}\n",
+  "stderr": "",
+  "isolated_path": "C:\\Windows\\System32;C:\\Windows",
+  "fresh_cache": true,
+  "data": {
+    "pme_energy_finite": true,
+    "loaded_modules": {
+      "OpenMM.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\OpenMM.dll",
+      "OpenMMCUDA.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\OpenMMCUDA.dll",
+      "cufft64_12.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\cufft64_12.dll",
+      "nvrtc64_130_0.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\nvrtc64_130_0.dll",
+      "nvrtc-builtins64_134.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\nvrtc-builtins64_134.dll"
+    }
+  },
+  "dll_sha256": {
+    "OpenMM.dll": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+    "OpenMMCUDA.dll": "0864b4e569119e4fea6e00714156cf77cad7fd8f40de6f8d258ac2356346d93a",
+    "cufft64_12.dll": "d353fd42da7729709864731f35888aa177793d2350e56557df4c6ebaaf079ace",
+    "nvrtc64_130_0.dll": "c92027e5eae58b6f272cafb438bf59b55deb02bd326b183956e84e0a180dbd14",
+    "nvrtc-builtins64_134.dll": "73768e90526e8a43d5eb356f0ffad198468e8c15e95d45a84c6c4b12fb9aa02f"
+  }
+}

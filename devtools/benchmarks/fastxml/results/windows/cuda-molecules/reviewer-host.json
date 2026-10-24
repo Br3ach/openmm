@@ -1,0 +1,18 @@
+[
+  {
+    "variant": "baseline",
+    "returncode": 0,
+    "seconds": 0.11290169999847421,
+    "stdout": "Ordered connectivity passed:1000 randomized orientations, crafted groups,200k chain, nested virtual-site chains\n",
+    "stderr": "",
+    "exe_sha256": "e4fd0da1885d229bb6c103da66f606dce4d3bfbb9866df6059011bc011735090"
+  },
+  {
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 0.13038849999793456,
+    "stdout": "Ordered connectivity passed:1000 randomized orientations, crafted groups,200k chain, nested virtual-site chains\n",
+    "stderr": "",
+    "exe_sha256": "e4fd0da1885d229bb6c103da66f606dce4d3bfbb9866df6059011bc011735090"
+  }
+]

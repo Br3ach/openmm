@@ -1,0 +1,92 @@
+[
+  {
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroups.exe",
+    "args": [
+      "mixed",
+      "save",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\reviewer-final\\baseline.chk"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"sequence\":\"664a2a995878df43\",\"state\":\"8c07dd7e7d3a1fd3\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":true,\"mode\":\"save\"}\n",
+    "stderr": "",
+    "seconds": 1.6541609000014432,
+    "exe_sha256": "9f6786cb7e9490ab9a96c21d8875a0a1b78f60c94823b25dd8121e7a1ea80b78",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\reviewer-final\\cache-baseline-TestCudaMoleculeGroups.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroups.exe",
+    "args": [
+      "mixed",
+      "save",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\reviewer-final\\candidate.chk"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"sequence\":\"664a2a995878df43\",\"state\":\"8c07dd7e7d3a1fd3\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":true,\"mode\":\"save\"}\n",
+    "stderr": "",
+    "seconds": 1.646274100003211,
+    "exe_sha256": "9f6786cb7e9490ab9a96c21d8875a0a1b78f60c94823b25dd8121e7a1ea80b78",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\reviewer-final\\cache-candidate-TestCudaMoleculeGroups.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroups.exe",
+    "args": [
+      "mixed",
+      "load",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\reviewer-final\\baseline.chk"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"sequence\":\"664a2a995878df43\",\"state\":\"8c07dd7e7d3a1fd3\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":false,\"mode\":\"load\"}\n",
+    "stderr": "",
+    "seconds": 1.7310788000031607,
+    "exe_sha256": "9f6786cb7e9490ab9a96c21d8875a0a1b78f60c94823b25dd8121e7a1ea80b78",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\reviewer-final\\cache-candidate-TestCudaMoleculeGroups.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroups.exe",
+    "args": [
+      "mixed",
+      "load",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\reviewer-final\\candidate.chk"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"sequence\":\"664a2a995878df43\",\"state\":\"8c07dd7e7d3a1fd3\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":false,\"mode\":\"load\"}\n",
+    "stderr": "",
+    "seconds": 1.7206550000009884,
+    "exe_sha256": "9f6786cb7e9490ab9a96c21d8875a0a1b78f60c94823b25dd8121e7a1ea80b78",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\reviewer-final\\cache-baseline-TestCudaMoleculeGroups.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroupingForces.exe",
+    "args": [
+      "mixed"
+    ],
+    "returncode": 0,
+    "stdout": "Reordering, parameter changes/offsets, periodic interactions/exceptions passed\n",
+    "stderr": "",
+    "seconds": 8.919341099997837,
+    "exe_sha256": "54f8552c8fb6db75096ee5ecf135958fdaac6a1c247138e5c6fe1317beb3b074",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\reviewer-final\\cache-candidate-TestCudaMoleculeGroupingForces.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "package",
+    "test": "VerifyCudaRuntime.exe",
+    "args": [],
+    "returncode": 0,
+    "stdout": "{\"pme_energy_finite\":true,\"loaded_modules\":{\"OpenMM.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\\\OpenMM.dll\",\"OpenMMCUDA.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\\\OpenMMCUDA.dll\",\"cufft64_12.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\\\cufft64_12.dll\",\"nvrtc64_130_0.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\\\nvrtc64_130_0.dll\",\"nvrtc-builtins64_134.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-molecules-20261024\\\\nvrtc-builtins64_134.dll\"}}\n",
+    "stderr": "",
+    "seconds": 2.1701136999981827,
+    "exe_sha256": "6074bce0f9c9dc1caf0d789d78f959123d40120e899d501a6866340a6e5b8ac9",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\reviewer-final\\cache-package-VerifyCudaRuntime.exe",
+    "isolated_path": "C:\\Windows\\System32;C:\\Windows"
+  }
+]

@@ -1,0 +1,398 @@
+[
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"single\",\"sequence\":\"b831f7f2d5517820\",\"state\":\"12f7d81ff63699c5\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":true,\"mode\":\"save\"}\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "single",
+    "extra": [
+      "save",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\baseline-single.chk"
+    ],
+    "seconds": 1.762871399998403
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"single\",\"sequence\":\"b831f7f2d5517820\",\"state\":\"12f7d81ff63699c5\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":true,\"mode\":\"save\"}\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "single",
+    "extra": [
+      "save",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\candidate-single.chk"
+    ],
+    "seconds": 1.5332674999990559
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"single\",\"sequence\":\"b831f7f2d5517820\",\"state\":\"12f7d81ff63699c5\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":false,\"mode\":\"load\"}\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "single",
+    "extra": [
+      "load",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\baseline-single.chk"
+    ],
+    "seconds": 1.5352072999994562
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"single\",\"sequence\":\"b831f7f2d5517820\",\"state\":\"12f7d81ff63699c5\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":false,\"mode\":\"load\"}\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "single",
+    "extra": [
+      "load",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\candidate-single.chk"
+    ],
+    "seconds": 1.519917700003134
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"sequence\":\"664a2a995878df43\",\"state\":\"8c07dd7e7d3a1fd3\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":true,\"mode\":\"save\"}\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "mixed",
+    "extra": [
+      "save",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\baseline-mixed.chk"
+    ],
+    "seconds": 1.6366675999997824
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"sequence\":\"664a2a995878df43\",\"state\":\"8c07dd7e7d3a1fd3\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":true,\"mode\":\"save\"}\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "mixed",
+    "extra": [
+      "save",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\candidate-mixed.chk"
+    ],
+    "seconds": 1.679875499998161
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"sequence\":\"664a2a995878df43\",\"state\":\"8c07dd7e7d3a1fd3\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":false,\"mode\":\"load\"}\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "mixed",
+    "extra": [
+      "load",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\baseline-mixed.chk"
+    ],
+    "seconds": 1.6850288999994518
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"sequence\":\"664a2a995878df43\",\"state\":\"8c07dd7e7d3a1fd3\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":false,\"mode\":\"load\"}\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "mixed",
+    "extra": [
+      "load",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\candidate-mixed.chk"
+    ],
+    "seconds": 1.7353844999997818
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"double\",\"sequence\":\"d6daefec9efd338a\",\"state\":\"625e397eac0c3dab\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":true,\"mode\":\"save\"}\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "double",
+    "extra": [
+      "save",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\baseline-double.chk"
+    ],
+    "seconds": 1.7502974000017275
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"double\",\"sequence\":\"d6daefec9efd338a\",\"state\":\"625e397eac0c3dab\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":true,\"mode\":\"save\"}\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "double",
+    "extra": [
+      "save",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\candidate-double.chk"
+    ],
+    "seconds": 1.8226361999986693
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"double\",\"sequence\":\"d6daefec9efd338a\",\"state\":\"625e397eac0c3dab\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":false,\"mode\":\"load\"}\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "double",
+    "extra": [
+      "load",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\baseline-double.chk"
+    ],
+    "seconds": 1.719606800001202
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"double\",\"sequence\":\"d6daefec9efd338a\",\"state\":\"625e397eac0c3dab\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":false,\"mode\":\"load\"}\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroups",
+    "precision": "double",
+    "extra": [
+      "load",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\molecule-gpu-opt\\results\\regressions\\candidate-double.chk"
+    ],
+    "seconds": 1.8825870000000577
+  },
+  {
+    "returncode": 0,
+    "stdout": "Reordering, parameter changes/offsets, periodic interactions/exceptions passed\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroupingForces",
+    "precision": "single",
+    "extra": [],
+    "seconds": 9.771440799999255
+  },
+  {
+    "returncode": 0,
+    "stdout": "Reordering, parameter changes/offsets, periodic interactions/exceptions passed\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroupingForces",
+    "precision": "single",
+    "extra": [],
+    "seconds": 7.701704199997039
+  },
+  {
+    "returncode": 0,
+    "stdout": "Reordering, parameter changes/offsets, periodic interactions/exceptions passed\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroupingForces",
+    "precision": "mixed",
+    "extra": [],
+    "seconds": 8.864958699999988
+  },
+  {
+    "returncode": 0,
+    "stdout": "Reordering, parameter changes/offsets, periodic interactions/exceptions passed\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroupingForces",
+    "precision": "mixed",
+    "extra": [],
+    "seconds": 8.968776000001526
+  },
+  {
+    "returncode": 0,
+    "stdout": "Reordering, parameter changes/offsets, periodic interactions/exceptions passed\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaMoleculeGroupingForces",
+    "precision": "double",
+    "extra": [],
+    "seconds": 8.70400090000112
+  },
+  {
+    "returncode": 0,
+    "stdout": "Reordering, parameter changes/offsets, periodic interactions/exceptions passed\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroupingForces",
+    "precision": "double",
+    "extra": [],
+    "seconds": 8.60063629999786
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaVirtualSites",
+    "precision": "single",
+    "extra": [],
+    "seconds": 10.691547899998113
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaVirtualSites",
+    "precision": "single",
+    "extra": [],
+    "seconds": 10.343199499999173
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaVirtualSites",
+    "precision": "mixed",
+    "extra": [],
+    "seconds": 12.627192200001446
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaVirtualSites",
+    "precision": "mixed",
+    "extra": [],
+    "seconds": 12.102962500001013
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaVirtualSites",
+    "precision": "double",
+    "extra": [],
+    "seconds": 15.001320200000919
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaVirtualSites",
+    "precision": "double",
+    "extra": [],
+    "seconds": 13.555951800000912
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaCheckpoints",
+    "precision": "single",
+    "extra": [],
+    "seconds": 7.463243199999852
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaCheckpoints",
+    "precision": "single",
+    "extra": [],
+    "seconds": 7.268887399997766
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaCheckpoints",
+    "precision": "mixed",
+    "extra": [],
+    "seconds": 9.805132000001322
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaCheckpoints",
+    "precision": "mixed",
+    "extra": [],
+    "seconds": 8.42178480000075
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaCheckpoints",
+    "precision": "double",
+    "extra": [],
+    "seconds": 8.857409700001881
+  },
+  {
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaCheckpoints",
+    "precision": "double",
+    "extra": [],
+    "seconds": 8.78508260000308
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"single\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"2f56a13dc1741fb6\",\"mode\":\"fresh\",\"self_replay_verified\":true}\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaSettleSnapshots",
+    "precision": "single",
+    "extra": [],
+    "seconds": 1.4230543999983638
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"single\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"2f56a13dc1741fb6\",\"mode\":\"fresh\",\"self_replay_verified\":true}\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaSettleSnapshots",
+    "precision": "single",
+    "extra": [],
+    "seconds": 0.9549631000008958
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e7c26f3767e166dd\",\"mode\":\"fresh\",\"self_replay_verified\":true}\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaSettleSnapshots",
+    "precision": "mixed",
+    "extra": [],
+    "seconds": 1.0701681999998982
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e7c26f3767e166dd\",\"mode\":\"fresh\",\"self_replay_verified\":true}\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaSettleSnapshots",
+    "precision": "mixed",
+    "extra": [],
+    "seconds": 1.0804454000026453
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"double\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e5a9f4fdb097a952\",\"mode\":\"fresh\",\"self_replay_verified\":true}\n",
+    "stderr": "",
+    "variant": "baseline",
+    "test": "TestCudaSettleSnapshots",
+    "precision": "double",
+    "extra": [],
+    "seconds": 1.021204199998465
+  },
+  {
+    "returncode": 0,
+    "stdout": "{\"precision\":\"double\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e5a9f4fdb097a952\",\"mode\":\"fresh\",\"self_replay_verified\":true}\n",
+    "stderr": "",
+    "variant": "candidate",
+    "test": "TestCudaSettleSnapshots",
+    "precision": "double",
+    "extra": [],
+    "seconds": 1.0280542000000423
+  }
+]

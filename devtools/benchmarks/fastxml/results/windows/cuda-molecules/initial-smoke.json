@@ -1,0 +1,14 @@
+[
+  {
+    "variant": "baseline",
+    "returncode": 0,
+    "stdout": "{\"particles\":500000,\"constraints\":375000,\"kind\":\"water\",\"precision\":\"mixed\",\"construction_seconds\":1.5201091,\"before_working_set_kib\":48704,\"before_peak_working_set_kib\":50496,\"before_private_kib\":262580,\"platform_created_working_set_kib\":220060,\"platform_created_peak_working_set_kib\":263528,\"platform_created_private_kib\":907224,\"constructed_working_set_kib\":288556,\"constructed_peak_working_set_kib\":453132,\"constructed_private_kib\":1001848,\"destroyed_working_set_kib\":131096,\"destroyed_peak_working_set_kib\":453132,\"destroyed_private_kib\":507708,\"peak_scope\":\"process_lifetime\",\"platform\":\"CUDA\"}\n",
+    "stderr": ""
+  },
+  {
+    "variant": "candidate",
+    "returncode": 0,
+    "stdout": "{\"particles\":500000,\"constraints\":375000,\"kind\":\"water\",\"precision\":\"mixed\",\"construction_seconds\":1.2360903,\"before_working_set_kib\":48792,\"before_peak_working_set_kib\":50588,\"before_private_kib\":262676,\"platform_created_working_set_kib\":222176,\"platform_created_peak_working_set_kib\":263560,\"platform_created_private_kib\":911644,\"constructed_working_set_kib\":288480,\"constructed_peak_working_set_kib\":300200,\"constructed_private_kib\":1001308,\"destroyed_working_set_kib\":130752,\"destroyed_peak_working_set_kib\":300200,\"destroyed_private_kib\":508428,\"peak_scope\":\"process_lifetime\",\"platform\":\"CUDA\"}\n",
+    "stderr": ""
+  }
+]

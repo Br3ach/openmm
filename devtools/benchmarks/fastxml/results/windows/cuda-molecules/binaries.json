@@ -1,0 +1,26 @@
+{
+  "baseline": {
+    "OpenMM.dll": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+    "OpenMMCUDA.dll": "bb08de5228f5d07aa02ef5b55a57edea1484b084aa32ffd611eeb8d8d3b6a7fb",
+    "TestComputeMoleculeConnectivity.exe": "e4fd0da1885d229bb6c103da66f606dce4d3bfbb9866df6059011bc011735090",
+    "TestCudaMoleculeGroups.exe": "9f6786cb7e9490ab9a96c21d8875a0a1b78f60c94823b25dd8121e7a1ea80b78",
+    "TestCudaMoleculeGroupingForces.exe": "54f8552c8fb6db75096ee5ecf135958fdaac6a1c247138e5c6fe1317beb3b074",
+    "BenchmarkCudaSettleStartup.exe": "e38b794e4b131d87b0a0be7b3eb29bd925b884155a0d9f94bb4e7e182503db86",
+    "BenchmarkCudaMoleculeStartup.exe": "91c191474d41a07db8ce95d8d9669416570cf535631e42fe7842eff42164850a",
+    "TestCudaVirtualSites.exe": "bdbdb17247d8705e46912882959cbabb33cd4fe05706ba910352bc1694b22ee4",
+    "TestCudaCheckpoints.exe": "d6f4cc337adfddb0fe2d63a796a400979f12f44a868eac0a5fc2bf5616f91cdb",
+    "TestCudaSettleSnapshots.exe": "be28f2b80ff5f6b6071ec585da7289d2b81b6c00e4daecac88f3ab242ca9ee89"
+  },
+  "candidate": {
+    "OpenMM.dll": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+    "OpenMMCUDA.dll": "0864b4e569119e4fea6e00714156cf77cad7fd8f40de6f8d258ac2356346d93a",
+    "TestComputeMoleculeConnectivity.exe": "e4fd0da1885d229bb6c103da66f606dce4d3bfbb9866df6059011bc011735090",
+    "TestCudaMoleculeGroups.exe": "9f6786cb7e9490ab9a96c21d8875a0a1b78f60c94823b25dd8121e7a1ea80b78",
+    "TestCudaMoleculeGroupingForces.exe": "54f8552c8fb6db75096ee5ecf135958fdaac6a1c247138e5c6fe1317beb3b074",
+    "BenchmarkCudaSettleStartup.exe": "e38b794e4b131d87b0a0be7b3eb29bd925b884155a0d9f94bb4e7e182503db86",
+    "BenchmarkCudaMoleculeStartup.exe": "91c191474d41a07db8ce95d8d9669416570cf535631e42fe7842eff42164850a",
+    "TestCudaVirtualSites.exe": "bdbdb17247d8705e46912882959cbabb33cd4fe05706ba910352bc1694b22ee4",
+    "TestCudaCheckpoints.exe": "d6f4cc337adfddb0fe2d63a796a400979f12f44a868eac0a5fc2bf5616f91cdb",
+    "TestCudaSettleSnapshots.exe": "be28f2b80ff5f6b6071ec585da7289d2b81b6c00e4daecac88f3ab242ca9ee89"
+  }
+}

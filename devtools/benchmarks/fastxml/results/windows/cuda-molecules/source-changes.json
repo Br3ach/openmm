@@ -1,0 +1,12 @@
+{
+  "changed": [
+    "platforms/common/src/ComputeContext.cpp"
+  ],
+  "added": [
+    "tests/TestComputeMoleculeConnectivity.cpp",
+    "platforms/cuda/tests/TestCudaMoleculeGroupingForces.cpp",
+    "platforms/cuda/tests/TestCudaMoleculeGroups.cpp",
+    "platforms/common/src/MoleculeConnectivity.h",
+    "devtools/benchmarks/fastxml/BenchmarkCudaMoleculeStartup.cpp"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "reviewer": "independent_reviewer (separate agent from implementing root)",
+  "review_date": "2026-10-24",
+  "branch": "fastxml-experimental-20261024",
+  "baseline_commit": "d9660c6c0c8edfd42ff62e0125eee38e53eb0c21",
+  "design_review_before_implementation": true,
+  "final_release_approved": true,
+  "runtime_scope": [
+    "platforms/common/src/ComputeContext.cpp",
+    "platforms/common/src/MoleculeConnectivity.h"
+  ],
+  "candidate_cuda_dll_sha256": "0864b4e569119e4fea6e00714156cf77cad7fd8f40de6f8d258ac2356346d93a",
+  "core_dll_unchanged_sha256": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+  "independent_checks": [
+    "Reviewed final runtime diff, DSU ordering, callback loops, persistent ownership and invalidation semantics.",
+    "Reran host connectivity oracle in both DLL directories; both passed.",
+    "Reran mixed finite-checked saves/self-replays and cross-plugin checkpoint loads in both directions; full hashes, atom order and group-enumeration traces match.",
+    "Reran candidate selected force/reordering assertions and isolated fresh-cache PME with OS-only PATH; passed.",
+    "Recomputed all 18 measured startup medians, excluded 6 warmups, verified 12 final equivalence outcomes and 24 selected existing-test outcomes.",
+    "Verified same callers, 531 identical CUDA export names/ordinals, staged DLL/import-library hashes, unchanged 199 public headers and notices, and final reporting/installation text."
+  ],
+  "findings_addressed": [
+    "Global group-enumeration trace added; parallel identity callbacks deliberately not traced and claims narrowed.",
+    "Nonfinite states explicitly rejected and context pointer checked before dereference.",
+    "Initial invalid test fixture corrected after reproducing NaNs on unchanged baseline; no tolerance weakened."
+  ],
+  "approved_memory_claim": {
+    "scene": "500000 synthetic four-site-water particles, mixed precision, CUDA Context construction",
+    "baseline_peak_mib": 441.296875,
+    "candidate_peak_mib": 291.57421875,
+    "reduction_mib": 149.72265625,
+    "reduction_percent": 33.92787593385972,
+    "metric": "median Windows process-lifetime PeakWorkingSetSize",
+    "retained_working_set": "essentially unchanged"
+  },
+  "limitations": [
+    "Tested RTX 5090 / driver 621.01 / CUDA 13.4.92; OpenCL/HIP and other hardware/driver combinations unvalidated.",
+    "No actual FAH work-unit execution, steady MD/PPD improvement or measured VRAM savings.",
+    "Full-size 7950256-particle synthetic baseline failed with bad allocation under 6 GiB cap; exact cause and baseline peak unestablished. Candidate single trial passed at 1995296 KiB peak; no exact paired savings or speedup claim.",
+    "Earlier validation results and stochastic/timeout history remain historical evidence; do not combine different-phase savings.",
+    "Final release commit/hash metadata must be filled after committing this reviewed scope; staged binaries must remain unchanged."
+  ],
+  "reviewed_runtime_source_sha256": {
+    "platforms/common/src/ComputeContext.cpp": "3fa31f90e9d14e3e0fc16f008adb60a0c437fbe0383a349201e9a7a948002741",
+    "platforms/common/src/MoleculeConnectivity.h": "4b95ea9f7fbe6648d9e545364e7438fde0af5c611e7cbdabb2f7c26cd9607b69"
+  }
+}

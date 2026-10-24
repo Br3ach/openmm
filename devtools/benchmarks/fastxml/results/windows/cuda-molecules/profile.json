@@ -1,0 +1,176 @@
+[
+  {
+    "particles": 250000,
+    "kind": "unconstrained",
+    "caller": {
+      "particles": 250000,
+      "constraints": 0,
+      "kind": "unconstrained",
+      "precision": "mixed",
+      "construction_seconds": 1.1715789,
+      "before_working_set_kib": 25808,
+      "before_peak_working_set_kib": 26980,
+      "before_private_kib": 236672,
+      "platform_created_working_set_kib": 191352,
+      "platform_created_peak_working_set_kib": 219740,
+      "platform_created_private_kib": 836220,
+      "constructed_working_set_kib": 237508,
+      "constructed_peak_working_set_kib": 303488,
+      "constructed_private_kib": 900392,
+      "destroyed_working_set_kib": 91104,
+      "destroyed_peak_working_set_kib": 303488,
+      "destroyed_private_kib": 507452,
+      "peak_scope": "process_lifetime",
+      "platform": "CUDA"
+    },
+    "phases": [
+      {
+        "phase": "entry",
+        "working_set_kib": 199196,
+        "peak_working_set_kib": 219740,
+        "private_kib": 860056
+      },
+      {
+        "phase": "virtual_site_metadata",
+        "working_set_kib": 199200,
+        "peak_working_set_kib": 219740,
+        "private_kib": 860056
+      },
+      {
+        "phase": "empty_hash_sets",
+        "working_set_kib": 257508,
+        "peak_working_set_kib": 257508,
+        "private_kib": 918276
+      },
+      {
+        "phase": "filled_hash_sets",
+        "working_set_kib": 257508,
+        "peak_working_set_kib": 257508,
+        "private_kib": 918276
+      },
+      {
+        "phase": "adjacency_objects",
+        "working_set_kib": 263368,
+        "peak_working_set_kib": 263368,
+        "private_kib": 924152
+      },
+      {
+        "phase": "copied_adjacency",
+        "working_set_kib": 263368,
+        "peak_working_set_kib": 263368,
+        "private_kib": 924152
+      },
+      {
+        "phase": "components",
+        "working_set_kib": 274116,
+        "peak_working_set_kib": 274116,
+        "private_kib": 935004
+      },
+      {
+        "phase": "molecule_atom_copies",
+        "working_set_kib": 303488,
+        "peak_working_set_kib": 303488,
+        "private_kib": 965356
+      },
+      {
+        "phase": "connectivity_staging_released",
+        "working_set_kib": 228524,
+        "peak_working_set_kib": 303488,
+        "private_kib": 888412
+      },
+      {
+        "phase": "grouping_done",
+        "working_set_kib": 237232,
+        "peak_working_set_kib": 303488,
+        "private_kib": 898364
+      }
+    ]
+  },
+  {
+    "particles": 500000,
+    "kind": "water",
+    "caller": {
+      "particles": 500000,
+      "constraints": 375000,
+      "kind": "water",
+      "precision": "mixed",
+      "construction_seconds": 1.5078897,
+      "before_working_set_kib": 47840,
+      "before_peak_working_set_kib": 49628,
+      "before_private_kib": 262616,
+      "platform_created_working_set_kib": 219060,
+      "platform_created_peak_working_set_kib": 262440,
+      "platform_created_private_kib": 909540,
+      "constructed_working_set_kib": 287720,
+      "constructed_peak_working_set_kib": 451800,
+      "constructed_private_kib": 1003504,
+      "destroyed_working_set_kib": 130148,
+      "destroyed_peak_working_set_kib": 451800,
+      "destroyed_private_kib": 508476,
+      "peak_scope": "process_lifetime",
+      "platform": "CUDA"
+    },
+    "phases": [
+      {
+        "phase": "entry",
+        "working_set_kib": 237676,
+        "peak_working_set_kib": 262440,
+        "private_kib": 952640
+      },
+      {
+        "phase": "virtual_site_metadata",
+        "working_set_kib": 250516,
+        "peak_working_set_kib": 262440,
+        "private_kib": 963776
+      },
+      {
+        "phase": "empty_hash_sets",
+        "working_set_kib": 367584,
+        "peak_working_set_kib": 367584,
+        "private_kib": 1083252
+      },
+      {
+        "phase": "filled_hash_sets",
+        "working_set_kib": 399084,
+        "peak_working_set_kib": 399084,
+        "private_kib": 1116692
+      },
+      {
+        "phase": "adjacency_objects",
+        "working_set_kib": 410804,
+        "peak_working_set_kib": 410804,
+        "private_kib": 1128440
+      },
+      {
+        "phase": "copied_adjacency",
+        "working_set_kib": 420444,
+        "peak_working_set_kib": 420444,
+        "private_kib": 1138760
+      },
+      {
+        "phase": "components",
+        "working_set_kib": 427328,
+        "peak_working_set_kib": 429284,
+        "private_kib": 1145884
+      },
+      {
+        "phase": "molecule_atom_copies",
+        "working_set_kib": 445968,
+        "peak_working_set_kib": 445968,
+        "private_kib": 1165028
+      },
+      {
+        "phase": "connectivity_staging_released",
+        "working_set_kib": 275052,
+        "peak_working_set_kib": 451800,
+        "private_kib": 989420
+      },
+      {
+        "phase": "grouping_done",
+        "working_set_kib": 278444,
+        "peak_working_set_kib": 451800,
+        "private_kib": 993068
+      }
+    ]
+  }
+]

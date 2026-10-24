@@ -1,0 +1,26 @@
+[
+  {
+    "variant": "baseline",
+    "gpu_status_before": "30023, 3",
+    "available_host_bytes": 17340604416,
+    "particles": 7950256,
+    "topology": "synthetic-four-site-water",
+    "actual_fah_topology": false,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "bad allocation\n",
+    "seconds": 9.193499400000292
+  },
+  {
+    "variant": "candidate",
+    "gpu_status_before": "30045, 21",
+    "available_host_bytes": 17381232640,
+    "particles": 7950256,
+    "topology": "synthetic-four-site-water",
+    "actual_fah_topology": false,
+    "returncode": 0,
+    "stdout": "{\"particles\":7950256,\"constraints\":5962692,\"kind\":\"water\",\"precision\":\"mixed\",\"construction_seconds\":5.9523118,\"before_working_set_kib\":427836,\"before_peak_working_set_kib\":480432,\"before_private_kib\":678172,\"platform_created_working_set_kib\":755680,\"platform_created_peak_working_set_kib\":1119104,\"platform_created_private_kib\":2533388,\"constructed_working_set_kib\":1808960,\"constructed_peak_working_set_kib\":1995296,\"constructed_private_kib\":3947016,\"destroyed_working_set_kib\":736956,\"destroyed_peak_working_set_kib\":1995296,\"destroyed_private_kib\":1221568,\"peak_scope\":\"process_lifetime\",\"platform\":\"CUDA\"}\n",
+    "stderr": "",
+    "seconds": 6.677439600000071
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "precisions": [
+    "mixed"
+  ],
+  "processes": 6,
+  "paired_and_cross_checkpoint_equal": true,
+  "matched_keys": [
+    "sequence",
+    "state",
+    "atom_index",
+    "trace",
+    "trace_entries",
+    "regroups",
+    "force_infos"
+  ]
+}

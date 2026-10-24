@@ -25,6 +25,7 @@
  * -------------------------------------------------------------------------- */
 
 #include "openmm/common/ComputeContext.h"
+#include "MoleculeConnectivity.h"
 #include "openmm/common/ContextSelector.h"
 #include "openmm/System.h"
 #include "openmm/VirtualSite.h"
@@ -35,7 +36,6 @@
 #include <cmath>
 #include <set>
 #include <sstream>
-#include <unordered_set>
 #include <utility>
 
 using namespace OpenMM;
@@ -210,33 +210,27 @@ void ComputeContext::findMoleculeGroups() {
 
         addForce(new VirtualSiteInfo(system));
 
-        // First make a list of every other atom to which each atom is connect by a constraint or force group.
-
-        vector<unordered_set<int> > atomBondSets(system.getNumParticles());
-        for (int i = 0; i < system.getNumConstraints(); i++) {
-            int particle1, particle2;
-            double distance;
-            system.getConstraintParameters(i, particle1, particle2, distance);
-            atomBondSets[particle1].insert(particle2);
-            atomBondSets[particle2].insert(particle1);
-        }
-        for (auto force : forces) {
-            vector<int> particles;
-            for (int j = 0; j < force->getNumParticleGroups(); j++) {
-                force->getParticlesInGroup(j, particles);
-                for (int k = 1; k < (int) particles.size(); k++) {
-                    atomBondSets[particles[k]].insert(particles[k-1]);
-                    atomBondSets[particles[k-1]].insert(particles[k]);
+        // Join connectivity directly without per-particle hash sets or adjacency copies.
+        vector<vector<int> > atomIndices;
+        {
+            OpenMM::detail::MoleculeConnectivity connectivity(numAtoms);
+            for (int i = 0; i < system.getNumConstraints(); i++) {
+                int particle1, particle2;
+                double distance;
+                system.getConstraintParameters(i, particle1, particle2, distance);
+                connectivity.connect(particle1, particle2);
+            }
+            for (auto force : forces) {
+                vector<int> particles;
+                for (int j = 0; j < force->getNumParticleGroups(); j++) {
+                    force->getParticlesInGroup(j, particles);
+                    for (int k = 1; k < (int) particles.size(); k++)
+                        connectivity.connect(particles[k], particles[k-1]);
                 }
             }
+            atomIndices = connectivity.createMolecules();
         }
-        vector<vector<int> > atomBonds(system.getNumParticles());
-        for (int i = 0; i < system.getNumParticles(); i++)
-            atomBonds[i].insert(atomBonds[i].begin(), atomBondSets[i].begin(),atomBondSets[i].end());
 
-        // Now identify atoms by which molecule they belong to.
-
-        vector<vector<int> > atomIndices = ContextImpl::findMolecules(numAtoms, atomBonds);
         int numMolecules = atomIndices.size();
         vector<int> atomMolecule(numAtoms);
         for (int i = 0; i < (int) atomIndices.size(); i++)
@@ -247,7 +241,7 @@ void ComputeContext::findMoleculeGroups() {
 
         molecules.resize(numMolecules);
         for (int i = 0; i < numMolecules; i++) {
-            molecules[i].atoms = atomIndices[i];
+            molecules[i].atoms = std::move(atomIndices[i]);
             molecules[i].groups.resize(forces.size());
         }
         for (int i = 0; i < system.getNumConstraints(); i++) {
@@ -268,7 +262,7 @@ void ComputeContext::findMoleculeGroups() {
 
     // Sort them into groups of identical molecules.
 
-    vector<Molecule> uniqueMolecules;
+    vector<int> uniqueMolecules;
     vector<vector<int> > moleculeInstances;
     vector<vector<int> > moleculeOffsets;
     for (int molIndex = 0; molIndex < (int) molecules.size(); molIndex++) {
@@ -278,7 +272,7 @@ void ComputeContext::findMoleculeGroups() {
 
         bool isNew = true;
         for (int j = 0; j < (int) uniqueMolecules.size() && isNew; j++) {
-            Molecule& mol2 = uniqueMolecules[j];
+            Molecule& mol2 = molecules[uniqueMolecules[j]];
             bool identical = (mol.atoms.size() == mol2.atoms.size() && mol.constraints.size() == mol2.constraints.size());
 
             // See if the atoms are identical.
@@ -326,7 +320,7 @@ void ComputeContext::findMoleculeGroups() {
             }
         }
         if (isNew) {
-            uniqueMolecules.push_back(mol);
+            uniqueMolecules.push_back(molIndex);
             moleculeInstances.push_back(vector<int>());
             moleculeInstances[moleculeInstances.size()-1].push_back(molIndex);
             moleculeOffsets.push_back(vector<int>());
@@ -336,9 +330,9 @@ void ComputeContext::findMoleculeGroups() {
     moleculeGroups.resize(moleculeInstances.size());
     for (int i = 0; i < (int) moleculeInstances.size(); i++)
     {
-        moleculeGroups[i].instances = moleculeInstances[i];
-        moleculeGroups[i].offsets = moleculeOffsets[i];
-        vector<int>& atoms = uniqueMolecules[i].atoms;
+        moleculeGroups[i].instances = std::move(moleculeInstances[i]);
+        moleculeGroups[i].offsets = std::move(moleculeOffsets[i]);
+        vector<int>& atoms = molecules[uniqueMolecules[i]].atoms;
         moleculeGroups[i].atoms.resize(atoms.size());
         for (int j = 0; j < (int) atoms.size(); j++)
             moleculeGroups[i].atoms[j] = atoms[j]-atoms[0];
