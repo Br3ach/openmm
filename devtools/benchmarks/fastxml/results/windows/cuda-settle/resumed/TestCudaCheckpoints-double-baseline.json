@@ -1,0 +1,18 @@
+{
+  "test": "TestCudaCheckpoints",
+  "precision": "double",
+  "variant": "baseline",
+  "pid": 7360,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 8.266942399997788,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.01,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 2.01
+    }
+  ]
+}

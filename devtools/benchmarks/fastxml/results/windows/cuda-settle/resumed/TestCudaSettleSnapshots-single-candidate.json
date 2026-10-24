@@ -1,0 +1,18 @@
+{
+  "test": "TestCudaSettleSnapshots",
+  "precision": "single",
+  "variant": "candidate",
+  "pid": 27484,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 180,
+  "seconds": 1.0064468000018678,
+  "output": "{\"precision\":\"single\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"2f56a13dc1741fb6\",\"mode\":\"load\",\"self_replay_verified\":false}\n",
+  "samples": [
+    {
+      "elapsed": 0.01,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 2.01
+    }
+  ]
+}

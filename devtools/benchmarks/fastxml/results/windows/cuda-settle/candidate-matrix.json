@@ -1,0 +1,164 @@
+[
+  {
+    "test": "TestCudaSettle",
+    "precision": "single",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaVirtualSites",
+    "precision": "single",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaCheckpoints",
+    "precision": "single",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaVerletIntegrator",
+    "precision": "single",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaLangevinMiddleIntegrator",
+    "precision": "single",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaCustomIntegrator",
+    "precision": "single",
+    "result": "stochastic_failure",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaVariableVerletIntegrator",
+    "precision": "single",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaNoseHooverIntegrator",
+    "precision": "single",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaMonteCarloBarostat",
+    "precision": "single",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaSettle",
+    "precision": "mixed",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaVirtualSites",
+    "precision": "mixed",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaCheckpoints",
+    "precision": "mixed",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaVerletIntegrator",
+    "precision": "mixed",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaLangevinMiddleIntegrator",
+    "precision": "mixed",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaCustomIntegrator",
+    "precision": "mixed",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaVariableVerletIntegrator",
+    "precision": "mixed",
+    "result": "pass",
+    "record": "gpu-tests-initial.json"
+  },
+  {
+    "test": "TestCudaNoseHooverIntegrator",
+    "precision": "mixed",
+    "result": "pass_on_recheck",
+    "record": "resumed/TestCudaNoseHooverIntegrator-mixed-candidate.json"
+  },
+  {
+    "test": "TestCudaMonteCarloBarostat",
+    "precision": "mixed",
+    "result": "pass",
+    "record": "resumed/additional-tests.json"
+  },
+  {
+    "test": "TestCudaSettle",
+    "precision": "double",
+    "result": "pass",
+    "record": "resumed/additional-tests.json"
+  },
+  {
+    "test": "TestCudaVirtualSites",
+    "precision": "double",
+    "result": "pass",
+    "record": "resumed/additional-tests.json"
+  },
+  {
+    "test": "TestCudaCheckpoints",
+    "precision": "double",
+    "result": "pass",
+    "record": "resumed/additional-tests.json"
+  },
+  {
+    "test": "TestCudaVerletIntegrator",
+    "precision": "double",
+    "result": "pass",
+    "record": "resumed/additional-tests.json"
+  },
+  {
+    "test": "TestCudaLangevinMiddleIntegrator",
+    "precision": "double",
+    "result": "pass",
+    "record": "resumed/additional-tests.json"
+  },
+  {
+    "test": "TestCudaCustomIntegrator",
+    "precision": "double",
+    "result": "pass",
+    "record": "resumed/additional-tests.json"
+  },
+  {
+    "test": "TestCudaVariableVerletIntegrator",
+    "precision": "double",
+    "result": "pass",
+    "record": "resumed/additional-tests.json"
+  },
+  {
+    "test": "TestCudaNoseHooverIntegrator",
+    "precision": "double",
+    "result": "pass",
+    "record": "resumed/additional-tests.json"
+  },
+  {
+    "test": "TestCudaMonteCarloBarostat",
+    "precision": "double",
+    "result": "pass",
+    "record": "resumed/additional-tests.json"
+  }
+]

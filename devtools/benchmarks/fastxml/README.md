@@ -205,3 +205,14 @@ See [`results/windows/context-construction/`](results/windows/context-constructi
 for the constructor A/B benchmark, exact scope, stochastic-test triage and
 independent review. The measured benefit is temporary startup memory; actual
 CUDA/FAH peak reductions and PPD remain unmeasured.
+
+## Compact CUDA SETTLE preparation
+
+The experimental branch replaces temporary degree-two SETTLE maps with compact
+private records and releases them after upload. See
+[`results/windows/cuda-settle/`](results/windows/cuda-settle/) for GPU correctness,
+seeded cross-plugin checkpoint comparison, bundled runtime validation and memory
+measurements. The measured CUDA construction-phase peak is lower; completed
+whole-Context peak is essentially unchanged in the tested synthetic cases.
+Full-size actual-topology measurements are a separate host-only model. No FAH
+peak-memory or PPD gain is claimed.

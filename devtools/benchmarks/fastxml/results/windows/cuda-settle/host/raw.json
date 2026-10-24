@@ -1,0 +1,356 @@
+[
+  {
+    "variant": "baseline",
+    "particles": 7950256,
+    "constraints": 5955638,
+    "active_constraints": 5955638,
+    "eligible_neighbor_entries": 11904894,
+    "topological_triangles": 1984149,
+    "settle_clusters": 1984149,
+    "is_shake_true": 5952447,
+    "build_classify_record_seconds": 1.3364104,
+    "row_release_seconds": 0.7270009,
+    "output_fingerprint": "4526a74be33f5294",
+    "neighbors_fingerprint": "9729c0bee4ae13b",
+    "phases": [
+      {
+        "phase": "input",
+        "working_set_kib": 159428,
+        "peak_working_set_kib": 159428,
+        "private_kib": 156152
+      },
+      {
+        "phase": "base_arrays",
+        "working_set_kib": 285248,
+        "peak_working_set_kib": 316700,
+        "private_kib": 313728
+      },
+      {
+        "phase": "empty_rows",
+        "working_set_kib": 783688,
+        "peak_working_set_kib": 783688,
+        "private_kib": 836364
+      },
+      {
+        "phase": "filled_rows",
+        "working_set_kib": 1344900,
+        "peak_working_set_kib": 1344900,
+        "private_kib": 1433444
+      },
+      {
+        "phase": "classified",
+        "working_set_kib": 1354244,
+        "peak_working_set_kib": 1358740,
+        "private_kib": 1444124
+      },
+      {
+        "phase": "outputs",
+        "working_set_kib": 1393604,
+        "peak_working_set_kib": 1416344,
+        "private_kib": 1491164
+      },
+      {
+        "phase": "released_rows",
+        "working_set_kib": 335556,
+        "peak_working_set_kib": 1416344,
+        "private_kib": 375284
+      }
+    ],
+    "repeat": 1
+  },
+  {
+    "variant": "compact",
+    "particles": 7950256,
+    "constraints": 5955638,
+    "active_constraints": 5955638,
+    "eligible_neighbor_entries": 11904894,
+    "topological_triangles": 1984149,
+    "settle_clusters": 1984149,
+    "is_shake_true": 5952447,
+    "build_classify_record_seconds": 0.1268851,
+    "row_release_seconds": 0.004805,
+    "output_fingerprint": "4526a74be33f5294",
+    "neighbors_fingerprint": "9729c0bee4ae13b",
+    "phases": [
+      {
+        "phase": "input",
+        "working_set_kib": 159436,
+        "peak_working_set_kib": 159436,
+        "private_kib": 156144
+      },
+      {
+        "phase": "base_arrays",
+        "working_set_kib": 285856,
+        "peak_working_set_kib": 317260,
+        "private_kib": 314280
+      },
+      {
+        "phase": "empty_rows",
+        "working_set_kib": 442112,
+        "peak_working_set_kib": 442112,
+        "private_kib": 470848
+      },
+      {
+        "phase": "filled_rows",
+        "working_set_kib": 442112,
+        "peak_working_set_kib": 442112,
+        "private_kib": 470848
+      },
+      {
+        "phase": "classified",
+        "working_set_kib": 449468,
+        "peak_working_set_kib": 453972,
+        "private_kib": 480096
+      },
+      {
+        "phase": "outputs",
+        "working_set_kib": 488268,
+        "peak_working_set_kib": 510996,
+        "private_kib": 526328
+      },
+      {
+        "phase": "released_rows",
+        "working_set_kib": 332988,
+        "peak_working_set_kib": 510996,
+        "private_kib": 370748
+      }
+    ],
+    "repeat": 1
+  },
+  {
+    "variant": "compact",
+    "particles": 7950256,
+    "constraints": 5955638,
+    "active_constraints": 5955638,
+    "eligible_neighbor_entries": 11904894,
+    "topological_triangles": 1984149,
+    "settle_clusters": 1984149,
+    "is_shake_true": 5952447,
+    "build_classify_record_seconds": 0.1285603,
+    "row_release_seconds": 0.0040673,
+    "output_fingerprint": "4526a74be33f5294",
+    "neighbors_fingerprint": "9729c0bee4ae13b",
+    "phases": [
+      {
+        "phase": "input",
+        "working_set_kib": 159432,
+        "peak_working_set_kib": 159432,
+        "private_kib": 156136
+      },
+      {
+        "phase": "base_arrays",
+        "working_set_kib": 285252,
+        "peak_working_set_kib": 316700,
+        "private_kib": 313712
+      },
+      {
+        "phase": "empty_rows",
+        "working_set_kib": 440696,
+        "peak_working_set_kib": 440696,
+        "private_kib": 470268
+      },
+      {
+        "phase": "filled_rows",
+        "working_set_kib": 440696,
+        "peak_working_set_kib": 440696,
+        "private_kib": 470268
+      },
+      {
+        "phase": "classified",
+        "working_set_kib": 448464,
+        "peak_working_set_kib": 452996,
+        "private_kib": 478700
+      },
+      {
+        "phase": "outputs",
+        "working_set_kib": 487248,
+        "peak_working_set_kib": 509980,
+        "private_kib": 524932
+      },
+      {
+        "phase": "released_rows",
+        "working_set_kib": 331968,
+        "peak_working_set_kib": 509980,
+        "private_kib": 369352
+      }
+    ],
+    "repeat": 2
+  },
+  {
+    "variant": "baseline",
+    "particles": 7950256,
+    "constraints": 5955638,
+    "active_constraints": 5955638,
+    "eligible_neighbor_entries": 11904894,
+    "topological_triangles": 1984149,
+    "settle_clusters": 1984149,
+    "is_shake_true": 5952447,
+    "build_classify_record_seconds": 1.345753,
+    "row_release_seconds": 0.708543,
+    "output_fingerprint": "4526a74be33f5294",
+    "neighbors_fingerprint": "9729c0bee4ae13b",
+    "phases": [
+      {
+        "phase": "input",
+        "working_set_kib": 159436,
+        "peak_working_set_kib": 159436,
+        "private_kib": 156148
+      },
+      {
+        "phase": "base_arrays",
+        "working_set_kib": 285272,
+        "peak_working_set_kib": 316712,
+        "private_kib": 313856
+      },
+      {
+        "phase": "empty_rows",
+        "working_set_kib": 783700,
+        "peak_working_set_kib": 783700,
+        "private_kib": 836436
+      },
+      {
+        "phase": "filled_rows",
+        "working_set_kib": 1344916,
+        "peak_working_set_kib": 1344916,
+        "private_kib": 1433444
+      },
+      {
+        "phase": "classified",
+        "working_set_kib": 1354180,
+        "peak_working_set_kib": 1358712,
+        "private_kib": 1444116
+      },
+      {
+        "phase": "outputs",
+        "working_set_kib": 1393512,
+        "peak_working_set_kib": 1416272,
+        "private_kib": 1491160
+      },
+      {
+        "phase": "released_rows",
+        "working_set_kib": 335412,
+        "peak_working_set_kib": 1416272,
+        "private_kib": 374548
+      }
+    ],
+    "repeat": 2
+  },
+  {
+    "variant": "baseline",
+    "particles": 7950256,
+    "constraints": 5955638,
+    "active_constraints": 5955638,
+    "eligible_neighbor_entries": 11904894,
+    "topological_triangles": 1984149,
+    "settle_clusters": 1984149,
+    "is_shake_true": 5952447,
+    "build_classify_record_seconds": 1.2273496,
+    "row_release_seconds": 0.5911245,
+    "output_fingerprint": "4526a74be33f5294",
+    "neighbors_fingerprint": "9729c0bee4ae13b",
+    "phases": [
+      {
+        "phase": "input",
+        "working_set_kib": 159428,
+        "peak_working_set_kib": 159428,
+        "private_kib": 156144
+      },
+      {
+        "phase": "base_arrays",
+        "working_set_kib": 285316,
+        "peak_working_set_kib": 316708,
+        "private_kib": 313796
+      },
+      {
+        "phase": "empty_rows",
+        "working_set_kib": 783732,
+        "peak_working_set_kib": 783732,
+        "private_kib": 836392
+      },
+      {
+        "phase": "filled_rows",
+        "working_set_kib": 1344948,
+        "peak_working_set_kib": 1344948,
+        "private_kib": 1433476
+      },
+      {
+        "phase": "classified",
+        "working_set_kib": 1354264,
+        "peak_working_set_kib": 1358768,
+        "private_kib": 1444152
+      },
+      {
+        "phase": "outputs",
+        "working_set_kib": 1393576,
+        "peak_working_set_kib": 1416340,
+        "private_kib": 1491196
+      },
+      {
+        "phase": "released_rows",
+        "working_set_kib": 335552,
+        "peak_working_set_kib": 1416340,
+        "private_kib": 374596
+      }
+    ],
+    "repeat": 3
+  },
+  {
+    "variant": "compact",
+    "particles": 7950256,
+    "constraints": 5955638,
+    "active_constraints": 5955638,
+    "eligible_neighbor_entries": 11904894,
+    "topological_triangles": 1984149,
+    "settle_clusters": 1984149,
+    "is_shake_true": 5952447,
+    "build_classify_record_seconds": 0.1198646,
+    "row_release_seconds": 0.0044443,
+    "output_fingerprint": "4526a74be33f5294",
+    "neighbors_fingerprint": "9729c0bee4ae13b",
+    "phases": [
+      {
+        "phase": "input",
+        "working_set_kib": 159424,
+        "peak_working_set_kib": 159424,
+        "private_kib": 156124
+      },
+      {
+        "phase": "base_arrays",
+        "working_set_kib": 285248,
+        "peak_working_set_kib": 316720,
+        "private_kib": 313728
+      },
+      {
+        "phase": "empty_rows",
+        "working_set_kib": 440692,
+        "peak_working_set_kib": 440692,
+        "private_kib": 470288
+      },
+      {
+        "phase": "filled_rows",
+        "working_set_kib": 440692,
+        "peak_working_set_kib": 440692,
+        "private_kib": 470288
+      },
+      {
+        "phase": "classified",
+        "working_set_kib": 448440,
+        "peak_working_set_kib": 452992,
+        "private_kib": 478724
+      },
+      {
+        "phase": "outputs",
+        "working_set_kib": 487192,
+        "peak_working_set_kib": 509952,
+        "private_kib": 524952
+      },
+      {
+        "phase": "released_rows",
+        "working_set_kib": 331912,
+        "peak_working_set_kib": 509952,
+        "private_kib": 369372
+      }
+    ],
+    "repeat": 3
+  }
+]

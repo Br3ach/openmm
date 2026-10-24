@@ -1,0 +1,18 @@
+{
+  "test": "TestCudaSettle",
+  "precision": "mixed",
+  "variant": "baseline",
+  "pid": 25640,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 1.5163818000000902,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.01,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 1.95
+    }
+  ]
+}

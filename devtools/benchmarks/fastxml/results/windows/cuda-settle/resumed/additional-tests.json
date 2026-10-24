@@ -1,0 +1,640 @@
+[
+  {
+    "test": "TestCudaMonteCarloBarostat",
+    "precision": "mixed",
+    "variant": "candidate",
+    "pid": 28448,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 132.16918430000078,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.95
+      },
+      {
+        "elapsed": 10.02,
+        "cpu_seconds": 10.078125,
+        "working_set_mib": 183.49
+      },
+      {
+        "elapsed": 20.03,
+        "cpu_seconds": 19.90625,
+        "working_set_mib": 183.5
+      },
+      {
+        "elapsed": 30.05,
+        "cpu_seconds": 29.828125,
+        "working_set_mib": 183.5
+      },
+      {
+        "elapsed": 40.06,
+        "cpu_seconds": 39.6875,
+        "working_set_mib": 183.45
+      },
+      {
+        "elapsed": 50.07,
+        "cpu_seconds": 49.640625,
+        "working_set_mib": 183.45
+      },
+      {
+        "elapsed": 60.08,
+        "cpu_seconds": 59.609375,
+        "working_set_mib": 183.38
+      },
+      {
+        "elapsed": 70.09,
+        "cpu_seconds": 69.5625,
+        "working_set_mib": 194.07
+      },
+      {
+        "elapsed": 80.1,
+        "cpu_seconds": 79.5,
+        "working_set_mib": 194.07
+      },
+      {
+        "elapsed": 90.12,
+        "cpu_seconds": 89.3125,
+        "working_set_mib": 194.07
+      },
+      {
+        "elapsed": 100.13,
+        "cpu_seconds": 99.265625,
+        "working_set_mib": 194.49
+      },
+      {
+        "elapsed": 110.14,
+        "cpu_seconds": 109.265625,
+        "working_set_mib": 194.49
+      },
+      {
+        "elapsed": 120.16,
+        "cpu_seconds": 119.234375,
+        "working_set_mib": 194.49
+      },
+      {
+        "elapsed": 130.17,
+        "cpu_seconds": 129.171875,
+        "working_set_mib": 200.94
+      }
+    ]
+  },
+  {
+    "test": "TestCudaSettle",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 2352,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 1.5152402000021539,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.95
+      }
+    ]
+  },
+  {
+    "test": "TestCudaVirtualSites",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 22564,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 12.842245800002274,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.83,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.95
+      },
+      {
+        "elapsed": 10.84,
+        "cpu_seconds": 11.4375,
+        "working_set_mib": 202.42
+      }
+    ]
+  },
+  {
+    "test": "TestCudaCheckpoints",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 6640,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 8.675673499998084,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.17,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.95
+      }
+    ]
+  },
+  {
+    "test": "TestCudaVerletIntegrator",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 39576,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 9.241548900001362,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.23,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.95
+      }
+    ]
+  },
+  {
+    "test": "TestCudaLangevinMiddleIntegrator",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 24372,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 11.650646099998994,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.14,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.95
+      },
+      {
+        "elapsed": 10.15,
+        "cpu_seconds": 10.171875,
+        "working_set_mib": 195.79
+      }
+    ]
+  },
+  {
+    "test": "TestCudaCustomIntegrator",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 34440,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 42.428434299999935,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.13,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.95
+      },
+      {
+        "elapsed": 10.14,
+        "cpu_seconds": 10.28125,
+        "working_set_mib": 197.01
+      },
+      {
+        "elapsed": 20.16,
+        "cpu_seconds": 20.6875,
+        "working_set_mib": 204.18
+      },
+      {
+        "elapsed": 30.17,
+        "cpu_seconds": 30.59375,
+        "working_set_mib": 205.26
+      },
+      {
+        "elapsed": 40.18,
+        "cpu_seconds": 40.4375,
+        "working_set_mib": 215.11
+      }
+    ]
+  },
+  {
+    "test": "TestCudaVariableVerletIntegrator",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 13696,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 8.667227700003423,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.16,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.95
+      }
+    ]
+  },
+  {
+    "test": "TestCudaNoseHooverIntegrator",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 21520,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 43.311580100002175,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.02,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.95
+      },
+      {
+        "elapsed": 10.02,
+        "cpu_seconds": 10.171875,
+        "working_set_mib": 205.23
+      },
+      {
+        "elapsed": 20.04,
+        "cpu_seconds": 20.46875,
+        "working_set_mib": 205.23
+      },
+      {
+        "elapsed": 30.05,
+        "cpu_seconds": 30.75,
+        "working_set_mib": 207.93
+      },
+      {
+        "elapsed": 40.06,
+        "cpu_seconds": 41.453125,
+        "working_set_mib": 297.62
+      }
+    ]
+  },
+  {
+    "test": "TestCudaMonteCarloBarostat",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 35560,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 22.158620000001974,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.13,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      },
+      {
+        "elapsed": 10.15,
+        "cpu_seconds": 9.703125,
+        "working_set_mib": 183.9
+      },
+      {
+        "elapsed": 20.16,
+        "cpu_seconds": 19.53125,
+        "working_set_mib": 203.0
+      }
+    ]
+  },
+  {
+    "test": "TestCudaVirtualSites",
+    "precision": "single",
+    "variant": "baseline",
+    "pid": 31660,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 10.280750100002479,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.02,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.98
+      },
+      {
+        "elapsed": 10.03,
+        "cpu_seconds": 10.65625,
+        "working_set_mib": 202.78
+      }
+    ]
+  },
+  {
+    "test": "TestCudaCheckpoints",
+    "precision": "single",
+    "variant": "baseline",
+    "pid": 32760,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 7.272532499999215,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.02,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.0
+      }
+    ]
+  },
+  {
+    "test": "TestCudaSettle",
+    "precision": "mixed",
+    "variant": "baseline",
+    "pid": 25640,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 1.5163818000000902,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 1.95
+      }
+    ]
+  },
+  {
+    "test": "TestCudaVirtualSites",
+    "precision": "mixed",
+    "variant": "baseline",
+    "pid": 37032,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 12.270468899998377,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      },
+      {
+        "elapsed": 10.02,
+        "cpu_seconds": 11.359375,
+        "working_set_mib": 191.61
+      }
+    ]
+  },
+  {
+    "test": "TestCudaCheckpoints",
+    "precision": "mixed",
+    "variant": "baseline",
+    "pid": 20928,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 8.263448499998049,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ]
+  },
+  {
+    "test": "TestCudaSettle",
+    "precision": "double",
+    "variant": "baseline",
+    "pid": 13164,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 1.508069700001215,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.02
+      }
+    ]
+  },
+  {
+    "test": "TestCudaVirtualSites",
+    "precision": "double",
+    "variant": "baseline",
+    "pid": 26760,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 11.76670390000072,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      },
+      {
+        "elapsed": 10.01,
+        "cpu_seconds": 11.09375,
+        "working_set_mib": 207.93
+      }
+    ]
+  },
+  {
+    "test": "TestCudaCheckpoints",
+    "precision": "double",
+    "variant": "baseline",
+    "pid": 7360,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 8.266942399997788,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ]
+  },
+  {
+    "test": "TestCudaCustomIntegratorFixedSeed",
+    "precision": "single",
+    "variant": "baseline",
+    "pid": 26956,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 34.44605479999882,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.66,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      },
+      {
+        "elapsed": 10.67,
+        "cpu_seconds": 10.640625,
+        "working_set_mib": 197.01
+      },
+      {
+        "elapsed": 20.68,
+        "cpu_seconds": 20.875,
+        "working_set_mib": 201.94
+      },
+      {
+        "elapsed": 30.69,
+        "cpu_seconds": 30.78125,
+        "working_set_mib": 209.07
+      }
+    ]
+  },
+  {
+    "test": "TestCudaCustomIntegratorFixedSeed",
+    "precision": "single",
+    "variant": "candidate",
+    "pid": 32760,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 34.30888810000033,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.02,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.0
+      },
+      {
+        "elapsed": 10.03,
+        "cpu_seconds": 10.609375,
+        "working_set_mib": 196.46
+      },
+      {
+        "elapsed": 20.05,
+        "cpu_seconds": 20.890625,
+        "working_set_mib": 208.86
+      },
+      {
+        "elapsed": 30.06,
+        "cpu_seconds": 30.765625,
+        "working_set_mib": 207.66
+      }
+    ]
+  },
+  {
+    "test": "TestCudaFFT3D",
+    "precision": "single",
+    "variant": "baseline",
+    "pid": 27916,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 4.527048199997807,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.52,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ]
+  },
+  {
+    "test": "TestCudaFFT3D",
+    "precision": "single",
+    "variant": "candidate",
+    "pid": 32808,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 4.021863900001335,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.02,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ]
+  },
+  {
+    "test": "TestCudaFFT3D",
+    "precision": "mixed",
+    "variant": "baseline",
+    "pid": 25744,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 4.762000999999145,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ]
+  },
+  {
+    "test": "TestCudaFFT3D",
+    "precision": "mixed",
+    "variant": "candidate",
+    "pid": 28780,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 4.760688200000004,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ]
+  },
+  {
+    "test": "TestCudaFFT3D",
+    "precision": "double",
+    "variant": "baseline",
+    "pid": 22088,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 4.510803699999087,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ]
+  },
+  {
+    "test": "TestCudaFFT3D",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 33452,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 600,
+    "seconds": 4.510218199997325,
+    "output": "Done\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ]
+  }
+]

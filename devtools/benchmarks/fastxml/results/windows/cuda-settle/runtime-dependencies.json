@@ -1,0 +1,66 @@
+{
+  "OpenMMCUDA.dll": {
+    "path": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\candidate\\OpenMMCUDA.dll",
+    "bytes": 1858560,
+    "imports": [
+      "OpenMM.dll",
+      "cufft64_12.dll",
+      "nvrtc64_130_0.dll",
+      "KERNEL32.dll",
+      "MSVCP140.dll",
+      "VCRUNTIME140.dll",
+      "VCRUNTIME140_1.dll",
+      "api-ms-win-crt-string-l1-1-0.dll",
+      "api-ms-win-crt-heap-l1-1-0.dll",
+      "api-ms-win-crt-environment-l1-1-0.dll",
+      "api-ms-win-crt-stdio-l1-1-0.dll",
+      "api-ms-win-crt-filesystem-l1-1-0.dll",
+      "api-ms-win-crt-math-l1-1-0.dll",
+      "api-ms-win-crt-runtime-l1-1-0.dll"
+    ]
+  },
+  "OpenMM.dll": {
+    "path": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\candidate\\OpenMM.dll",
+    "bytes": 2792448,
+    "imports": [
+      "MSVCP140.dll",
+      "ADVAPI32.dll",
+      "KERNEL32.dll",
+      "VCRUNTIME140.dll",
+      "VCRUNTIME140_1.dll",
+      "api-ms-win-crt-string-l1-1-0.dll",
+      "api-ms-win-crt-math-l1-1-0.dll",
+      "api-ms-win-crt-environment-l1-1-0.dll",
+      "api-ms-win-crt-runtime-l1-1-0.dll",
+      "api-ms-win-crt-heap-l1-1-0.dll",
+      "api-ms-win-crt-stdio-l1-1-0.dll",
+      "api-ms-win-crt-convert-l1-1-0.dll"
+    ]
+  },
+  "nvrtc-builtins64_134.dll": {
+    "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.4\\bin\\x64\\nvrtc-builtins64_134.dll",
+    "bytes": 7243376,
+    "imports": [
+      "KERNEL32.dll"
+    ]
+  },
+  "cufft64_12.dll": {
+    "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.4\\bin\\x64\\cufft64_12.dll",
+    "bytes": 232604272,
+    "imports": [
+      "KERNEL32.dll"
+    ]
+  },
+  "nvrtc64_130_0.dll": {
+    "path": "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.4\\bin\\x64\\nvrtc64_130_0.dll",
+    "bytes": 106038896,
+    "imports": [
+      "USER32.dll",
+      "ntdll.dll",
+      "KERNEL32.dll",
+      "ADVAPI32.dll",
+      "ole32.dll",
+      "SHELL32.dll"
+    ]
+  }
+}

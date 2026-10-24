@@ -1,0 +1,236 @@
+[
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "single",
+    "variant": "baseline",
+    "pid": 41184,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.1612333999983093,
+    "output": "{\"precision\":\"single\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"2f56a13dc1741fb6\",\"mode\":\"save\",\"self_replay_verified\":true}\n",
+    "samples": [
+      {
+        "elapsed": 0.16,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.14
+      }
+    ],
+    "mode": "save"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "single",
+    "variant": "candidate",
+    "pid": 17248,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.018521599999076,
+    "output": "{\"precision\":\"single\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"2f56a13dc1741fb6\",\"mode\":\"save\",\"self_replay_verified\":true}\n",
+    "samples": [
+      {
+        "elapsed": 0.02,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "save"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "single",
+    "variant": "candidate",
+    "pid": 27484,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.0064468000018678,
+    "output": "{\"precision\":\"single\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"2f56a13dc1741fb6\",\"mode\":\"load\",\"self_replay_verified\":false}\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "load",
+    "checkpoint_writer": "baseline"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "single",
+    "variant": "baseline",
+    "pid": 28216,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.006999999997788,
+    "output": "{\"precision\":\"single\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"2f56a13dc1741fb6\",\"mode\":\"load\",\"self_replay_verified\":false}\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "load",
+    "checkpoint_writer": "candidate"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "mixed",
+    "variant": "baseline",
+    "pid": 30328,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.257635999998456,
+    "output": "{\"precision\":\"mixed\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e7c26f3767e166dd\",\"mode\":\"save\",\"self_replay_verified\":true}\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "save"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "mixed",
+    "variant": "candidate",
+    "pid": 29640,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.257335400001466,
+    "output": "{\"precision\":\"mixed\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e7c26f3767e166dd\",\"mode\":\"save\",\"self_replay_verified\":true}\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "save"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "mixed",
+    "variant": "candidate",
+    "pid": 23016,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.2577005000021018,
+    "output": "{\"precision\":\"mixed\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e7c26f3767e166dd\",\"mode\":\"load\",\"self_replay_verified\":false}\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "load",
+    "checkpoint_writer": "baseline"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "mixed",
+    "variant": "baseline",
+    "pid": 1916,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.2568081999997958,
+    "output": "{\"precision\":\"mixed\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e7c26f3767e166dd\",\"mode\":\"load\",\"self_replay_verified\":false}\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "load",
+    "checkpoint_writer": "candidate"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "double",
+    "variant": "baseline",
+    "pid": 10908,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.0069991999989725,
+    "output": "{\"precision\":\"double\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e5a9f4fdb097a952\",\"mode\":\"save\",\"self_replay_verified\":true}\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "save"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 2240,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.0068542000008165,
+    "output": "{\"precision\":\"double\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e5a9f4fdb097a952\",\"mode\":\"save\",\"self_replay_verified\":true}\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "save"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "double",
+    "variant": "candidate",
+    "pid": 37368,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.257486999998946,
+    "output": "{\"precision\":\"double\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e5a9f4fdb097a952\",\"mode\":\"load\",\"self_replay_verified\":false}\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "load",
+    "checkpoint_writer": "baseline"
+  },
+  {
+    "test": "TestCudaSettleSnapshots",
+    "precision": "double",
+    "variant": "baseline",
+    "pid": 5168,
+    "returncode": 0,
+    "timeout": false,
+    "timeout_seconds": 180,
+    "seconds": 1.0068687999992108,
+    "output": "{\"precision\":\"double\",\"particles\":39,\"constraints\":31,\"fingerprint\":\"e5a9f4fdb097a952\",\"mode\":\"load\",\"self_replay_verified\":false}\n",
+    "samples": [
+      {
+        "elapsed": 0.01,
+        "cpu_seconds": 0.0,
+        "working_set_mib": 2.01
+      }
+    ],
+    "mode": "load",
+    "checkpoint_writer": "candidate"
+  }
+]

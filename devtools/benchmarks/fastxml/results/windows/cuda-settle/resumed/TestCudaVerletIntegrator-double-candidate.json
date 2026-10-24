@@ -1,0 +1,18 @@
+{
+  "test": "TestCudaVerletIntegrator",
+  "precision": "double",
+  "variant": "candidate",
+  "pid": 39576,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 9.241548900001362,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.23,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 1.95
+    }
+  ]
+}

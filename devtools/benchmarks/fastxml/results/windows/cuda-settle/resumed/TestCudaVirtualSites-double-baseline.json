@@ -1,0 +1,23 @@
+{
+  "test": "TestCudaVirtualSites",
+  "precision": "double",
+  "variant": "baseline",
+  "pid": 26760,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 11.76670390000072,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.01,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 2.01
+    },
+    {
+      "elapsed": 10.01,
+      "cpu_seconds": 11.09375,
+      "working_set_mib": 207.93
+    }
+  ]
+}

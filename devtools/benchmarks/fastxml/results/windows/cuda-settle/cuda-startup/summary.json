@@ -1,0 +1,107 @@
+[
+  {
+    "particles": 250000,
+    "kind": "unconstrained",
+    "constraints": 0,
+    "baseline": {
+      "construction_seconds": 1.1097789,
+      "before_working_set_kib": 25720,
+      "before_peak_working_set_kib": 26912,
+      "before_private_kib": 237508,
+      "platform_created_working_set_kib": 190324,
+      "platform_created_peak_working_set_kib": 235164,
+      "platform_created_private_kib": 835484,
+      "constructed_working_set_kib": 237304,
+      "constructed_peak_working_set_kib": 303256,
+      "constructed_private_kib": 899932,
+      "destroyed_working_set_kib": 90368,
+      "destroyed_peak_working_set_kib": 303256,
+      "destroyed_private_kib": 506912
+    },
+    "candidate": {
+      "construction_seconds": 1.0914582,
+      "before_working_set_kib": 24900,
+      "before_peak_working_set_kib": 26044,
+      "before_private_kib": 236652,
+      "platform_created_working_set_kib": 190452,
+      "platform_created_peak_working_set_kib": 219424,
+      "platform_created_private_kib": 835848,
+      "constructed_working_set_kib": 237472,
+      "constructed_peak_working_set_kib": 303104,
+      "constructed_private_kib": 900908,
+      "destroyed_working_set_kib": 90816,
+      "destroyed_peak_working_set_kib": 303104,
+      "destroyed_private_kib": 508180
+    }
+  },
+  {
+    "particles": 250000,
+    "kind": "water",
+    "constraints": 187500,
+    "baseline": {
+      "construction_seconds": 1.2324603,
+      "before_working_set_kib": 35104,
+      "before_peak_working_set_kib": 35104,
+      "before_private_kib": 247412,
+      "platform_created_working_set_kib": 201636,
+      "platform_created_peak_working_set_kib": 269676,
+      "platform_created_private_kib": 852852,
+      "constructed_working_set_kib": 238276,
+      "constructed_peak_working_set_kib": 317792,
+      "constructed_private_kib": 908156,
+      "destroyed_working_set_kib": 108972,
+      "destroyed_peak_working_set_kib": 317792,
+      "destroyed_private_kib": 529036
+    },
+    "candidate": {
+      "construction_seconds": 1.1851236,
+      "before_working_set_kib": 35120,
+      "before_peak_working_set_kib": 35120,
+      "before_private_kib": 247400,
+      "platform_created_working_set_kib": 200988,
+      "platform_created_peak_working_set_kib": 236296,
+      "platform_created_private_kib": 852004,
+      "constructed_working_set_kib": 238456,
+      "constructed_peak_working_set_kib": 317628,
+      "constructed_private_kib": 908504,
+      "destroyed_working_set_kib": 109296,
+      "destroyed_peak_working_set_kib": 317628,
+      "destroyed_private_kib": 529504
+    }
+  },
+  {
+    "particles": 500000,
+    "kind": "water",
+    "constraints": 375000,
+    "baseline": {
+      "construction_seconds": 1.5490641,
+      "before_working_set_kib": 47816,
+      "before_peak_working_set_kib": 49636,
+      "before_private_kib": 262592,
+      "platform_created_working_set_kib": 219304,
+      "platform_created_peak_working_set_kib": 330636,
+      "platform_created_private_kib": 908628,
+      "constructed_working_set_kib": 287864,
+      "constructed_peak_working_set_kib": 452260,
+      "constructed_private_kib": 1002580,
+      "destroyed_working_set_kib": 130440,
+      "destroyed_peak_working_set_kib": 452260,
+      "destroyed_private_kib": 508384
+    },
+    "candidate": {
+      "construction_seconds": 1.4712911,
+      "before_working_set_kib": 47800,
+      "before_peak_working_set_kib": 49632,
+      "before_private_kib": 262584,
+      "platform_created_working_set_kib": 219772,
+      "platform_created_peak_working_set_kib": 263056,
+      "platform_created_private_kib": 909364,
+      "constructed_working_set_kib": 287972,
+      "constructed_peak_working_set_kib": 451924,
+      "constructed_private_kib": 1003628,
+      "destroyed_working_set_kib": 130312,
+      "destroyed_peak_working_set_kib": 451924,
+      "destroyed_private_kib": 508196
+    }
+  }
+]

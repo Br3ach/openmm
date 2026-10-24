@@ -1,0 +1,43 @@
+{
+  "test": "TestCudaNoseHooverIntegrator",
+  "precision": "mixed",
+  "variant": "candidate",
+  "pid": 21364,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 58.585126499998296,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.01,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 1.95
+    },
+    {
+      "elapsed": 10.02,
+      "cpu_seconds": 10.546875,
+      "working_set_mib": 201.06
+    },
+    {
+      "elapsed": 20.03,
+      "cpu_seconds": 20.828125,
+      "working_set_mib": 208.38
+    },
+    {
+      "elapsed": 30.05,
+      "cpu_seconds": 30.96875,
+      "working_set_mib": 212.15
+    },
+    {
+      "elapsed": 40.06,
+      "cpu_seconds": 41.3125,
+      "working_set_mib": 210.18
+    },
+    {
+      "elapsed": 50.07,
+      "cpu_seconds": 51.625,
+      "working_set_mib": 214.04
+    }
+  ]
+}

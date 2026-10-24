@@ -1,0 +1,23 @@
+{
+  "test": "TestCudaLangevinMiddleIntegrator",
+  "precision": "double",
+  "variant": "candidate",
+  "pid": 24372,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 11.650646099998994,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.14,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 1.95
+    },
+    {
+      "elapsed": 10.15,
+      "cpu_seconds": 10.171875,
+      "working_set_mib": 195.79
+    }
+  ]
+}

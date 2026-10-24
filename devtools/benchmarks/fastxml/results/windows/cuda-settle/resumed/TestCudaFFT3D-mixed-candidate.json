@@ -1,0 +1,18 @@
+{
+  "test": "TestCudaFFT3D",
+  "precision": "mixed",
+  "variant": "candidate",
+  "pid": 28780,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 4.760688200000004,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.01,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 2.01
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "test": "TestCudaNoseHooverIntegrator",
+  "precision": "mixed",
+  "variant": "baseline",
+  "pid": 8968,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 103.52962109999862,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.63,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 2.3
+    },
+    {
+      "elapsed": 10.65,
+      "cpu_seconds": 9.953125,
+      "working_set_mib": 193.22
+    },
+    {
+      "elapsed": 20.66,
+      "cpu_seconds": 19.984375,
+      "working_set_mib": 187.2
+    },
+    {
+      "elapsed": 30.68,
+      "cpu_seconds": 30.1875,
+      "working_set_mib": 200.72
+    },
+    {
+      "elapsed": 40.7,
+      "cpu_seconds": 39.828125,
+      "working_set_mib": 207.37
+    },
+    {
+      "elapsed": 50.71,
+      "cpu_seconds": 50.203125,
+      "working_set_mib": 207.37
+    },
+    {
+      "elapsed": 60.73,
+      "cpu_seconds": 60.359375,
+      "working_set_mib": 204.1
+    },
+    {
+      "elapsed": 70.74,
+      "cpu_seconds": 70.296875,
+      "working_set_mib": 204.11
+    },
+    {
+      "elapsed": 80.75,
+      "cpu_seconds": 80.25,
+      "working_set_mib": 210.19
+    },
+    {
+      "elapsed": 90.76,
+      "cpu_seconds": 91.375,
+      "working_set_mib": 294.15
+    },
+    {
+      "elapsed": 100.78,
+      "cpu_seconds": 101.265625,
+      "working_set_mib": 214.84
+    }
+  ]
+}

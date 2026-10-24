@@ -1,0 +1,146 @@
+[
+  {
+    "test": "TestCudaSettle",
+    "precision": "single",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 2.091880299998593,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaVirtualSites",
+    "precision": "single",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 13.665006299997913,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaCheckpoints",
+    "precision": "single",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 9.615642900000239,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaVerletIntegrator",
+    "precision": "single",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 10.203373600001214,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaLangevinMiddleIntegrator",
+    "precision": "single",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 12.602267499998561,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaCustomIntegrator",
+    "precision": "single",
+    "variant": "candidate",
+    "returncode": 1,
+    "seconds": 40.6426191999999,
+    "stdout": "exception: Assertion failure at TestCustomIntegrator.h:1167.  Expected 300, found 296.361 (This test is stochastic and may occasionally fail)\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaVariableVerletIntegrator",
+    "precision": "single",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 8.99095060000036,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaNoseHooverIntegrator",
+    "precision": "single",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 41.342059400001745,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaMonteCarloBarostat",
+    "precision": "single",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 22.945965400002024,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaSettle",
+    "precision": "mixed",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 1.7786344999985886,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaVirtualSites",
+    "precision": "mixed",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 15.712143600001582,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaCheckpoints",
+    "precision": "mixed",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 10.443951299999753,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaVerletIntegrator",
+    "precision": "mixed",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 12.675988199996937,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaLangevinMiddleIntegrator",
+    "precision": "mixed",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 15.232362799997645,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaCustomIntegrator",
+    "precision": "mixed",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 46.21321529999841,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaVariableVerletIntegrator",
+    "precision": "mixed",
+    "variant": "candidate",
+    "returncode": 0,
+    "seconds": 9.352222800000163,
+    "stdout": "Done\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "test": "TestSettleConnectivity",
+    "variant": "baseline",
+    "returncode": 0,
+    "stdout": "{\"selftest\":\"passed\",\"random_graphs\":500,\"float_triangles\":108,\"long_cycle_particles\":20000}\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSettleConnectivity",
+    "variant": "candidate",
+    "returncode": 0,
+    "stdout": "{\"selftest\":\"passed\",\"random_graphs\":500,\"float_triangles\":108,\"long_cycle_particles\":20000}\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestCudaSettle",
+    "variant": "baseline",
+    "precision": "single",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  }
+]

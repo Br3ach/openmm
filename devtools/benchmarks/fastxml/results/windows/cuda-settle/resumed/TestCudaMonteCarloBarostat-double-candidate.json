@@ -1,0 +1,28 @@
+{
+  "test": "TestCudaMonteCarloBarostat",
+  "precision": "double",
+  "variant": "candidate",
+  "pid": 35560,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 22.158620000001974,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.13,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 2.01
+    },
+    {
+      "elapsed": 10.15,
+      "cpu_seconds": 9.703125,
+      "working_set_mib": 183.9
+    },
+    {
+      "elapsed": 20.16,
+      "cpu_seconds": 19.53125,
+      "working_set_mib": 203.0
+    }
+  ]
+}

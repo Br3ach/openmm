@@ -1,0 +1,33 @@
+{
+  "test": "TestCudaCustomIntegratorFixedSeed",
+  "precision": "single",
+  "variant": "candidate",
+  "pid": 32760,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 34.30888810000033,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.02,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 2.0
+    },
+    {
+      "elapsed": 10.03,
+      "cpu_seconds": 10.609375,
+      "working_set_mib": 196.46
+    },
+    {
+      "elapsed": 20.05,
+      "cpu_seconds": 20.890625,
+      "working_set_mib": 208.86
+    },
+    {
+      "elapsed": 30.06,
+      "cpu_seconds": 30.765625,
+      "working_set_mib": 207.66
+    }
+  ]
+}

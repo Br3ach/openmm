@@ -1,0 +1,18 @@
+{
+  "test": "TestCudaVariableVerletIntegrator",
+  "precision": "double",
+  "variant": "candidate",
+  "pid": 13696,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 8.667227700003423,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.16,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 1.95
+    }
+  ]
+}

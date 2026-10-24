@@ -1,0 +1,5 @@
+{
+  "performed": false,
+  "reason": "Not performed: CUDA startup benchmark is explicitly bounded to500000particles. Full-size actual-topology evidence is a host preprocessing model only.",
+  "gpu_status_after": "30123, 3"
+}

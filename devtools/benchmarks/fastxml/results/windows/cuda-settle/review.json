@@ -1,0 +1,32 @@
+{
+  "design_approved_before_implementation": true,
+  "final_release_approved": true,
+  "reviewer": "Separate independent reviewer agent",
+  "branch": "fastxml-experimental-20261024",
+  "stable_branch_verified_at": "655c38e9179d984f095f32d811d3eceed7c69534",
+  "independently_verified": [
+    "Runtime/helper/CUDA13 diffs and preserved output ordering",
+    "Host regression and complete real-topology equivalence modes",
+    "Selected mixed GPU snapshots, SETTLE, checkpoints and isolated fresh-JIT PME",
+    "All 26 additional outcome records; original stochastic failure and unreproduced timeout retained",
+    "12 seeded/cross-plugin checkpoint process records and fingerprints",
+    "Every CUDA/host median from raw records with warmups excluded",
+    "Byte-identical callers; DLL/runtime hashes;531 export names and ordinals",
+    "Staged five DLLs, matching import libraries and199 source-matched public headers",
+    "OpenMM/third-party and NVIDIA notices/licenses plus installation wording"
+  ],
+  "findings_addressed": [
+    "Snapshot load mode distinguishes external resume verification from internal replay",
+    "Original timeout recorded as not reproduced, cause undetermined",
+    "Reduced earlier-phase peak distinguished from unchanged whole-Context peak",
+    "Full-size host model distinguished from actual CUDA/FAH execution",
+    "Runtime bundle verified with OS-only PATH and all modules loaded from isolated folder"
+  ],
+  "limitations": [
+    "Tested RTX5090/driver621.01/CUDA13.4 configuration",
+    "OpenCL/HIP not built or validated",
+    "Actual FahCore_28 execution, work-unit peak and PPD unmeasured",
+    "CUDA memory benchmark bounded to500000 synthetic particles"
+  ],
+  "remaining_release_blockers": []
+}

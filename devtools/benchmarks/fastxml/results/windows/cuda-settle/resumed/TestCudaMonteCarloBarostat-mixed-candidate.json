@@ -1,0 +1,83 @@
+{
+  "test": "TestCudaMonteCarloBarostat",
+  "precision": "mixed",
+  "variant": "candidate",
+  "pid": 28448,
+  "returncode": 0,
+  "timeout": false,
+  "timeout_seconds": 600,
+  "seconds": 132.16918430000078,
+  "output": "Done\n",
+  "samples": [
+    {
+      "elapsed": 0.01,
+      "cpu_seconds": 0.0,
+      "working_set_mib": 1.95
+    },
+    {
+      "elapsed": 10.02,
+      "cpu_seconds": 10.078125,
+      "working_set_mib": 183.49
+    },
+    {
+      "elapsed": 20.03,
+      "cpu_seconds": 19.90625,
+      "working_set_mib": 183.5
+    },
+    {
+      "elapsed": 30.05,
+      "cpu_seconds": 29.828125,
+      "working_set_mib": 183.5
+    },
+    {
+      "elapsed": 40.06,
+      "cpu_seconds": 39.6875,
+      "working_set_mib": 183.45
+    },
+    {
+      "elapsed": 50.07,
+      "cpu_seconds": 49.640625,
+      "working_set_mib": 183.45
+    },
+    {
+      "elapsed": 60.08,
+      "cpu_seconds": 59.609375,
+      "working_set_mib": 183.38
+    },
+    {
+      "elapsed": 70.09,
+      "cpu_seconds": 69.5625,
+      "working_set_mib": 194.07
+    },
+    {
+      "elapsed": 80.1,
+      "cpu_seconds": 79.5,
+      "working_set_mib": 194.07
+    },
+    {
+      "elapsed": 90.12,
+      "cpu_seconds": 89.3125,
+      "working_set_mib": 194.07
+    },
+    {
+      "elapsed": 100.13,
+      "cpu_seconds": 99.265625,
+      "working_set_mib": 194.49
+    },
+    {
+      "elapsed": 110.14,
+      "cpu_seconds": 109.265625,
+      "working_set_mib": 194.49
+    },
+    {
+      "elapsed": 120.16,
+      "cpu_seconds": 119.234375,
+      "working_set_mib": 194.49
+    },
+    {
+      "elapsed": 130.17,
+      "cpu_seconds": 129.171875,
+      "working_set_mib": 200.94
+    }
+  ]
+}

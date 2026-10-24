@@ -1,0 +1,52 @@
+[
+  {
+    "variant": "baseline",
+    "returncode": 0,
+    "stdout": "{\"pme_energy_finite\":true,\"loaded_modules\":{\"OpenMM.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\settle-opt\\\\runtime-baseline\\\\OpenMM.dll\",\"OpenMMCUDA.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\settle-opt\\\\runtime-baseline\\\\OpenMMCUDA.dll\",\"cufft64_12.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\settle-opt\\\\runtime-baseline\\\\cufft64_12.dll\",\"nvrtc64_130_0.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\settle-opt\\\\runtime-baseline\\\\nvrtc64_130_0.dll\",\"nvrtc-builtins64_134.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\settle-opt\\\\runtime-baseline\\\\nvrtc-builtins64_134.dll\"}}\n",
+    "stderr": "",
+    "isolated_path": "C:\\Windows\\System32;C:\\Windows",
+    "fresh_cache": true,
+    "data": {
+      "pme_energy_finite": true,
+      "loaded_modules": {
+        "OpenMM.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\runtime-baseline\\OpenMM.dll",
+        "OpenMMCUDA.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\runtime-baseline\\OpenMMCUDA.dll",
+        "cufft64_12.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\runtime-baseline\\cufft64_12.dll",
+        "nvrtc64_130_0.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\runtime-baseline\\nvrtc64_130_0.dll",
+        "nvrtc-builtins64_134.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\runtime-baseline\\nvrtc-builtins64_134.dll"
+      }
+    },
+    "dll_sha256": {
+      "OpenMM.dll": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+      "OpenMMCUDA.dll": "da2c4c8e91ced64c7a48b9c560eb2e7a30cc7a621e991e919b01232fde4847a9",
+      "cufft64_12.dll": "d353fd42da7729709864731f35888aa177793d2350e56557df4c6ebaaf079ace",
+      "nvrtc64_130_0.dll": "c92027e5eae58b6f272cafb438bf59b55deb02bd326b183956e84e0a180dbd14",
+      "nvrtc-builtins64_134.dll": "73768e90526e8a43d5eb356f0ffad198468e8c15e95d45a84c6c4b12fb9aa02f"
+    }
+  },
+  {
+    "variant": "candidate",
+    "returncode": 0,
+    "stdout": "{\"pme_energy_finite\":true,\"loaded_modules\":{\"OpenMM.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\settle-opt\\\\runtime-candidate\\\\OpenMM.dll\",\"OpenMMCUDA.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\settle-opt\\\\runtime-candidate\\\\OpenMMCUDA.dll\",\"cufft64_12.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\settle-opt\\\\runtime-candidate\\\\cufft64_12.dll\",\"nvrtc64_130_0.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\settle-opt\\\\runtime-candidate\\\\nvrtc64_130_0.dll\",\"nvrtc-builtins64_134.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\settle-opt\\\\runtime-candidate\\\\nvrtc-builtins64_134.dll\"}}\n",
+    "stderr": "",
+    "isolated_path": "C:\\Windows\\System32;C:\\Windows",
+    "fresh_cache": true,
+    "data": {
+      "pme_energy_finite": true,
+      "loaded_modules": {
+        "OpenMM.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\runtime-candidate\\OpenMM.dll",
+        "OpenMMCUDA.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\runtime-candidate\\OpenMMCUDA.dll",
+        "cufft64_12.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\runtime-candidate\\cufft64_12.dll",
+        "nvrtc64_130_0.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\runtime-candidate\\nvrtc64_130_0.dll",
+        "nvrtc-builtins64_134.dll": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\settle-opt\\runtime-candidate\\nvrtc-builtins64_134.dll"
+      }
+    },
+    "dll_sha256": {
+      "OpenMM.dll": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+      "OpenMMCUDA.dll": "bb08de5228f5d07aa02ef5b55a57edea1484b084aa32ffd611eeb8d8d3b6a7fb",
+      "cufft64_12.dll": "d353fd42da7729709864731f35888aa177793d2350e56557df4c6ebaaf079ace",
+      "nvrtc64_130_0.dll": "c92027e5eae58b6f272cafb438bf59b55deb02bd326b183956e84e0a180dbd14",
+      "nvrtc-builtins64_134.dll": "73768e90526e8a43d5eb356f0ffad198468e8c15e95d45a84c6c4b12fb9aa02f"
+    }
+  }
+]

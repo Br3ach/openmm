@@ -1,0 +1,7 @@
+{
+  "precisions": 3,
+  "processes": 12,
+  "seeded_trajectories_identical": true,
+  "cross_plugin_checkpoint_directions": 2,
+  "all_replays_identical": true
+}
