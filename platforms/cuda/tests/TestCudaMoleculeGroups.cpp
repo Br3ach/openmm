@@ -123,7 +123,7 @@ static uint64_t stateHash(Context& context){
 static uint64_t indexHash(CudaContext& cc){auto order=cc.getAtomIndex();auto sorted=order;sort(sorted.begin(),sorted.end());for(int i=0;i<(int)sorted.size();i++)if(sorted[i]!=i)throw runtime_error("Atom index is not a permutation");uint64_t h=14695981039346656037ULL;for(int i:order)h=hashInt(h,i);return h;}
 static uint64_t traceHash(const InfoState& first,const InfoState& second){uint64_t h=14695981039346656037ULL;for(int x:first.trace)h=hashInt(h,(uint32_t)x);h=hashInt(h,123456);for(int x:second.trace)h=hashInt(h,(uint32_t)x);for(int x:groupCallbackTrace)h=hashInt(h,(uint32_t)x);return h;}
 int main(int argc,char**argv){try{
-    string precision=argc>1?argv[1]:"mixed",mode=argc>2?argv[2]:"fresh";if(mode!="fresh"&&mode!="save"&&mode!="load")throw runtime_error("Invalid mode");if(mode!="fresh"&&argc!=4)throw runtime_error("Checkpoint path required");
+    string precision=argc>1?argv[1]:"mixed",mode=argc>2?argv[2]:"fresh";if(mode!="fresh"&&mode!="save"&&mode!="load"&&mode!="invalid")throw runtime_error("Invalid mode");if((mode=="save"||mode=="load")&&argc!=4)throw runtime_error("Checkpoint path required");
     InfoState first(1),second(2);System system;vector<Vec3> positions;NonbondedForce* nb=makeSystem(system,positions,first,second);
     VerletIntegrator integrator(0.0005);CudaPlatform platform;map<string,string> properties;properties["Precision"]=precision;properties["UseBlockingSync"]="true";properties["DeterministicForces"]="true";
     Context context(system,integrator,platform,properties);if(!first.context)throw runtime_error("Missing CUDA test context");CudaContext& cc=*first.context;
@@ -139,6 +139,23 @@ int main(int argc,char**argv){try{
     first.labels[20]=0;second.groupLabels[7]=99;if(!invalidate(cc,second.info))throw runtime_error("Group split was not detected");regroups++;record();
     second.groupLabels[7]=3;double q,sigma,epsilon;nb->getParticleParameters(32,q,sigma,epsilon);nb->setParticleParameters(32,q,sigma,2*epsilon);nb->updateParametersInContext(context);record();
     nb->setParticleParameters(32,q,sigma,epsilon);nb->updateParametersInContext(context);first.labels[28]=99;if(!invalidate(cc,first.info))throw runtime_error("Restored-group merge trigger was not detected");regroups++;record();
+    if(mode=="invalid") {
+        auto order=cc.getAtomIndex();
+        int a=int(find(order.begin(),order.end(),9)-order.begin());
+        int b=int(find(order.begin(),order.end(),10)-order.begin());
+        if(a==order.size()||b==order.size())throw runtime_error("Missing test atoms");
+        swap(order[a],order[b]);
+        {ContextSelector select(cc);cc.setAtomIndex(order);}
+        auto beforeRepair=context.getState(State::Positions|State::Velocities);
+        {ContextSelector select(cc);cc.validateAtomOrder();}
+        if(cc.getAtomIndex()==order)throw runtime_error("Invalid order was not repaired");
+        auto afterRepair=context.getState(State::Positions|State::Velocities);
+        for(int i=0;i<system.getNumParticles();i++)for(int d=0;d<3;d++) {
+            double dp=beforeRepair.getPositions()[i][d]-afterRepair.getPositions()[i][d];
+            double dv=beforeRepair.getVelocities()[i][d]-afterRepair.getVelocities()[i][d];
+            if(!isfinite(dp)||!isfinite(dv)||abs(dp)>1e-6||abs(dv)>1e-6)throw runtime_error("Order repair changed state");
+        }
+    }
     if(mode=="load"){ifstream file(argv[3],ios::binary);if(!file)throw runtime_error("Checkpoint missing");context.loadCheckpoint(file);}
     stringstream checkpoint(ios::in|ios::out|ios::binary);context.createCheckpoint(checkpoint);
     if(mode=="save"){ofstream file(argv[3],ios::binary);file<<checkpoint.rdbuf();if(!file)throw runtime_error("Checkpoint write failed");}

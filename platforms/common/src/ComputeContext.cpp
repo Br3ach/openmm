@@ -424,17 +424,14 @@ void ComputeContext::resetAtomOrder() {
 
 void ComputeContext::validateAtomOrder() {
     for (auto& mol : moleculeGroups) {
-        for (int atom : mol.atoms) {
-            set<int> identical;
+        // Offsets are appended in ascending molecule-minimum order and never reordered.
+        for (int atom : mol.atoms)
             for (int offset : mol.offsets)
-                identical.insert(atom+offset);
-            for (int i : identical)
-                if (identical.find(atomIndex[i]) == identical.end()) {
+                if (!binary_search(mol.offsets.begin(), mol.offsets.end(), atomIndex[atom+offset]-atom)) {
                     resetAtomOrder();
                     reorderAtoms();
                     return;
                 }
-        }
     }
 }
 
