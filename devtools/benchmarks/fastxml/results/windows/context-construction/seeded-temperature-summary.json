@@ -1,0 +1,47 @@
+{
+  "seeds": 101,
+  "all_temperatures_and_velocity_fingerprints_identical": true,
+  "particle_count": 50000,
+  "outside_one_percent": [
+    {
+      "seed": 24,
+      "temperature": 295.48854546808104,
+      "fingerprint": "470f86a9beb34fb6"
+    },
+    {
+      "seed": 33,
+      "temperature": 304.13525099789376,
+      "fingerprint": "dc083bbedf2864f"
+    },
+    {
+      "seed": 40,
+      "temperature": 303.7166101626712,
+      "fingerprint": "8599336d9c1b1af6"
+    },
+    {
+      "seed": 50,
+      "temperature": 296.7869806115542,
+      "fingerprint": "2bf29be01babe103"
+    },
+    {
+      "seed": 52,
+      "temperature": 304.19343914303977,
+      "fingerprint": "a49f24a3d42e867f"
+    },
+    {
+      "seed": 53,
+      "temperature": 296.8633337006112,
+      "fingerprint": "13348355de31e4d0"
+    },
+    {
+      "seed": 69,
+      "temperature": 295.7443989545247,
+      "fingerprint": "19f18382b2c14a23"
+    },
+    {
+      "seed": 83,
+      "temperature": 303.6098161039806,
+      "fingerprint": "49ca9759f268fb7a"
+    }
+  ]
+}

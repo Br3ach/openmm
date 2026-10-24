@@ -1,0 +1,50 @@
+[
+  {
+    "test": "TestReferenceCustomIntegrator",
+    "variant": "baseline",
+    "repeat": 1,
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestReferenceCustomIntegrator",
+    "variant": "candidate",
+    "repeat": 1,
+    "returncode": 1,
+    "stdout": "exception: Assertion failure at TestCustomIntegrator.h:1167.  Expected 300, found 303.012 (This test is stochastic and may occasionally fail)\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestReferenceCustomIntegrator",
+    "variant": "baseline",
+    "repeat": 2,
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestReferenceCustomIntegrator",
+    "variant": "candidate",
+    "repeat": 2,
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestReferenceCustomIntegrator",
+    "variant": "baseline",
+    "repeat": 3,
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestReferenceCustomIntegrator",
+    "variant": "candidate",
+    "repeat": 3,
+    "returncode": 1,
+    "stdout": "exception: Assertion failure at TestCustomIntegrator.h:1167.  Expected 300, found 296.163 (This test is stochastic and may occasionally fail)\n",
+    "stderr": ""
+  }
+]

@@ -65,23 +65,25 @@ ContextImpl::ContextImpl(Context& owner, const System& system, Integrator& integ
     for (int i = 0; i < numParticles; i++)
         if (system.isVirtualSite(i) && system.getParticleMass(i) != 0.0)
             throw OpenMMException("Virtual site has nonzero mass");
-    set<pair<int, int> > constraintAtoms;
-    for (int i = 0; i < system.getNumConstraints(); i++) {
-        int particle1, particle2;
-        double distance;
-        system.getConstraintParameters(i, particle1, particle2, distance);
-        if (particle1 == particle2)
-            throw OpenMMException("A constraint cannot connect a particle to itself");
-        if (particle1 < 0 || particle2 < 0 || particle1 >= numParticles || particle2 >= numParticles)
-            throw OpenMMException("Illegal particle index in constraint");
-        double mass1 = system.getParticleMass(particle1);
-        double mass2 = system.getParticleMass(particle2);
-        if ((mass1 == 0.0 && mass2 != 0.0) || (mass2 == 0.0 && mass1 != 0.0))
-            throw OpenMMException("A constraint cannot involve a massless particle");
-        pair<int, int> atoms = make_pair(min(particle1, particle2), max(particle1, particle2));
-        if (constraintAtoms.find(atoms) != constraintAtoms.end())
-            throw OpenMMException("The System has two constraints between the same atoms.  This will produce a singular constraint matrix.");
-        constraintAtoms.insert(atoms);
+    {
+        set<pair<int, int> > constraintAtoms;
+        for (int i = 0; i < system.getNumConstraints(); i++) {
+            int particle1, particle2;
+            double distance;
+            system.getConstraintParameters(i, particle1, particle2, distance);
+            if (particle1 == particle2)
+                throw OpenMMException("A constraint cannot connect a particle to itself");
+            if (particle1 < 0 || particle2 < 0 || particle1 >= numParticles || particle2 >= numParticles)
+                throw OpenMMException("Illegal particle index in constraint");
+            double mass1 = system.getParticleMass(particle1);
+            double mass2 = system.getParticleMass(particle2);
+            if ((mass1 == 0.0 && mass2 != 0.0) || (mass2 == 0.0 && mass1 != 0.0))
+                throw OpenMMException("A constraint cannot involve a massless particle");
+            pair<int, int> atoms = make_pair(min(particle1, particle2), max(particle1, particle2));
+            if (constraintAtoms.find(atoms) != constraintAtoms.end())
+                throw OpenMMException("The System has two constraints between the same atoms.  This will produce a singular constraint matrix.");
+            constraintAtoms.insert(atoms);
+        }
     }
     
     // Validate the list of properties.

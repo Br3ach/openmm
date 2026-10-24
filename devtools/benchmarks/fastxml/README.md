@@ -194,3 +194,14 @@ existing exported static algorithm. See
 for independent review, 49 passing tests, first-call benchmarks and the
 Windows setup-peak caveat. This change benefits existing core-DLL callers;
 the larger platform-side graph is a separate optimization target.
+
+## Release constraint-validation memory before platform setup
+
+The `ContextImpl` constructor now destroys its temporary constraint-validation
+set as soon as validation finishes. The same validation logic and error order
+are retained; the core DLL and public ABI remain compatible. This removes the
+tree's overlap with platform creation and host constraint preprocessing.
+See [`results/windows/context-construction/`](results/windows/context-construction/)
+for the constructor A/B benchmark, exact scope, stochastic-test triage and
+independent review. The measured benefit is temporary startup memory; actual
+CUDA/FAH peak reductions and PPD remain unmeasured.

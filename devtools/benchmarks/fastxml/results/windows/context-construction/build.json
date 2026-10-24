@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "ab4179b71b83e876bd6b5c0888137da268bc3d01",
+  "candidate_change": "Scope the identical constraintAtoms validation block before property/force/platform construction",
+  "compiler": "MSVC 19.51.36260 x64",
+  "os": "Native Windows",
+  "platform": "Reference",
+  "cpu": "AMD Ryzen 7 9800X3D",
+  "compile_flags": [
+    "/O2",
+    "/Ob2",
+    "/MD",
+    "/EHsc",
+    "/std:c++14"
+  ],
+  "recompiled_translation_unit": "openmmapi/src/ContextImpl.cpp",
+  "reused_other_translation_units": 263,
+  "process_memory_limit_mib": 6144,
+  "timeout_seconds": 240,
+  "identical_caller_binary": true,
+  "peak_scope": "Windows process-lifetime PeakWorkingSetSize sampled after Context construction",
+  "cuda_tested": false,
+  "fah_core_tested": false,
+  "design_independently_approved_before_implementation": true,
+  "baseline_dll_sha256": "1c0f1828bedc295e9eeb39f3ac7f65dcf0925d2f0369d7d1800f0d220c44c215",
+  "candidate_dll_sha256": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+  "benchmark_exe_sha256": "e0a3fa6c0a46d2f79fde4d6eb8228d2b376aaac6b9d7e15a6b973499b761c3df",
+  "seeded_temperature_exe_sha256": "02548a96e293af65bf580e99f3f0d8364b3c0f3719a7e5311d56e647d21b76aa",
+  "fixed_seed_test_exe_sha256": "bf57b9d19fcaed93911460ea97cd77290d08537a2787fa4943de57eb9f734ae7"
+}

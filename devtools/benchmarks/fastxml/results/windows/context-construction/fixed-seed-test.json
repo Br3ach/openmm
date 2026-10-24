@@ -1,0 +1,16 @@
+[
+  {
+    "test": "TestReferenceCustomIntegratorFixedSeed",
+    "variant": "baseline",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestReferenceCustomIntegratorFixedSeed",
+    "variant": "candidate",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  }
+]

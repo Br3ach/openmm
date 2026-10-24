@@ -1,0 +1,1016 @@
+{
+  "baseline": [
+    {
+      "seed": 0,
+      "temperature": 300.5676365518619,
+      "fingerprint": "ae4b8ce548c66018"
+    },
+    {
+      "seed": 1,
+      "temperature": 297.53670381379135,
+      "fingerprint": "dd6f8fddbd2f8810"
+    },
+    {
+      "seed": 2,
+      "temperature": 301.5307228169101,
+      "fingerprint": "c5c44fcada3a201f"
+    },
+    {
+      "seed": 3,
+      "temperature": 301.6265831740005,
+      "fingerprint": "85fc631289903ef5"
+    },
+    {
+      "seed": 4,
+      "temperature": 301.7015604354731,
+      "fingerprint": "2dfd561f9af379f2"
+    },
+    {
+      "seed": 5,
+      "temperature": 298.4112434604356,
+      "fingerprint": "42f8e520ec2b149f"
+    },
+    {
+      "seed": 6,
+      "temperature": 297.0578992730595,
+      "fingerprint": "a4dce63f7290ec22"
+    },
+    {
+      "seed": 7,
+      "temperature": 299.95317038003344,
+      "fingerprint": "a6d4b69fa6477429"
+    },
+    {
+      "seed": 8,
+      "temperature": 299.6858937994796,
+      "fingerprint": "6448ac597b913b24"
+    },
+    {
+      "seed": 9,
+      "temperature": 299.0483475298091,
+      "fingerprint": "de92c08c1d3359be"
+    },
+    {
+      "seed": 10,
+      "temperature": 302.43898639094203,
+      "fingerprint": "f089dbbe5d081ed5"
+    },
+    {
+      "seed": 11,
+      "temperature": 299.42191787787436,
+      "fingerprint": "15c0da27de0f3370"
+    },
+    {
+      "seed": 12,
+      "temperature": 299.3468906103629,
+      "fingerprint": "44e63a7327a173a2"
+    },
+    {
+      "seed": 13,
+      "temperature": 300.0112184640342,
+      "fingerprint": "644c315d517925b4"
+    },
+    {
+      "seed": 14,
+      "temperature": 300.49195154131684,
+      "fingerprint": "1e2d2dbcd7b3767c"
+    },
+    {
+      "seed": 15,
+      "temperature": 301.2953965650541,
+      "fingerprint": "a022eb3bb5b1d358"
+    },
+    {
+      "seed": 16,
+      "temperature": 301.03927917118847,
+      "fingerprint": "cfda4efca72e6f02"
+    },
+    {
+      "seed": 17,
+      "temperature": 299.7782094234176,
+      "fingerprint": "c3001aae55a621e5"
+    },
+    {
+      "seed": 18,
+      "temperature": 298.90664481063914,
+      "fingerprint": "3bf6890976ca05d9"
+    },
+    {
+      "seed": 19,
+      "temperature": 297.37365150722616,
+      "fingerprint": "b73b3c27f7db8e69"
+    },
+    {
+      "seed": 20,
+      "temperature": 300.5157679571293,
+      "fingerprint": "beb05e2ad8cbe7ab"
+    },
+    {
+      "seed": 21,
+      "temperature": 302.2299977758583,
+      "fingerprint": "c7f58453abbd83ec"
+    },
+    {
+      "seed": 22,
+      "temperature": 301.05570561089644,
+      "fingerprint": "f95ce8b2a8f06f7a"
+    },
+    {
+      "seed": 23,
+      "temperature": 299.72698644647613,
+      "fingerprint": "ce3d7b27169f8429"
+    },
+    {
+      "seed": 24,
+      "temperature": 295.48854546808104,
+      "fingerprint": "470f86a9beb34fb6"
+    },
+    {
+      "seed": 25,
+      "temperature": 298.2818054059609,
+      "fingerprint": "d48a3687bfc50859"
+    },
+    {
+      "seed": 26,
+      "temperature": 300.2215994979839,
+      "fingerprint": "5de059e4a4f130f8"
+    },
+    {
+      "seed": 27,
+      "temperature": 301.6125557011814,
+      "fingerprint": "4a28d789befb3709"
+    },
+    {
+      "seed": 28,
+      "temperature": 300.44186206285656,
+      "fingerprint": "349d454ef54388d0"
+    },
+    {
+      "seed": 29,
+      "temperature": 302.16861266728836,
+      "fingerprint": "9c495b9ff6e6b2fc"
+    },
+    {
+      "seed": 30,
+      "temperature": 297.1328977723424,
+      "fingerprint": "a37b7fa40dcae16b"
+    },
+    {
+      "seed": 31,
+      "temperature": 298.8323912107771,
+      "fingerprint": "14203220c919c27e"
+    },
+    {
+      "seed": 32,
+      "temperature": 298.49788280596755,
+      "fingerprint": "9c4a370c2ec86b2c"
+    },
+    {
+      "seed": 33,
+      "temperature": 304.13525099789376,
+      "fingerprint": "dc083bbedf2864f"
+    },
+    {
+      "seed": 34,
+      "temperature": 297.8091742443534,
+      "fingerprint": "1a42a80fbef50b53"
+    },
+    {
+      "seed": 35,
+      "temperature": 297.8819879271128,
+      "fingerprint": "73271493348e3df6"
+    },
+    {
+      "seed": 36,
+      "temperature": 299.70563320772425,
+      "fingerprint": "e93a11c34eab0f41"
+    },
+    {
+      "seed": 37,
+      "temperature": 299.97548135263514,
+      "fingerprint": "1c617a45cc8f87a7"
+    },
+    {
+      "seed": 38,
+      "temperature": 297.78902228259665,
+      "fingerprint": "fc28410d524f9aba"
+    },
+    {
+      "seed": 39,
+      "temperature": 301.5793771974003,
+      "fingerprint": "d12ae418a9e78bd7"
+    },
+    {
+      "seed": 40,
+      "temperature": 303.7166101626712,
+      "fingerprint": "8599336d9c1b1af6"
+    },
+    {
+      "seed": 41,
+      "temperature": 298.126443328168,
+      "fingerprint": "6f8cd87f5161d4a3"
+    },
+    {
+      "seed": 42,
+      "temperature": 299.3231444264804,
+      "fingerprint": "d361fae86f70fa"
+    },
+    {
+      "seed": 43,
+      "temperature": 301.32413914576,
+      "fingerprint": "cec1ffa9a5792230"
+    },
+    {
+      "seed": 44,
+      "temperature": 297.6643439778511,
+      "fingerprint": "590a3b63f96c1ee2"
+    },
+    {
+      "seed": 45,
+      "temperature": 302.1796959762062,
+      "fingerprint": "5c7ce9ff7ab1e994"
+    },
+    {
+      "seed": 46,
+      "temperature": 302.09167469706995,
+      "fingerprint": "751e8727529058d3"
+    },
+    {
+      "seed": 47,
+      "temperature": 300.315147803551,
+      "fingerprint": "5e1a47da3cd77ddd"
+    },
+    {
+      "seed": 48,
+      "temperature": 302.61093633224493,
+      "fingerprint": "e315a17b9201586b"
+    },
+    {
+      "seed": 49,
+      "temperature": 300.9988773465275,
+      "fingerprint": "6dc552c0bea7020d"
+    },
+    {
+      "seed": 50,
+      "temperature": 296.7869806115542,
+      "fingerprint": "2bf29be01babe103"
+    },
+    {
+      "seed": 51,
+      "temperature": 301.33637678640986,
+      "fingerprint": "c31664e2fb5c96ec"
+    },
+    {
+      "seed": 52,
+      "temperature": 304.19343914303977,
+      "fingerprint": "a49f24a3d42e867f"
+    },
+    {
+      "seed": 53,
+      "temperature": 296.8633337006112,
+      "fingerprint": "13348355de31e4d0"
+    },
+    {
+      "seed": 54,
+      "temperature": 298.81502466130416,
+      "fingerprint": "860903fa8b9e23c3"
+    },
+    {
+      "seed": 55,
+      "temperature": 300.0527463966611,
+      "fingerprint": "2bd9ae8fe42790d3"
+    },
+    {
+      "seed": 56,
+      "temperature": 299.52875485887233,
+      "fingerprint": "7ac6c908897419aa"
+    },
+    {
+      "seed": 57,
+      "temperature": 300.5809115327569,
+      "fingerprint": "8dad2302a94fc8a"
+    },
+    {
+      "seed": 58,
+      "temperature": 301.3337182410428,
+      "fingerprint": "39e309cbbdf5ee7d"
+    },
+    {
+      "seed": 59,
+      "temperature": 299.9838159063982,
+      "fingerprint": "901d2e191c1013c"
+    },
+    {
+      "seed": 60,
+      "temperature": 301.1554951979329,
+      "fingerprint": "bd84df42a9879a78"
+    },
+    {
+      "seed": 61,
+      "temperature": 298.77714760736944,
+      "fingerprint": "4e7e4d78bc9c06e9"
+    },
+    {
+      "seed": 62,
+      "temperature": 301.3060655082297,
+      "fingerprint": "d095b215815aa7d1"
+    },
+    {
+      "seed": 63,
+      "temperature": 299.8683961097504,
+      "fingerprint": "a6b97c1b2e6fa313"
+    },
+    {
+      "seed": 64,
+      "temperature": 297.35246253744907,
+      "fingerprint": "d1870825de9a81dd"
+    },
+    {
+      "seed": 65,
+      "temperature": 297.9780478497443,
+      "fingerprint": "c32504de359dff7e"
+    },
+    {
+      "seed": 66,
+      "temperature": 301.18691693816277,
+      "fingerprint": "e82056be9ce81a38"
+    },
+    {
+      "seed": 67,
+      "temperature": 300.75280915685653,
+      "fingerprint": "64b600f4b7f2693e"
+    },
+    {
+      "seed": 68,
+      "temperature": 299.7631859872232,
+      "fingerprint": "4dc316b754d0b012"
+    },
+    {
+      "seed": 69,
+      "temperature": 295.7443989545247,
+      "fingerprint": "19f18382b2c14a23"
+    },
+    {
+      "seed": 70,
+      "temperature": 300.1551278775361,
+      "fingerprint": "f1599f888d6f968"
+    },
+    {
+      "seed": 71,
+      "temperature": 300.7428866769917,
+      "fingerprint": "b05e6156ebe5944"
+    },
+    {
+      "seed": 72,
+      "temperature": 301.5594166673852,
+      "fingerprint": "8198e31f8994c089"
+    },
+    {
+      "seed": 73,
+      "temperature": 297.2381816163397,
+      "fingerprint": "9d93f7f28b600d86"
+    },
+    {
+      "seed": 74,
+      "temperature": 299.5024355266994,
+      "fingerprint": "2d7660b39087361c"
+    },
+    {
+      "seed": 75,
+      "temperature": 302.62123637644873,
+      "fingerprint": "717fed14947b633"
+    },
+    {
+      "seed": 76,
+      "temperature": 301.09281641282433,
+      "fingerprint": "9c075b701283652d"
+    },
+    {
+      "seed": 77,
+      "temperature": 300.9249887429689,
+      "fingerprint": "a46906efe3606387"
+    },
+    {
+      "seed": 78,
+      "temperature": 299.0103011700035,
+      "fingerprint": "10fe08aafa224d31"
+    },
+    {
+      "seed": 79,
+      "temperature": 300.2406372925935,
+      "fingerprint": "757b019cb52768d2"
+    },
+    {
+      "seed": 80,
+      "temperature": 300.1310515848887,
+      "fingerprint": "fe4bfa5ac1403b38"
+    },
+    {
+      "seed": 81,
+      "temperature": 299.8414562376323,
+      "fingerprint": "79a54cee9b8b2af"
+    },
+    {
+      "seed": 82,
+      "temperature": 302.38766933233904,
+      "fingerprint": "9115231092527375"
+    },
+    {
+      "seed": 83,
+      "temperature": 303.6098161039806,
+      "fingerprint": "49ca9759f268fb7a"
+    },
+    {
+      "seed": 84,
+      "temperature": 300.8962445243377,
+      "fingerprint": "8f38dbbbb207cf5b"
+    },
+    {
+      "seed": 85,
+      "temperature": 299.97403202074497,
+      "fingerprint": "7513ec80e7c15c86"
+    },
+    {
+      "seed": 86,
+      "temperature": 300.3178042910146,
+      "fingerprint": "2317bfabcb6ef658"
+    },
+    {
+      "seed": 87,
+      "temperature": 300.1889066317364,
+      "fingerprint": "34ae2a1b93fcbbfb"
+    },
+    {
+      "seed": 88,
+      "temperature": 297.3526821442785,
+      "fingerprint": "8bbc1f87dd66e5cd"
+    },
+    {
+      "seed": 89,
+      "temperature": 300.368108181503,
+      "fingerprint": "26b4bf743913510a"
+    },
+    {
+      "seed": 90,
+      "temperature": 300.41635381973566,
+      "fingerprint": "e6d309100d0798d4"
+    },
+    {
+      "seed": 91,
+      "temperature": 299.0816504662897,
+      "fingerprint": "dbcc3804e5c24bd1"
+    },
+    {
+      "seed": 92,
+      "temperature": 297.8299645249503,
+      "fingerprint": "afe97a09fa7e2191"
+    },
+    {
+      "seed": 93,
+      "temperature": 299.5512220444511,
+      "fingerprint": "b04e401137ccdbcb"
+    },
+    {
+      "seed": 94,
+      "temperature": 300.83606970250656,
+      "fingerprint": "5b416aba7ed4de45"
+    },
+    {
+      "seed": 95,
+      "temperature": 299.9307319402925,
+      "fingerprint": "5c64bc2da65d792e"
+    },
+    {
+      "seed": 96,
+      "temperature": 302.20914593633614,
+      "fingerprint": "d563c5196c5ff821"
+    },
+    {
+      "seed": 97,
+      "temperature": 299.28185417447753,
+      "fingerprint": "90ae9888ab60cb7d"
+    },
+    {
+      "seed": 98,
+      "temperature": 300.70883492413344,
+      "fingerprint": "26b826028a5abedf"
+    },
+    {
+      "seed": 99,
+      "temperature": 299.71197288389914,
+      "fingerprint": "5d07dc50e05f7cee"
+    },
+    {
+      "seed": 20261024,
+      "temperature": 298.7147458812462,
+      "fingerprint": "775e0983d0e10797"
+    }
+  ],
+  "candidate": [
+    {
+      "seed": 0,
+      "temperature": 300.5676365518619,
+      "fingerprint": "ae4b8ce548c66018"
+    },
+    {
+      "seed": 1,
+      "temperature": 297.53670381379135,
+      "fingerprint": "dd6f8fddbd2f8810"
+    },
+    {
+      "seed": 2,
+      "temperature": 301.5307228169101,
+      "fingerprint": "c5c44fcada3a201f"
+    },
+    {
+      "seed": 3,
+      "temperature": 301.6265831740005,
+      "fingerprint": "85fc631289903ef5"
+    },
+    {
+      "seed": 4,
+      "temperature": 301.7015604354731,
+      "fingerprint": "2dfd561f9af379f2"
+    },
+    {
+      "seed": 5,
+      "temperature": 298.4112434604356,
+      "fingerprint": "42f8e520ec2b149f"
+    },
+    {
+      "seed": 6,
+      "temperature": 297.0578992730595,
+      "fingerprint": "a4dce63f7290ec22"
+    },
+    {
+      "seed": 7,
+      "temperature": 299.95317038003344,
+      "fingerprint": "a6d4b69fa6477429"
+    },
+    {
+      "seed": 8,
+      "temperature": 299.6858937994796,
+      "fingerprint": "6448ac597b913b24"
+    },
+    {
+      "seed": 9,
+      "temperature": 299.0483475298091,
+      "fingerprint": "de92c08c1d3359be"
+    },
+    {
+      "seed": 10,
+      "temperature": 302.43898639094203,
+      "fingerprint": "f089dbbe5d081ed5"
+    },
+    {
+      "seed": 11,
+      "temperature": 299.42191787787436,
+      "fingerprint": "15c0da27de0f3370"
+    },
+    {
+      "seed": 12,
+      "temperature": 299.3468906103629,
+      "fingerprint": "44e63a7327a173a2"
+    },
+    {
+      "seed": 13,
+      "temperature": 300.0112184640342,
+      "fingerprint": "644c315d517925b4"
+    },
+    {
+      "seed": 14,
+      "temperature": 300.49195154131684,
+      "fingerprint": "1e2d2dbcd7b3767c"
+    },
+    {
+      "seed": 15,
+      "temperature": 301.2953965650541,
+      "fingerprint": "a022eb3bb5b1d358"
+    },
+    {
+      "seed": 16,
+      "temperature": 301.03927917118847,
+      "fingerprint": "cfda4efca72e6f02"
+    },
+    {
+      "seed": 17,
+      "temperature": 299.7782094234176,
+      "fingerprint": "c3001aae55a621e5"
+    },
+    {
+      "seed": 18,
+      "temperature": 298.90664481063914,
+      "fingerprint": "3bf6890976ca05d9"
+    },
+    {
+      "seed": 19,
+      "temperature": 297.37365150722616,
+      "fingerprint": "b73b3c27f7db8e69"
+    },
+    {
+      "seed": 20,
+      "temperature": 300.5157679571293,
+      "fingerprint": "beb05e2ad8cbe7ab"
+    },
+    {
+      "seed": 21,
+      "temperature": 302.2299977758583,
+      "fingerprint": "c7f58453abbd83ec"
+    },
+    {
+      "seed": 22,
+      "temperature": 301.05570561089644,
+      "fingerprint": "f95ce8b2a8f06f7a"
+    },
+    {
+      "seed": 23,
+      "temperature": 299.72698644647613,
+      "fingerprint": "ce3d7b27169f8429"
+    },
+    {
+      "seed": 24,
+      "temperature": 295.48854546808104,
+      "fingerprint": "470f86a9beb34fb6"
+    },
+    {
+      "seed": 25,
+      "temperature": 298.2818054059609,
+      "fingerprint": "d48a3687bfc50859"
+    },
+    {
+      "seed": 26,
+      "temperature": 300.2215994979839,
+      "fingerprint": "5de059e4a4f130f8"
+    },
+    {
+      "seed": 27,
+      "temperature": 301.6125557011814,
+      "fingerprint": "4a28d789befb3709"
+    },
+    {
+      "seed": 28,
+      "temperature": 300.44186206285656,
+      "fingerprint": "349d454ef54388d0"
+    },
+    {
+      "seed": 29,
+      "temperature": 302.16861266728836,
+      "fingerprint": "9c495b9ff6e6b2fc"
+    },
+    {
+      "seed": 30,
+      "temperature": 297.1328977723424,
+      "fingerprint": "a37b7fa40dcae16b"
+    },
+    {
+      "seed": 31,
+      "temperature": 298.8323912107771,
+      "fingerprint": "14203220c919c27e"
+    },
+    {
+      "seed": 32,
+      "temperature": 298.49788280596755,
+      "fingerprint": "9c4a370c2ec86b2c"
+    },
+    {
+      "seed": 33,
+      "temperature": 304.13525099789376,
+      "fingerprint": "dc083bbedf2864f"
+    },
+    {
+      "seed": 34,
+      "temperature": 297.8091742443534,
+      "fingerprint": "1a42a80fbef50b53"
+    },
+    {
+      "seed": 35,
+      "temperature": 297.8819879271128,
+      "fingerprint": "73271493348e3df6"
+    },
+    {
+      "seed": 36,
+      "temperature": 299.70563320772425,
+      "fingerprint": "e93a11c34eab0f41"
+    },
+    {
+      "seed": 37,
+      "temperature": 299.97548135263514,
+      "fingerprint": "1c617a45cc8f87a7"
+    },
+    {
+      "seed": 38,
+      "temperature": 297.78902228259665,
+      "fingerprint": "fc28410d524f9aba"
+    },
+    {
+      "seed": 39,
+      "temperature": 301.5793771974003,
+      "fingerprint": "d12ae418a9e78bd7"
+    },
+    {
+      "seed": 40,
+      "temperature": 303.7166101626712,
+      "fingerprint": "8599336d9c1b1af6"
+    },
+    {
+      "seed": 41,
+      "temperature": 298.126443328168,
+      "fingerprint": "6f8cd87f5161d4a3"
+    },
+    {
+      "seed": 42,
+      "temperature": 299.3231444264804,
+      "fingerprint": "d361fae86f70fa"
+    },
+    {
+      "seed": 43,
+      "temperature": 301.32413914576,
+      "fingerprint": "cec1ffa9a5792230"
+    },
+    {
+      "seed": 44,
+      "temperature": 297.6643439778511,
+      "fingerprint": "590a3b63f96c1ee2"
+    },
+    {
+      "seed": 45,
+      "temperature": 302.1796959762062,
+      "fingerprint": "5c7ce9ff7ab1e994"
+    },
+    {
+      "seed": 46,
+      "temperature": 302.09167469706995,
+      "fingerprint": "751e8727529058d3"
+    },
+    {
+      "seed": 47,
+      "temperature": 300.315147803551,
+      "fingerprint": "5e1a47da3cd77ddd"
+    },
+    {
+      "seed": 48,
+      "temperature": 302.61093633224493,
+      "fingerprint": "e315a17b9201586b"
+    },
+    {
+      "seed": 49,
+      "temperature": 300.9988773465275,
+      "fingerprint": "6dc552c0bea7020d"
+    },
+    {
+      "seed": 50,
+      "temperature": 296.7869806115542,
+      "fingerprint": "2bf29be01babe103"
+    },
+    {
+      "seed": 51,
+      "temperature": 301.33637678640986,
+      "fingerprint": "c31664e2fb5c96ec"
+    },
+    {
+      "seed": 52,
+      "temperature": 304.19343914303977,
+      "fingerprint": "a49f24a3d42e867f"
+    },
+    {
+      "seed": 53,
+      "temperature": 296.8633337006112,
+      "fingerprint": "13348355de31e4d0"
+    },
+    {
+      "seed": 54,
+      "temperature": 298.81502466130416,
+      "fingerprint": "860903fa8b9e23c3"
+    },
+    {
+      "seed": 55,
+      "temperature": 300.0527463966611,
+      "fingerprint": "2bd9ae8fe42790d3"
+    },
+    {
+      "seed": 56,
+      "temperature": 299.52875485887233,
+      "fingerprint": "7ac6c908897419aa"
+    },
+    {
+      "seed": 57,
+      "temperature": 300.5809115327569,
+      "fingerprint": "8dad2302a94fc8a"
+    },
+    {
+      "seed": 58,
+      "temperature": 301.3337182410428,
+      "fingerprint": "39e309cbbdf5ee7d"
+    },
+    {
+      "seed": 59,
+      "temperature": 299.9838159063982,
+      "fingerprint": "901d2e191c1013c"
+    },
+    {
+      "seed": 60,
+      "temperature": 301.1554951979329,
+      "fingerprint": "bd84df42a9879a78"
+    },
+    {
+      "seed": 61,
+      "temperature": 298.77714760736944,
+      "fingerprint": "4e7e4d78bc9c06e9"
+    },
+    {
+      "seed": 62,
+      "temperature": 301.3060655082297,
+      "fingerprint": "d095b215815aa7d1"
+    },
+    {
+      "seed": 63,
+      "temperature": 299.8683961097504,
+      "fingerprint": "a6b97c1b2e6fa313"
+    },
+    {
+      "seed": 64,
+      "temperature": 297.35246253744907,
+      "fingerprint": "d1870825de9a81dd"
+    },
+    {
+      "seed": 65,
+      "temperature": 297.9780478497443,
+      "fingerprint": "c32504de359dff7e"
+    },
+    {
+      "seed": 66,
+      "temperature": 301.18691693816277,
+      "fingerprint": "e82056be9ce81a38"
+    },
+    {
+      "seed": 67,
+      "temperature": 300.75280915685653,
+      "fingerprint": "64b600f4b7f2693e"
+    },
+    {
+      "seed": 68,
+      "temperature": 299.7631859872232,
+      "fingerprint": "4dc316b754d0b012"
+    },
+    {
+      "seed": 69,
+      "temperature": 295.7443989545247,
+      "fingerprint": "19f18382b2c14a23"
+    },
+    {
+      "seed": 70,
+      "temperature": 300.1551278775361,
+      "fingerprint": "f1599f888d6f968"
+    },
+    {
+      "seed": 71,
+      "temperature": 300.7428866769917,
+      "fingerprint": "b05e6156ebe5944"
+    },
+    {
+      "seed": 72,
+      "temperature": 301.5594166673852,
+      "fingerprint": "8198e31f8994c089"
+    },
+    {
+      "seed": 73,
+      "temperature": 297.2381816163397,
+      "fingerprint": "9d93f7f28b600d86"
+    },
+    {
+      "seed": 74,
+      "temperature": 299.5024355266994,
+      "fingerprint": "2d7660b39087361c"
+    },
+    {
+      "seed": 75,
+      "temperature": 302.62123637644873,
+      "fingerprint": "717fed14947b633"
+    },
+    {
+      "seed": 76,
+      "temperature": 301.09281641282433,
+      "fingerprint": "9c075b701283652d"
+    },
+    {
+      "seed": 77,
+      "temperature": 300.9249887429689,
+      "fingerprint": "a46906efe3606387"
+    },
+    {
+      "seed": 78,
+      "temperature": 299.0103011700035,
+      "fingerprint": "10fe08aafa224d31"
+    },
+    {
+      "seed": 79,
+      "temperature": 300.2406372925935,
+      "fingerprint": "757b019cb52768d2"
+    },
+    {
+      "seed": 80,
+      "temperature": 300.1310515848887,
+      "fingerprint": "fe4bfa5ac1403b38"
+    },
+    {
+      "seed": 81,
+      "temperature": 299.8414562376323,
+      "fingerprint": "79a54cee9b8b2af"
+    },
+    {
+      "seed": 82,
+      "temperature": 302.38766933233904,
+      "fingerprint": "9115231092527375"
+    },
+    {
+      "seed": 83,
+      "temperature": 303.6098161039806,
+      "fingerprint": "49ca9759f268fb7a"
+    },
+    {
+      "seed": 84,
+      "temperature": 300.8962445243377,
+      "fingerprint": "8f38dbbbb207cf5b"
+    },
+    {
+      "seed": 85,
+      "temperature": 299.97403202074497,
+      "fingerprint": "7513ec80e7c15c86"
+    },
+    {
+      "seed": 86,
+      "temperature": 300.3178042910146,
+      "fingerprint": "2317bfabcb6ef658"
+    },
+    {
+      "seed": 87,
+      "temperature": 300.1889066317364,
+      "fingerprint": "34ae2a1b93fcbbfb"
+    },
+    {
+      "seed": 88,
+      "temperature": 297.3526821442785,
+      "fingerprint": "8bbc1f87dd66e5cd"
+    },
+    {
+      "seed": 89,
+      "temperature": 300.368108181503,
+      "fingerprint": "26b4bf743913510a"
+    },
+    {
+      "seed": 90,
+      "temperature": 300.41635381973566,
+      "fingerprint": "e6d309100d0798d4"
+    },
+    {
+      "seed": 91,
+      "temperature": 299.0816504662897,
+      "fingerprint": "dbcc3804e5c24bd1"
+    },
+    {
+      "seed": 92,
+      "temperature": 297.8299645249503,
+      "fingerprint": "afe97a09fa7e2191"
+    },
+    {
+      "seed": 93,
+      "temperature": 299.5512220444511,
+      "fingerprint": "b04e401137ccdbcb"
+    },
+    {
+      "seed": 94,
+      "temperature": 300.83606970250656,
+      "fingerprint": "5b416aba7ed4de45"
+    },
+    {
+      "seed": 95,
+      "temperature": 299.9307319402925,
+      "fingerprint": "5c64bc2da65d792e"
+    },
+    {
+      "seed": 96,
+      "temperature": 302.20914593633614,
+      "fingerprint": "d563c5196c5ff821"
+    },
+    {
+      "seed": 97,
+      "temperature": 299.28185417447753,
+      "fingerprint": "90ae9888ab60cb7d"
+    },
+    {
+      "seed": 98,
+      "temperature": 300.70883492413344,
+      "fingerprint": "26b826028a5abedf"
+    },
+    {
+      "seed": 99,
+      "temperature": 299.71197288389914,
+      "fingerprint": "5d07dc50e05f7cee"
+    },
+    {
+      "seed": 20261024,
+      "temperature": 298.7147458812462,
+      "fingerprint": "775e0983d0e10797"
+    }
+  ]
+}
