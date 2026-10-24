@@ -144,7 +144,12 @@ CudaContext::CudaContext(const System& system, int deviceIndex, bool useBlocking
             else
                 flags += CU_CTX_SCHED_SPIN;
 
-            if (cuCtxCreate(&context, flags, device) == CUDA_SUCCESS) {
+#if CUDA_VERSION >= 13000
+            CUresult result = cuCtxCreate(&context, NULL, flags, device);
+#else
+            CUresult result = cuCtxCreate(&context, flags, device);
+#endif
+            if (result == CUDA_SUCCESS) {
                 this->deviceIndex = trialDeviceIndex;
                 CUcontext popped;
                 cuCtxPopCurrent(&popped);
