@@ -171,3 +171,14 @@ run a CUDA Context, integrate a trajectory, replace the FAH core, measure PPD, o
 include BZip2 decompression in the serializer timings. In particular, a work unit
 whose forces already fit the original fast reader need not gain from the new
 per-force fallback.
+
+## Reduce State-collection copies in existing callers
+
+`Context::getState()` now transfers its temporary particle arrays and assembled
+State through the already available rvalue setters and `takeState()`. This
+avoids duplicate allocations before checkpoint validation and final XML output
+without changing public layouts, snapshot semantics, force evaluation, or
+binary checkpoint format. Existing callers use the change through the core
+DLL without recompilation; CUDA/platform plugins are unchanged. See
+[`results/windows/context-state/`](results/windows/context-state/) for the
+Windows Reference benchmark, correctness coverage, and reproduction commands.

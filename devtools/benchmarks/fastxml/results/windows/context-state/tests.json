@@ -1,0 +1,260 @@
+[
+  {
+    "test": "TestReferenceStateSnapshots",
+    "returncode": 0,
+    "stdout": "Snapshot ownership and all 128 data masks passed\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestReferenceCheckpoints",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestReferenceCustomIntegrator",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestReferenceKineticEnergy",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestFastSystemXmlWrite",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestFastXmlFallback",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestFastXmlProxyOverrides",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestFastXmlSerialization",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializationNode",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeAndersenThermostat",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeATMForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCMAPTorsion",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCMMotionRemover",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomAngleForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomBondForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomCentroidBondForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomCompoundBondForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomCVForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomExternalForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomGBForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomHbondForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomManyParticleForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomNonbondedForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomTorsionForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomVolumeForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeDPDIntegrator",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeGayBerneForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeGBSAOBCForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeHarmonicAngleForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeHarmonicBondForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeIntegrator",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeMonteCarloAnisotropicBarostat",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeMonteCarloBarostat",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeMonteCarloFlexibleBarostat",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeMonteCarloMembraneBarostat",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeNonbondedForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeNoseHooverIntegrator",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializePeriodicTorsionForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeRBTorsionForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeRMSDForce",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeState",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeSystem",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeTabulatedFunctions",
+    "returncode": 0,
+    "stdout": "Done\n",
+    "stderr": ""
+  }
+]

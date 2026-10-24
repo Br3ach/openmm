@@ -1,0 +1,78 @@
+[
+  {
+    "particles": 1000000,
+    "mask": 3,
+    "identical_fingerprints": true,
+    "baseline": {
+      "seconds": 0.0175741,
+      "peak_working_set_kib": 208920,
+      "baseline_working_set_kib": 115144,
+      "retained_working_set_kib": 162040,
+      "private_kib": 158316
+    },
+    "candidate": {
+      "seconds": 0.006382,
+      "peak_working_set_kib": 162088,
+      "baseline_working_set_kib": 115188,
+      "retained_working_set_kib": 162088,
+      "private_kib": 158308
+    }
+  },
+  {
+    "particles": 1000000,
+    "mask": 31,
+    "identical_fingerprints": true,
+    "baseline": {
+      "seconds": 0.0322365,
+      "peak_working_set_kib": 255896,
+      "baseline_working_set_kib": 115212,
+      "retained_working_set_kib": 185576,
+      "private_kib": 182612
+    },
+    "candidate": {
+      "seconds": 0.0179143,
+      "peak_working_set_kib": 185512,
+      "baseline_working_set_kib": 115144,
+      "retained_working_set_kib": 185512,
+      "private_kib": 181768
+    }
+  },
+  {
+    "particles": 7950256,
+    "mask": 3,
+    "identical_fingerprints": true,
+    "baseline": {
+      "seconds": 0.1677426,
+      "peak_working_set_kib": 1622304,
+      "baseline_working_set_kib": 876944,
+      "retained_working_set_kib": 1249632,
+      "private_kib": 1248640
+    },
+    "candidate": {
+      "seconds": 0.056981,
+      "peak_working_set_kib": 1249580,
+      "baseline_working_set_kib": 876888,
+      "retained_working_set_kib": 1249580,
+      "private_kib": 1248572
+    }
+  },
+  {
+    "particles": 7950256,
+    "mask": 31,
+    "identical_fingerprints": true,
+    "baseline": {
+      "seconds": 0.2868536,
+      "peak_working_set_kib": 1994936,
+      "baseline_working_set_kib": 876872,
+      "retained_working_set_kib": 1435928,
+      "private_kib": 1435304
+    },
+    "candidate": {
+      "seconds": 0.1465882,
+      "peak_working_set_kib": 1435940,
+      "baseline_working_set_kib": 876884,
+      "retained_working_set_kib": 1435940,
+      "private_kib": 1435252
+    }
+  }
+]

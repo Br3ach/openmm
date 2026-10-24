@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "85570f1511100166effb157eba6f5f72ff7c9693",
+  "candidate_change": "Context::getState ownership transfers; no other runtime source changes",
+  "compiler": "MSVC 19.51.36260 x64",
+  "platform": "Reference",
+  "os": "Native Windows",
+  "cpu": "AMD Ryzen 7 9800X3D",
+  "compile_flags": [
+    "/O2",
+    "/Ob2",
+    "/MD",
+    "/EHsc",
+    "/std:c++14"
+  ],
+  "reused_unchanged_translation_units": 263,
+  "recompiled_translation_units": [
+    "openmmapi/src/Context.cpp"
+  ],
+  "identical_caller_binary": true,
+  "process_memory_limit_mib": 6144,
+  "peak_scope": "Windows process-lifetime PeakWorkingSetSize including setup",
+  "cuda_tested": false,
+  "fah_core_tested": false,
+  "baseline_dll_sha256": "5df0058895a78e063be2c2bedb423c1a0169f5ffd57b4c79da891baaaee45431",
+  "candidate_dll_sha256": "a0c709846539efd0dd1520044ad3db9c7d4b409a3130f2e4c86c2b7fbcdd18ca",
+  "benchmark_exe_sha256": "d82a3d5ce640d500d15041a7230018b3211bd002a079eb725e13e8b903b50258"
+}
