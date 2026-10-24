@@ -1,0 +1,30 @@
+{
+  "preservation_commit_approved": true,
+  "production_release_approved": false,
+  "reviewer": "Separate independent reviewer agent",
+  "reviewed": [
+    "Preservation-first branch operation and five recent commits",
+    "CUDA13 compatibility-only diff",
+    "Private bounded SETTLE helper and scoped constructor diff",
+    "Host equivalence tests and prior independent full-topology reruns",
+    "GPU outcomes15pass/1stochastic failure and600-second mixed NoseHoover timeout",
+    "Snapshot reporting fix and unfinished startup/runtime-loader utilities",
+    "WIP README/status and outstanding validation disclosures",
+    "All four baseline/candidate core/plugin DLL hashes"
+  ],
+  "branch_operation": {
+    "preserve_new_branch": "fastxml-experimental-20261024",
+    "original_branch": "fastxml-clean-v4",
+    "expected_original_head": "19c091248e636747d74d516e28c795e73d9063a2",
+    "restore_target": "655c38e9179d984f095f32d811d3eceed7c69534",
+    "verify_wip_before_reset": true
+  },
+  "remaining_release_blockers": [
+    "Baseline triage of NoseHoover mixed timeout",
+    "Controlled-seed followup and remaining GPU cases",
+    "Matched-seed/cross-DLL checkpoint comparison",
+    "Actual CUDA startup memory benchmark",
+    "Isolated bundled runtime/PME/FFT validation",
+    "Final production release review"
+  ]
+}

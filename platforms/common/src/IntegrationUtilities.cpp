@@ -25,6 +25,7 @@
  * -------------------------------------------------------------------------- */
 
 #include "openmm/common/IntegrationUtilities.h"
+#include "SettleConstraintNeighbors.h"
 #include "openmm/common/ComputeContext.h"
 #include "openmm/common/ContextSelector.h"
 #include "CommonKernelSources.h"
@@ -140,70 +141,74 @@ IntegrationUtilities::IntegrationUtilities(ComputeContext& context, const System
     // connected to.
 
     int numAtoms = system.getNumParticles();
-    vector<map<int, float> > settleConstraints(numAtoms);
-    for (int i = 0; i < (int)atom1.size(); i++) {
-        if (constraintCount[atom1[i]] == 2 && constraintCount[atom2[i]] == 2) {
-            settleConstraints[atom1[i]][atom2[i]] = (float) distance[i];
-            settleConstraints[atom2[i]][atom1[i]] = (float) distance[i];
-        }
-    }
-
-    // Now remove the ones that don't actually form closed loops of three atoms.
-
-    vector<int> settleClusters;
-    for (int i = 0; i < (int)settleConstraints.size(); i++) {
-        if (settleConstraints[i].size() == 2) {
-            int partner1 = settleConstraints[i].begin()->first;
-            int partner2 = (++settleConstraints[i].begin())->first;
-            if (settleConstraints[partner1].size() != 2 || settleConstraints[partner2].size() != 2 ||
-                    settleConstraints[partner1].find(partner2) == settleConstraints[partner1].end())
-                settleConstraints[i].clear();
-            else if (i < partner1 && i < partner2)
-                settleClusters.push_back(i);
-        }
-        else
-            settleConstraints[i].clear();
-    }
-
-    // Record the SETTLE clusters.
-
     vector<bool> isShakeAtom(numAtoms, false);
-    if (settleClusters.size() > 0) {
-        vector<mm_int4> atoms;
-        vector<mm_float2> params;
-        for (int i = 0; i < (int) settleClusters.size(); i++) {
-            int atom1 = settleClusters[i];
-            int atom2 = settleConstraints[atom1].begin()->first;
-            int atom3 = (++settleConstraints[atom1].begin())->first;
-            float dist12 = settleConstraints[atom1].find(atom2)->second;
-            float dist13 = settleConstraints[atom1].find(atom3)->second;
-            float dist23 = settleConstraints[atom2].find(atom3)->second;
-            if (dist12 == dist13) {
-                // atom1 is the central atom
-                atoms.push_back(mm_int4(atom1, atom2, atom3, 0));
-                params.push_back(mm_float2(dist12, dist23));
+    {
+        // Keep only two eligible neighbors per particle, and release this temporary
+        // storage before preparing SHAKE, CCMA, and virtual sites.
+        vector<OpenMM::detail::SettleConstraintNeighbors> settleConstraints(numAtoms);
+        for (int i = 0; i < (int)atom1.size(); i++) {
+            if (constraintCount[atom1[i]] == 2 && constraintCount[atom2[i]] == 2) {
+                settleConstraints[atom1[i]][atom2[i]] = (float) distance[i];
+                settleConstraints[atom2[i]][atom1[i]] = (float) distance[i];
             }
-            else if (dist12 == dist23) {
-                // atom2 is the central atom
-                atoms.push_back(mm_int4(atom2, atom1, atom3, 0));
-                params.push_back(mm_float2(dist12, dist13));
-            }
-            else if (dist13 == dist23) {
-                // atom3 is the central atom
-                atoms.push_back(mm_int4(atom3, atom1, atom2, 0));
-                params.push_back(mm_float2(dist13, dist12));
+        }
+
+        // Now remove the ones that don't actually form closed loops of three atoms.
+
+        vector<int> settleClusters;
+        for (int i = 0; i < (int)settleConstraints.size(); i++) {
+            if (settleConstraints[i].size() == 2) {
+                int partner1 = settleConstraints[i].begin()->first;
+                int partner2 = (settleConstraints[i].begin()+1)->first;
+                if (settleConstraints[partner1].size() != 2 || settleConstraints[partner2].size() != 2 ||
+                        settleConstraints[partner1].find(partner2) == settleConstraints[partner1].end())
+                    settleConstraints[i].clear();
+                else if (i < partner1 && i < partner2)
+                    settleClusters.push_back(i);
             }
             else
-                continue; // We can't handle this with SETTLE
-            isShakeAtom[atom1] = true;
-            isShakeAtom[atom2] = true;
-            isShakeAtom[atom3] = true;
+                settleConstraints[i].clear();
         }
-        if (atoms.size() > 0) {
-            settleAtoms.initialize<mm_int4>(context, atoms.size(), "settleAtoms");
-            settleParams.initialize<mm_float2>(context, params.size(), "settleParams");
-            settleAtoms.upload(atoms);
-            settleParams.upload(params);
+
+        // Record the SETTLE clusters.
+
+        if (settleClusters.size() > 0) {
+            vector<mm_int4> atoms;
+            vector<mm_float2> params;
+            for (int i = 0; i < (int) settleClusters.size(); i++) {
+                int atom1 = settleClusters[i];
+                int atom2 = settleConstraints[atom1].begin()->first;
+                int atom3 = (settleConstraints[atom1].begin()+1)->first;
+                float dist12 = settleConstraints[atom1].find(atom2)->second;
+                float dist13 = settleConstraints[atom1].find(atom3)->second;
+                float dist23 = settleConstraints[atom2].find(atom3)->second;
+                if (dist12 == dist13) {
+                    // atom1 is the central atom
+                    atoms.push_back(mm_int4(atom1, atom2, atom3, 0));
+                    params.push_back(mm_float2(dist12, dist23));
+                }
+                else if (dist12 == dist23) {
+                    // atom2 is the central atom
+                    atoms.push_back(mm_int4(atom2, atom1, atom3, 0));
+                    params.push_back(mm_float2(dist12, dist13));
+                }
+                else if (dist13 == dist23) {
+                    // atom3 is the central atom
+                    atoms.push_back(mm_int4(atom3, atom1, atom2, 0));
+                    params.push_back(mm_float2(dist13, dist12));
+                }
+                else
+                    continue; // We can't handle this with SETTLE
+                isShakeAtom[atom1] = true;
+                isShakeAtom[atom2] = true;
+                isShakeAtom[atom3] = true;
+            }
+            if (atoms.size() > 0) {
+                settleAtoms.initialize<mm_int4>(context, atoms.size(), "settleAtoms");
+                settleParams.initialize<mm_float2>(context, params.size(), "settleParams");
+                settleAtoms.upload(atoms);
+                settleParams.upload(params);
+            }
         }
     }
 

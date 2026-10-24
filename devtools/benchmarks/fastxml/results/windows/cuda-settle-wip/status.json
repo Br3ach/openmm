@@ -1,0 +1,23 @@
+{
+  "status": "WIP, incomplete validation; not a release",
+  "original_base_commit": "19c091248e636747d74d516e28c795e73d9063a2",
+  "new_branch": "fastxml-experimental-20261024",
+  "compiler": "MSVC19.51 x64 Release /O2 /Ob2 /MD /std:c++14",
+  "toolkit": "CUDA13.4.92",
+  "gpu": "RTX5090, driver621.01",
+  "candidate_gpu_completed_cases": 16,
+  "candidate_gpu_direct_passes": 15,
+  "candidate_gpu_stochastic_failures": 1,
+  "candidate_gpu_timeouts": 1,
+  "gpu_cases_planned": 27,
+  "host_topology_runs": 6,
+  "host_outputs_match": true,
+  "cross_dll_checkpoint_validation_completed": false,
+  "scaled_cuda_memory_benchmark_completed": false,
+  "isolated_runtime_bundle_validation_completed": false,
+  "final_production_delivery_approved": false,
+  "baseline_OpenMM.dll_sha256": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+  "baseline_OpenMMCUDA.dll_sha256": "da2c4c8e91ced64c7a48b9c560eb2e7a30cc7a621e991e919b01232fde4847a9",
+  "candidate_OpenMM.dll_sha256": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+  "candidate_OpenMMCUDA.dll_sha256": "bb08de5228f5d07aa02ef5b55a57edea1484b084aa32ffd611eeb8d8d3b6a7fb"
+}

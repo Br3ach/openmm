@@ -1,0 +1,8 @@
+{
+  "test": "TestCudaNoseHooverIntegrator",
+  "precision": "mixed",
+  "variant": "candidate",
+  "outcome": "timeout",
+  "timeout_seconds": 600,
+  "full_run_completed": false
+}

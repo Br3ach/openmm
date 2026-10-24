@@ -1,0 +1,102 @@
+{
+  "layout": {
+    "map_object_bytes": 16,
+    "map_sentinel_bytes": 40,
+    "map_entry_bytes": 40,
+    "compact_row_bytes": 20
+  },
+  "particles": 7950256,
+  "constraints": 5955638,
+  "active_constraints": 5955638,
+  "eligible_neighbor_entries": 11904894,
+  "topological_triangles": 1984149,
+  "settle_clusters": 1984149,
+  "is_shake_true": 5952447,
+  "outputs_match_all_runs": true,
+  "exe_sha256": "b36e07120b37aeaefb599e0cd1c0ad6a8cb94dccb8f55364f4439c163478aa75",
+  "fixture_binary_sha256": "104af6bbd01a53e98a31ccb80888fb5b3f5593e2f89e54e818a9e1883ee2f188",
+  "baseline": {
+    "build_classify_record_seconds": 1.3364104,
+    "row_release_seconds": 0.708543,
+    "phases": {
+      "input": {
+        "working_set_kib": 159428,
+        "peak_working_set_kib": 159428,
+        "private_kib": 156148
+      },
+      "base_arrays": {
+        "working_set_kib": 285272,
+        "peak_working_set_kib": 316708,
+        "private_kib": 313796
+      },
+      "empty_rows": {
+        "working_set_kib": 783700,
+        "peak_working_set_kib": 783700,
+        "private_kib": 836392
+      },
+      "filled_rows": {
+        "working_set_kib": 1344916,
+        "peak_working_set_kib": 1344916,
+        "private_kib": 1433444
+      },
+      "classified": {
+        "working_set_kib": 1354244,
+        "peak_working_set_kib": 1358740,
+        "private_kib": 1444124
+      },
+      "outputs": {
+        "working_set_kib": 1393576,
+        "peak_working_set_kib": 1416340,
+        "private_kib": 1491164
+      },
+      "released_rows": {
+        "working_set_kib": 335552,
+        "peak_working_set_kib": 1416340,
+        "private_kib": 374596
+      }
+    }
+  },
+  "compact": {
+    "build_classify_record_seconds": 0.1268851,
+    "row_release_seconds": 0.0044443,
+    "phases": {
+      "input": {
+        "working_set_kib": 159432,
+        "peak_working_set_kib": 159432,
+        "private_kib": 156136
+      },
+      "base_arrays": {
+        "working_set_kib": 285252,
+        "peak_working_set_kib": 316720,
+        "private_kib": 313728
+      },
+      "empty_rows": {
+        "working_set_kib": 440696,
+        "peak_working_set_kib": 440696,
+        "private_kib": 470288
+      },
+      "filled_rows": {
+        "working_set_kib": 440696,
+        "peak_working_set_kib": 440696,
+        "private_kib": 470288
+      },
+      "classified": {
+        "working_set_kib": 448464,
+        "peak_working_set_kib": 452996,
+        "private_kib": 478724
+      },
+      "outputs": {
+        "working_set_kib": 487248,
+        "peak_working_set_kib": 509980,
+        "private_kib": 524952
+      },
+      "released_rows": {
+        "working_set_kib": 331968,
+        "peak_working_set_kib": 509980,
+        "private_kib": 369372
+      }
+    }
+  },
+  "baseline_requested_container_bytes": 921410096,
+  "compact_requested_container_bytes": 159005120
+}
