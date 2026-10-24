@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "73228c31055cc6fae3ed8f94a0ee33e4f8444c44",
+  "candidate_change": "ContextImpl::getMolecules local disjoint-set algorithm; static findMolecules and all other runtime source unchanged",
+  "compiler": "MSVC 19.51.36260 x64",
+  "os": "Native Windows",
+  "platform": "Reference",
+  "cpu": "AMD Ryzen 7 9800X3D",
+  "compile_flags": [
+    "/O2",
+    "/Ob2",
+    "/MD",
+    "/EHsc",
+    "/std:c++14"
+  ],
+  "recompiled_translation_unit": "openmmapi/src/ContextImpl.cpp",
+  "reused_other_translation_units": 263,
+  "process_memory_limit_mib": 6144,
+  "identical_caller_binary": true,
+  "peak_scope": "Windows process-lifetime PeakWorkingSetSize including Context setup",
+  "cuda_tested": false,
+  "fah_core_tested": false,
+  "independent_review": {
+    "design_approved_before_implementation": true,
+    "final_code_approved": true,
+    "tests_and_raw_measurements_verified": true,
+    "reviewer_rerun_tests": [
+      "Baseline TestMoleculeDiscovery",
+      "Candidate TestMoleculeDiscovery",
+      "Candidate TestFindMolecules",
+      "Candidate TestReferenceCheckpoints"
+    ]
+  },
+  "baseline_dll_sha256": "a0c709846539efd0dd1520044ad3db9c7d4b409a3130f2e4c86c2b7fbcdd18ca",
+  "candidate_dll_sha256": "1c0f1828bedc295e9eeb39f3ac7f65dcf0925d2f0369d7d1800f0d220c44c215",
+  "benchmark_exe_sha256": "217a14789f2fb56729d3edd072132a22c80cc4491b0889fdfe1c6fc69f930f0a"
+}

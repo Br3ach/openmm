@@ -1,0 +1,134 @@
+[
+  {
+    "particles": 1000000,
+    "kind": "water",
+    "molecules": 333334,
+    "identical_fingerprints": true,
+    "baseline": {
+      "seconds": 0.3384632,
+      "baseline_working_set_kib": 115180,
+      "baseline_peak_working_set_kib": 158192,
+      "peak_working_set_kib": 184424,
+      "retained_working_set_kib": 133668,
+      "private_kib": 131136
+    },
+    "candidate": {
+      "seconds": 0.042621,
+      "baseline_working_set_kib": 115208,
+      "baseline_peak_working_set_kib": 158192,
+      "peak_working_set_kib": 158192,
+      "retained_working_set_kib": 133456,
+      "private_kib": 130848
+    }
+  },
+  {
+    "particles": 1000000,
+    "kind": "chain",
+    "molecules": 1,
+    "identical_fingerprints": true,
+    "baseline": {
+      "seconds": 0.1852705,
+      "baseline_working_set_kib": 115160,
+      "baseline_peak_working_set_kib": 158176,
+      "peak_working_set_kib": 175168,
+      "retained_working_set_kib": 119208,
+      "private_kib": 115540
+    },
+    "candidate": {
+      "seconds": 0.0074019,
+      "baseline_working_set_kib": 115152,
+      "baseline_peak_working_set_kib": 158168,
+      "peak_working_set_kib": 158168,
+      "retained_working_set_kib": 119068,
+      "private_kib": 115236
+    }
+  },
+  {
+    "particles": 1000000,
+    "kind": "isolated",
+    "molecules": 1000000,
+    "identical_fingerprints": true,
+    "baseline": {
+      "seconds": 0.3265215,
+      "baseline_working_set_kib": 115200,
+      "baseline_peak_working_set_kib": 158172,
+      "peak_working_set_kib": 181740,
+      "retained_working_set_kib": 154392,
+      "private_kib": 152772
+    },
+    "candidate": {
+      "seconds": 0.1171976,
+      "baseline_working_set_kib": 115144,
+      "baseline_peak_working_set_kib": 158156,
+      "peak_working_set_kib": 162224,
+      "retained_working_set_kib": 154408,
+      "private_kib": 152756
+    }
+  },
+  {
+    "particles": 7950256,
+    "kind": "water",
+    "molecules": 2650086,
+    "identical_fingerprints": true,
+    "baseline": {
+      "seconds": 2.5385376,
+      "baseline_working_set_kib": 876896,
+      "baseline_peak_working_set_kib": 1219672,
+      "peak_working_set_kib": 1427524,
+      "retained_working_set_kib": 1022788,
+      "private_kib": 1026132
+    },
+    "candidate": {
+      "seconds": 0.359061,
+      "baseline_working_set_kib": 876888,
+      "baseline_peak_working_set_kib": 1219688,
+      "peak_working_set_kib": 1219688,
+      "retained_working_set_kib": 1022200,
+      "private_kib": 1027064
+    }
+  },
+  {
+    "particles": 7950256,
+    "kind": "chain",
+    "molecules": 1,
+    "identical_fingerprints": true,
+    "baseline": {
+      "seconds": 1.4458288,
+      "baseline_working_set_kib": 876900,
+      "baseline_peak_working_set_kib": 1219676,
+      "peak_working_set_kib": 1347684,
+      "retained_working_set_kib": 908024,
+      "private_kib": 906852
+    },
+    "candidate": {
+      "seconds": 0.0663281,
+      "baseline_working_set_kib": 876924,
+      "baseline_peak_working_set_kib": 1219680,
+      "peak_working_set_kib": 1219680,
+      "retained_working_set_kib": 907988,
+      "private_kib": 906296
+    }
+  },
+  {
+    "particles": 7950256,
+    "kind": "isolated",
+    "molecules": 7950256,
+    "identical_fingerprints": true,
+    "baseline": {
+      "seconds": 2.5806043,
+      "baseline_working_set_kib": 876888,
+      "baseline_peak_working_set_kib": 1219680,
+      "peak_working_set_kib": 1406228,
+      "retained_working_set_kib": 1188836,
+      "private_kib": 1204596
+    },
+    "candidate": {
+      "seconds": 0.8835052,
+      "baseline_working_set_kib": 876880,
+      "baseline_peak_working_set_kib": 1219696,
+      "peak_working_set_kib": 1250968,
+      "retained_working_set_kib": 1188856,
+      "private_kib": 1204484
+    }
+  }
+]

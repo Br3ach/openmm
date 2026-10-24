@@ -182,3 +182,15 @@ binary checkpoint format. Existing callers use the change through the core
 DLL without recompilation; CUDA/platform plugins are unchanged. See
 [`results/windows/context-state/`](results/windows/context-state/) for the
 Windows Reference benchmark, correctness coverage, and reproduction commands.
+
+## Reduce temporary molecule-discovery storage
+
+`ContextImpl::getMolecules()` now joins connectivity through a compact local
+disjoint-set forest rather than constructing a combined bond list and per-
+particle adjacency vectors. It preserves complete molecule/member order,
+custom force callbacks, virtual-site connectivity, cache semantics and the
+existing exported static algorithm. See
+[`results/windows/molecule-discovery/`](results/windows/molecule-discovery/)
+for independent review, 49 passing tests, first-call benchmarks and the
+Windows setup-peak caveat. This change benefits existing core-DLL callers;
+the larger platform-side graph is a separate optimization target.

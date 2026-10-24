@@ -361,39 +361,72 @@ const vector<vector<int> >& ContextImpl::getMolecules() const {
     if (molecules.size() > 0 || system.getNumParticles() == 0)
         return molecules;
 
-    // First make a list of bonds and constraints.
-
-    vector<pair<int, int> > bonds;
+    // Join connected particles directly, without retaining a combined bond list
+    // and an adjacency vector for every particle.  A negative parent stores a
+    // root's component size; nonnegative entries point to another particle.
+    int numParticles = system.getNumParticles();
+    vector<int> parent(numParticles, -1);
+    int numMolecules = numParticles;
+    auto findRoot = [&](int particle) {
+        int root = particle;
+        while (parent[root] >= 0)
+            root = parent[root];
+        while (particle != root) {
+            int next = parent[particle];
+            parent[particle] = root;
+            particle = next;
+        }
+        return root;
+    };
+    auto join = [&](int particle1, int particle2) {
+        int root1 = findRoot(particle1);
+        int root2 = findRoot(particle2);
+        if (root1 == root2)
+            return;
+        if (parent[root1] > parent[root2])
+            swap(root1, root2);
+        parent[root1] += parent[root2];
+        parent[root2] = root1;
+        --numMolecules;
+    };
     for (int i = 0; i < system.getNumConstraints(); i++) {
         int particle1, particle2;
         double distance;
         system.getConstraintParameters(i, particle1, particle2, distance);
-        bonds.push_back(std::make_pair(particle1, particle2));
+        join(particle1, particle2);
     }
     for (auto force : forceImpls) {
+        // Keep each callback and its order, but release its bond vector before
+        // asking the next force instead of accumulating all forces' bonds.
         vector<pair<int, int> > forceBonds = force->getBondedParticles();
-        bonds.insert(bonds.end(), forceBonds.begin(), forceBonds.end());
+        for (auto& bond : forceBonds)
+            join(bond.first, bond.second);
     }
-    for (int i = 0; i < system.getNumParticles(); i++) {
+    for (int i = 0; i < numParticles; i++) {
         if (system.isVirtualSite(i)) {
             const VirtualSite& site = system.getVirtualSite(i);
             for (int j = 0; j < site.getNumParticles(); j++)
-                bonds.push_back(std::make_pair(i, site.getParticle(j)));
+                join(i, site.getParticle(j));
         }
     }
 
-    // Make a list of every other particle to which each particle is connected
-
-    int numParticles = system.getNumParticles();
-    vector<vector<int> > particleBonds(numParticles);
-    for (auto& bond : bonds) {
-        particleBonds[bond.first].push_back(bond.second);
-        particleBonds[bond.second].push_back(bond.first);
+    // Enumerating particles in ascending order preserves the original output:
+    // molecules are ordered by their smallest member, and their members are
+    // ascending.  Root selection and the order of incoming bonds cannot alter it.
+    vector<int> moleculeForRoot(numParticles, -1);
+    vector<vector<int> > result(numMolecules);
+    int nextMolecule = 0;
+    for (int i = 0; i < numParticles; i++) {
+        int root = findRoot(i);
+        int& molecule = moleculeForRoot[root];
+        if (molecule == -1) {
+            molecule = nextMolecule++;
+            result[molecule].reserve(-parent[root]);
+        }
+        result[molecule].push_back(i);
     }
-
-    // Now identify particles by which molecule they belong to.
-
-    molecules = findMolecules(numParticles, particleBonds);
+    // Publish the cache only after the entire result was constructed successfully.
+    molecules.swap(result);
     return molecules;
 }
 
