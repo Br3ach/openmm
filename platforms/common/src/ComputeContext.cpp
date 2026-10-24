@@ -461,13 +461,9 @@ void ComputeContext::reorderAtomsImpl() {
 
     // Find the range of positions and the number of bins along each axis.
 
+    ContextSelector selector(*this);
     vector<Real4> oldPosq(paddedNumAtoms);
-    vector<Real4> oldPosqCorrection(paddedNumAtoms);
-    vector<Mixed4> oldVelm(paddedNumAtoms);
     getPosq().download(oldPosq);
-    getVelm().download(oldVelm);
-    if (getUseMixedPrecision())
-        getPosqCorrection().download(oldPosqCorrection);
     Real minx = oldPosq[0].x, maxx = oldPosq[0].x;
     Real miny = oldPosq[0].y, maxy = oldPosq[0].y;
     Real minz = oldPosq[0].z, maxz = oldPosq[0].z;
@@ -496,9 +492,8 @@ void ComputeContext::reorderAtomsImpl() {
 
     
     vector<int> originalIndex(numAtoms);
+    vector<int> oldIndexForNew(numAtoms);
     vector<Real4> newPosq(paddedNumAtoms, Real4(0,0,0,0));
-    vector<Real4> newPosqCorrection(paddedNumAtoms, Real4(0,0,0,0));
-    vector<Mixed4> newVelm(paddedNumAtoms, Mixed4(0,0,0,0));
     vector<mm_int4> newCellOffsets(numAtoms);
     for (auto& mol : moleculeGroups) {
         // Find the center of each molecule.
@@ -601,25 +596,37 @@ void ComputeContext::reorderAtomsImpl() {
                 int newIndex = mol.offsets[i]+atom;
                 originalIndex[newIndex] = atomIndex[oldIndex];
                 newPosq[newIndex] = oldPosq[oldIndex];
-                if (getUseMixedPrecision())
-                    newPosqCorrection[newIndex] = oldPosqCorrection[oldIndex];
-                newVelm[newIndex] = oldVelm[oldIndex];
+                oldIndexForNew[newIndex] = oldIndex;
                 newCellOffsets[newIndex] = posCellOffsets[oldIndex];
             }
         }
     }
 
-    // Update the arrays.
-
-    ContextSelector selector(*this);
+    // Transfer each field separately so only one old/new pair is live.
+    getPosq().upload(newPosq);
+    vector<Real4>().swap(oldPosq);
+    vector<Real4>().swap(newPosq);
+    if (getUseMixedPrecision()) {
+        vector<Real4> oldCorrection(paddedNumAtoms);
+        vector<Real4> newCorrection(paddedNumAtoms, Real4(0,0,0,0));
+        getPosqCorrection().download(oldCorrection);
+        for (int i = 0; i < numAtoms; i++)
+            newCorrection[i] = oldCorrection[oldIndexForNew[i]];
+        getPosqCorrection().upload(newCorrection);
+    }
+    {
+        vector<Mixed4> oldVelm(paddedNumAtoms);
+        vector<Mixed4> newVelm(paddedNumAtoms, Mixed4(0,0,0,0));
+        getVelm().download(oldVelm);
+        for (int i = 0; i < numAtoms; i++)
+            newVelm[i] = oldVelm[oldIndexForNew[i]];
+        getVelm().upload(newVelm);
+    }
+    // Publish the new indexing and notify consumers only after all uploads finish.
     for (int i = 0; i < numAtoms; i++) {
         atomIndex[i] = originalIndex[i];
         posCellOffsets[i] = newCellOffsets[i];
     }
-    getPosq().upload(newPosq);
-    if (getUseMixedPrecision())
-        getPosqCorrection().upload(newPosqCorrection);
-    getVelm().upload(newVelm);
     getAtomIndexArray().upload(atomIndex);
     for (auto listener : reorderListeners)
         listener->execute();

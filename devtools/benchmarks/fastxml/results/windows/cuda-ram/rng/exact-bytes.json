@@ -1,0 +1,20 @@
+[
+  {
+    "precision": "single",
+    "bytes": 17836871,
+    "sha256": "5cf50e7da497951b756ad39145762c98b4c52fd44c26d08ce3b7698917cc248a",
+    "byte_identical": true
+  },
+  {
+    "precision": "mixed",
+    "bytes": 17846087,
+    "sha256": "cdb21ceb02994cedc21e9721c8c39112b231750e0f0fdff596da196daa6a5fd0",
+    "byte_identical": true
+  },
+  {
+    "precision": "double",
+    "bytes": 17846087,
+    "sha256": "8264b7374943da5fff8688f2d2fc440a680abd846a556c0c3e848c7f7034841f",
+    "byte_identical": true
+  }
+]

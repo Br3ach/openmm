@@ -1,0 +1,122 @@
+[
+  {
+    "variant": "baseline",
+    "test": "TestCudaCheckpointChunks.exe",
+    "args": [
+      "mixed",
+      "save",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\baseline-rng.chk"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"state\":\"dfc8ae974198a11e\",\"checkpoint\":\"80c1468ed8690847\",\"checkpoint_bytes\":17846087,\"grown_rng\":true,\"self_replay_verified\":true}\n",
+    "stderr": "",
+    "seconds": 1.2775985000007495,
+    "exe_sha256": "2f0a4476737dfa763606d7388d1108504d3d4c1b41bad2873f54067e24b52d5c",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\cache-baseline-TestCudaCheckpointChunks.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "candidate",
+    "test": "TestCudaCheckpointChunks.exe",
+    "args": [
+      "mixed",
+      "save",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\candidate-rng.chk"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"state\":\"dfc8ae974198a11e\",\"checkpoint\":\"80c1468ed8690847\",\"checkpoint_bytes\":17846087,\"grown_rng\":true,\"self_replay_verified\":true}\n",
+    "stderr": "",
+    "seconds": 1.2687315000002855,
+    "exe_sha256": "2f0a4476737dfa763606d7388d1108504d3d4c1b41bad2873f54067e24b52d5c",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\cache-candidate-TestCudaCheckpointChunks.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "candidate",
+    "test": "TestCudaCheckpointChunks.exe",
+    "args": [
+      "mixed",
+      "load",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\baseline-rng.chk"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"state\":\"dfc8ae974198a11e\",\"checkpoint\":\"80c1468ed8690847\",\"checkpoint_bytes\":17846087,\"grown_rng\":true,\"self_replay_verified\":false}\n",
+    "stderr": "",
+    "seconds": 1.2512327999975241,
+    "exe_sha256": "2f0a4476737dfa763606d7388d1108504d3d4c1b41bad2873f54067e24b52d5c",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\cache-candidate-TestCudaCheckpointChunks.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "baseline",
+    "test": "TestCudaCheckpointChunks.exe",
+    "args": [
+      "mixed",
+      "load",
+      "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\candidate-rng.chk"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"state\":\"dfc8ae974198a11e\",\"checkpoint\":\"80c1468ed8690847\",\"checkpoint_bytes\":17846087,\"grown_rng\":true,\"self_replay_verified\":false}\n",
+    "stderr": "",
+    "seconds": 1.2415298000014445,
+    "exe_sha256": "2f0a4476737dfa763606d7388d1108504d3d4c1b41bad2873f54067e24b52d5c",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\cache-baseline-TestCudaCheckpointChunks.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "candidate",
+    "test": "TestCudaCheckpointChunks.exe",
+    "args": [
+      "mixed",
+      "errors"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"chunk_boundaries\":5,\"short_reads\":2,\"short_writes\":2,\"nondefault_stream\":true,\"uninitialized_rng\":true}\n",
+    "stderr": "",
+    "seconds": 1.2445847999988473,
+    "exe_sha256": "2f0a4476737dfa763606d7388d1108504d3d4c1b41bad2873f54067e24b52d5c",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\cache-candidate-TestCudaCheckpointChunks.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "candidate",
+    "test": "TestCudaMoleculeGroups.exe",
+    "args": [
+      "mixed",
+      "invalid"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"sequence\":\"664a2a995878df43\",\"state\":\"c33df10a0181781b\",\"atom_index\":\"3c264997bb02b125\",\"trace\":\"5c295a302f19e106\",\"trace_entries\":398,\"regroups\":4,\"force_infos\":4,\"nonidentity_reorder\":true,\"self_replay_verified\":true,\"mode\":\"invalid\"}\n",
+    "stderr": "",
+    "seconds": 2.160028099999181,
+    "exe_sha256": "cb0eee85b99d6b0ab78d5baf25cbfe1b880957397cebd8350141793e7179a562",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\cache-candidate-TestCudaMoleculeGroups.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "candidate",
+    "test": "TestCudaNonperiodicReordering.exe",
+    "args": [
+      "mixed"
+    ],
+    "returncode": 0,
+    "stdout": "{\"precision\":\"mixed\",\"state\":\"d2a77a50da7ae64\",\"atom_index\":\"7a1133c60053b125\",\"trace\":\"2ef8835f6dd39646\",\"self_replay_verified\":true}\n",
+    "stderr": "",
+    "seconds": 1.9346726999974635,
+    "exe_sha256": "25c02c4b04ded9a39bd1879f44241099f922f20c894764548ac067885c22c300",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\cache-candidate-TestCudaNonperiodicReordering.exe",
+    "isolated_path": null
+  },
+  {
+    "variant": "package",
+    "test": "VerifyCudaRuntime.exe",
+    "args": [],
+    "returncode": 0,
+    "stdout": "{\"pme_energy_finite\":true,\"loaded_modules\":{\"OpenMM.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-ram-20261024\\\\OpenMM.dll\",\"OpenMMCUDA.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-ram-20261024\\\\OpenMMCUDA.dll\",\"cufft64_12.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-ram-20261024\\\\cufft64_12.dll\",\"nvrtc64_130_0.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-ram-20261024\\\\nvrtc64_130_0.dll\",\"nvrtc-builtins64_134.dll\":\"C:\\\\Users\\\\alexa\\\\OneDrive\\\\Documents\\\\ChatGPT\\\\OpenMM\\\\OpenMM-8.3.1-win64-fastxml-cuda-ram-20261024\\\\nvrtc-builtins64_134.dll\"}}\n",
+    "stderr": "",
+    "seconds": 2.5276481000000786,
+    "exe_sha256": "6074bce0f9c9dc1caf0d789d78f959123d40120e899d501a6866340a6e5b8ac9",
+    "cache": "C:\\Users\\alexa\\OneDrive\\Documents\\ChatGPT\\OpenMM\\ram-opt\\results\\reviewer-final\\cache-package-VerifyCudaRuntime.exe",
+    "isolated_path": "C:\\Windows\\System32;C:\\Windows"
+  }
+]

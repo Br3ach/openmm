@@ -1,0 +1,30 @@
+{
+  "03-checkpoint": {
+    "sampled_phase_peak_mib_median": 1227.625,
+    "sampled_phase_peak_mib_range": [
+      1218.84375,
+      1232.5390625
+    ],
+    "sample_counts": [
+      25,
+      23,
+      23
+    ],
+    "actual_interval_seconds_median": 0.01573294999980135,
+    "actual_interval_seconds_max": 0.016499699999258155
+  },
+  "candidate": {
+    "sampled_phase_peak_mib_median": 1098.92578125,
+    "sampled_phase_peak_mib_range": [
+      1098.15625,
+      1110.31640625
+    ],
+    "sample_counts": [
+      21,
+      23,
+      27
+    ],
+    "actual_interval_seconds_median": 0.015575949999401928,
+    "actual_interval_seconds_max": 0.016141200001584366
+  }
+}

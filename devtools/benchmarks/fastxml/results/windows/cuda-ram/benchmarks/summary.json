@@ -1,0 +1,237 @@
+[
+  {
+    "case": "vsites",
+    "particles": 2000000,
+    "mode": "startup",
+    "baseline_variant": "baseline",
+    "candidate_variant": "01-vsites",
+    "baseline": {
+      "construction_seconds": 2.4548911,
+      "phase_seconds": 1e-07,
+      "before_working_set_kib": 124156,
+      "before_peak_working_set_kib": 124156,
+      "before_private_kib": 341556,
+      "constructed_working_set_kib": 600968,
+      "constructed_peak_working_set_kib": 647844,
+      "constructed_private_kib": 1606808,
+      "phase_before_working_set_kib": 600968,
+      "phase_before_peak_working_set_kib": 647844,
+      "phase_before_private_kib": 1606808,
+      "phase_after_working_set_kib": 600968,
+      "phase_after_peak_working_set_kib": 647844,
+      "phase_after_private_kib": 1606808,
+      "phase_seconds_range": [
+        0,
+        1e-07
+      ]
+    },
+    "candidate": {
+      "construction_seconds": 2.1527241,
+      "phase_seconds": 1e-07,
+      "before_working_set_kib": 124172,
+      "before_peak_working_set_kib": 124172,
+      "before_private_kib": 341548,
+      "constructed_working_set_kib": 559092,
+      "constructed_peak_working_set_kib": 606508,
+      "constructed_private_kib": 1552996,
+      "phase_before_working_set_kib": 559092,
+      "phase_before_peak_working_set_kib": 606508,
+      "phase_before_private_kib": 1552996,
+      "phase_after_working_set_kib": 559092,
+      "phase_after_peak_working_set_kib": 606508,
+      "phase_after_private_kib": 1552996,
+      "phase_seconds_range": [
+        0,
+        1e-07
+      ]
+    }
+  },
+  {
+    "case": "validation",
+    "particles": 2000000,
+    "mode": "validate",
+    "baseline_variant": "01-vsites",
+    "candidate_variant": "02-validation",
+    "baseline": {
+      "construction_seconds": 2.3374321,
+      "phase_seconds": 1.1594599,
+      "before_working_set_kib": 124156,
+      "before_peak_working_set_kib": 124156,
+      "before_private_kib": 341556,
+      "constructed_working_set_kib": 560132,
+      "constructed_peak_working_set_kib": 607008,
+      "constructed_private_kib": 1553816,
+      "phase_before_working_set_kib": 560132,
+      "phase_before_peak_working_set_kib": 607008,
+      "phase_before_private_kib": 1553816,
+      "phase_after_working_set_kib": 581700,
+      "phase_after_peak_working_set_kib": 607008,
+      "phase_after_private_kib": 1578144,
+      "phase_seconds_range": [
+        1.1543146,
+        1.2372947
+      ]
+    },
+    "candidate": {
+      "construction_seconds": 2.5174535,
+      "phase_seconds": 0.3083915,
+      "before_working_set_kib": 124156,
+      "before_peak_working_set_kib": 124156,
+      "before_private_kib": 341564,
+      "constructed_working_set_kib": 559320,
+      "constructed_peak_working_set_kib": 606804,
+      "constructed_private_kib": 1554528,
+      "phase_before_working_set_kib": 559320,
+      "phase_before_peak_working_set_kib": 606804,
+      "phase_before_private_kib": 1554528,
+      "phase_after_working_set_kib": 559320,
+      "phase_after_peak_working_set_kib": 606804,
+      "phase_after_private_kib": 1554528,
+      "phase_seconds_range": [
+        0.29076,
+        0.3102906
+      ]
+    }
+  },
+  {
+    "case": "rngsave",
+    "particles": 2000000,
+    "mode": "rngsave",
+    "baseline_variant": "02-validation",
+    "candidate_variant": "03-checkpoint",
+    "baseline": {
+      "construction_seconds": 1.8786452,
+      "phase_seconds": 0.0151469,
+      "before_working_set_kib": 38484,
+      "before_peak_working_set_kib": 47424,
+      "before_private_kib": 252632,
+      "constructed_working_set_kib": 601992,
+      "constructed_peak_working_set_kib": 648868,
+      "constructed_private_kib": 1568876,
+      "phase_before_working_set_kib": 602060,
+      "phase_before_peak_working_set_kib": 648868,
+      "phase_before_private_kib": 1696104,
+      "phase_after_working_set_kib": 602076,
+      "phase_after_peak_working_set_kib": 728104,
+      "phase_after_private_kib": 1696104,
+      "phase_seconds_range": [
+        0.0146006,
+        0.0176205
+      ]
+    },
+    "candidate": {
+      "construction_seconds": 1.9237795,
+      "phase_seconds": 0.0086403,
+      "before_working_set_kib": 38500,
+      "before_peak_working_set_kib": 47428,
+      "before_private_kib": 252736,
+      "constructed_working_set_kib": 602128,
+      "constructed_peak_working_set_kib": 649004,
+      "constructed_private_kib": 1570396,
+      "phase_before_working_set_kib": 602196,
+      "phase_before_peak_working_set_kib": 649004,
+      "phase_before_private_kib": 1697624,
+      "phase_after_working_set_kib": 602208,
+      "phase_after_peak_working_set_kib": 649004,
+      "phase_after_private_kib": 1697624,
+      "phase_seconds_range": [
+        0.0085502,
+        0.0090572
+      ]
+    }
+  },
+  {
+    "case": "rngload",
+    "particles": 2000000,
+    "mode": "rngload",
+    "baseline_variant": "02-validation",
+    "candidate_variant": "03-checkpoint",
+    "baseline": {
+      "construction_seconds": 1.9383774,
+      "phase_seconds": 0.0172589,
+      "before_working_set_kib": 38488,
+      "before_peak_working_set_kib": 47424,
+      "before_private_kib": 252736,
+      "constructed_working_set_kib": 602336,
+      "constructed_peak_working_set_kib": 649212,
+      "constructed_private_kib": 1570304,
+      "phase_before_working_set_kib": 602404,
+      "phase_before_peak_working_set_kib": 649212,
+      "phase_before_private_kib": 1697532,
+      "phase_after_working_set_kib": 602408,
+      "phase_after_peak_working_set_kib": 728436,
+      "phase_after_private_kib": 1697532,
+      "phase_seconds_range": [
+        0.0167798,
+        0.0174679
+      ]
+    },
+    "candidate": {
+      "construction_seconds": 1.8799237,
+      "phase_seconds": 0.0093427,
+      "before_working_set_kib": 39328,
+      "before_peak_working_set_kib": 48288,
+      "before_private_kib": 253556,
+      "constructed_working_set_kib": 602148,
+      "constructed_peak_working_set_kib": 649024,
+      "constructed_private_kib": 1570072,
+      "phase_before_working_set_kib": 602216,
+      "phase_before_peak_working_set_kib": 649024,
+      "phase_before_private_kib": 1697300,
+      "phase_after_working_set_kib": 602220,
+      "phase_after_peak_working_set_kib": 649024,
+      "phase_after_private_kib": 1697300,
+      "phase_seconds_range": [
+        0.0084201,
+        0.0095431
+      ]
+    }
+  },
+  {
+    "case": "reorder",
+    "particles": 2000000,
+    "mode": "reorder",
+    "baseline_variant": "03-checkpoint",
+    "candidate_variant": "candidate",
+    "baseline": {
+      "construction_seconds": 4.3760337,
+      "phase_seconds": 0.390986,
+      "before_working_set_kib": 453208,
+      "before_peak_working_set_kib": 461916,
+      "before_private_kib": 705612,
+      "constructed_working_set_kib": 953720,
+      "constructed_peak_working_set_kib": 1281192,
+      "constructed_private_kib": 2332796,
+      "phase_before_working_set_kib": 953720,
+      "phase_before_peak_working_set_kib": 1281192,
+      "phase_before_private_kib": 2332796,
+      "phase_after_working_set_kib": 953764,
+      "phase_after_peak_working_set_kib": 1281192,
+      "phase_after_private_kib": 2332796,
+      "phase_seconds_range": [
+        0.3852459,
+        0.3984831
+      ]
+    },
+    "candidate": {
+      "construction_seconds": 4.327584,
+      "phase_seconds": 0.3812423,
+      "before_working_set_kib": 453164,
+      "before_peak_working_set_kib": 461876,
+      "before_private_kib": 705488,
+      "constructed_working_set_kib": 953968,
+      "constructed_peak_working_set_kib": 1280740,
+      "constructed_private_kib": 2333824,
+      "phase_before_working_set_kib": 953968,
+      "phase_before_peak_working_set_kib": 1280740,
+      "phase_before_private_kib": 2333824,
+      "phase_after_working_set_kib": 954012,
+      "phase_after_peak_working_set_kib": 1280740,
+      "phase_after_private_kib": 2333824,
+      "phase_seconds_range": [
+        0.3574975,
+        0.3902074
+      ]
+    }
+  }
+]

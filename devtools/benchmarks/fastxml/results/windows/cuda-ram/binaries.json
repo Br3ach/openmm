@@ -1,0 +1,57 @@
+{
+  "baseline": {
+    "OpenMM.dll": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+    "OpenMMCUDA.dll": "0864b4e569119e4fea6e00714156cf77cad7fd8f40de6f8d258ac2356346d93a",
+    "OpenMM.lib": "a146026f568816f41ae739a75161b42df3acf2ee89496fcb2d569b28b07584e4",
+    "OpenMMCUDA.lib": "308ad11ab58dd38e3d4a3d47749567949e8bef44c71baee6bff53375b9c15b98",
+    "TestVirtualSiteSnapshot.exe": "f5a707d86ac13c3a43414e49c689da0b0f9d76080219a4f5107c7b4a7051512b",
+    "TestCudaMoleculeGroups.exe": "cb0eee85b99d6b0ab78d5baf25cbfe1b880957397cebd8350141793e7179a562",
+    "TestCudaCheckpointChunks.exe": "2f0a4476737dfa763606d7388d1108504d3d4c1b41bad2873f54067e24b52d5c",
+    "TestCudaNonperiodicReordering.exe": "25c02c4b04ded9a39bd1879f44241099f922f20c894764548ac067885c22c300",
+    "BenchmarkCudaHostMemory.exe": "9a9a9f850b1a583563d691f64454149c6be16a3c786105f8e3f0f891d870c757"
+  },
+  "01-vsites": {
+    "OpenMM.dll": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+    "OpenMMCUDA.dll": "11ce8f33fd50d9a8185bc1f62f6aa53c5c674370c38e09bd8b846ce2bfb5cee7",
+    "OpenMM.lib": "a146026f568816f41ae739a75161b42df3acf2ee89496fcb2d569b28b07584e4",
+    "OpenMMCUDA.lib": "308ad11ab58dd38e3d4a3d47749567949e8bef44c71baee6bff53375b9c15b98",
+    "TestVirtualSiteSnapshot.exe": "f5a707d86ac13c3a43414e49c689da0b0f9d76080219a4f5107c7b4a7051512b",
+    "TestCudaMoleculeGroups.exe": "cb0eee85b99d6b0ab78d5baf25cbfe1b880957397cebd8350141793e7179a562",
+    "TestCudaCheckpointChunks.exe": "2f0a4476737dfa763606d7388d1108504d3d4c1b41bad2873f54067e24b52d5c",
+    "TestCudaNonperiodicReordering.exe": "25c02c4b04ded9a39bd1879f44241099f922f20c894764548ac067885c22c300",
+    "BenchmarkCudaHostMemory.exe": "9a9a9f850b1a583563d691f64454149c6be16a3c786105f8e3f0f891d870c757"
+  },
+  "02-validation": {
+    "OpenMM.dll": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+    "OpenMMCUDA.dll": "5d6a3a78b26ece7f9717c6b993fc00722d2aeb8382e38ab80c0433f160c21f55",
+    "OpenMM.lib": "a146026f568816f41ae739a75161b42df3acf2ee89496fcb2d569b28b07584e4",
+    "OpenMMCUDA.lib": "308ad11ab58dd38e3d4a3d47749567949e8bef44c71baee6bff53375b9c15b98",
+    "TestVirtualSiteSnapshot.exe": "f5a707d86ac13c3a43414e49c689da0b0f9d76080219a4f5107c7b4a7051512b",
+    "TestCudaMoleculeGroups.exe": "cb0eee85b99d6b0ab78d5baf25cbfe1b880957397cebd8350141793e7179a562",
+    "TestCudaCheckpointChunks.exe": "2f0a4476737dfa763606d7388d1108504d3d4c1b41bad2873f54067e24b52d5c",
+    "TestCudaNonperiodicReordering.exe": "25c02c4b04ded9a39bd1879f44241099f922f20c894764548ac067885c22c300",
+    "BenchmarkCudaHostMemory.exe": "9a9a9f850b1a583563d691f64454149c6be16a3c786105f8e3f0f891d870c757"
+  },
+  "03-checkpoint": {
+    "OpenMM.dll": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+    "OpenMMCUDA.dll": "2dcabe1f1afcd4137644a5057e282b52880ab28dfff6e0047d5ef023ea51fb56",
+    "OpenMM.lib": "a146026f568816f41ae739a75161b42df3acf2ee89496fcb2d569b28b07584e4",
+    "OpenMMCUDA.lib": "308ad11ab58dd38e3d4a3d47749567949e8bef44c71baee6bff53375b9c15b98",
+    "TestVirtualSiteSnapshot.exe": "f5a707d86ac13c3a43414e49c689da0b0f9d76080219a4f5107c7b4a7051512b",
+    "TestCudaMoleculeGroups.exe": "cb0eee85b99d6b0ab78d5baf25cbfe1b880957397cebd8350141793e7179a562",
+    "TestCudaCheckpointChunks.exe": "2f0a4476737dfa763606d7388d1108504d3d4c1b41bad2873f54067e24b52d5c",
+    "TestCudaNonperiodicReordering.exe": "25c02c4b04ded9a39bd1879f44241099f922f20c894764548ac067885c22c300",
+    "BenchmarkCudaHostMemory.exe": "9a9a9f850b1a583563d691f64454149c6be16a3c786105f8e3f0f891d870c757"
+  },
+  "candidate": {
+    "OpenMM.dll": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+    "OpenMMCUDA.dll": "2cdfee475469713e3c504c88df0518f3796dcd1e041eb584674cb34f29af826b",
+    "OpenMM.lib": "a146026f568816f41ae739a75161b42df3acf2ee89496fcb2d569b28b07584e4",
+    "OpenMMCUDA.lib": "308ad11ab58dd38e3d4a3d47749567949e8bef44c71baee6bff53375b9c15b98",
+    "TestVirtualSiteSnapshot.exe": "f5a707d86ac13c3a43414e49c689da0b0f9d76080219a4f5107c7b4a7051512b",
+    "TestCudaMoleculeGroups.exe": "cb0eee85b99d6b0ab78d5baf25cbfe1b880957397cebd8350141793e7179a562",
+    "TestCudaCheckpointChunks.exe": "2f0a4476737dfa763606d7388d1108504d3d4c1b41bad2873f54067e24b52d5c",
+    "TestCudaNonperiodicReordering.exe": "25c02c4b04ded9a39bd1879f44241099f922f20c894764548ac067885c22c300",
+    "BenchmarkCudaHostMemory.exe": "9a9a9f850b1a583563d691f64454149c6be16a3c786105f8e3f0f891d870c757"
+  }
+}

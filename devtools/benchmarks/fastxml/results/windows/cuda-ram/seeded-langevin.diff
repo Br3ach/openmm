@@ -1,0 +1,64 @@
+--- original/TestLangevinMiddleIntegrator.h
++++ controlled/SeededLangevinMiddle.h
+@@ -51,6 +51,7 @@
+     system.addParticle(2.0);
+     system.addParticle(2.0);
+     LangevinMiddleIntegrator integrator(0, 0.1, 0.01);
++    integrator.setRandomNumberSeed(20261024);
+     HarmonicBondForce* forceField = new HarmonicBondForce();
+     forceField->addBond(0, 1, 1.5, 1);
+     system.addForce(forceField);
+@@ -95,6 +96,7 @@
+     System system;
+     system.setDefaultPeriodicBoxVectors(Vec3(5, 0, 0), Vec3(0, 5, 0), Vec3(0, 0, 5));
+     LangevinMiddleIntegrator integrator(temp, 3.0, 0.01);
++    integrator.setRandomNumberSeed(20261024);
+     NonbondedForce* forceField = new NonbondedForce();
+     forceField->setNonbondedMethod(NonbondedForce::CutoffPeriodic);
+     for (int i = 0; i < numParticles; ++i) {
+@@ -132,6 +134,7 @@
+     const double temp = 100.0;
+     System system;
+     LangevinMiddleIntegrator integrator(temp, 2.0, 0.01);
++    integrator.setRandomNumberSeed(20261024);
+     integrator.setConstraintTolerance(1e-5);
+     NonbondedForce* forceField = new NonbondedForce();
+     for (int i = 0; i < numParticles; ++i) {
+@@ -183,6 +186,7 @@
+     positions[0] = Vec3(-1, 0, 0);
+     positions[1] = Vec3(1, 0, 0);
+     LangevinMiddleIntegrator integrator(300.0, 2.0, 0.01);
++    integrator.setRandomNumberSeed(20261024);
+     bool failed = false;
+     try {
+         // This should throw an exception.
+@@ -210,6 +214,7 @@
+     const double temp = 100.0;
+     System system;
+     LangevinMiddleIntegrator integrator(temp, 2.0, 0.01);
++    integrator.setRandomNumberSeed(20261024);
+     NonbondedForce* forceField = new NonbondedForce();
+     for (int i = 0; i < numParticles; ++i) {
+         system.addParticle(2.0);
+@@ -280,9 +285,10 @@
+     }
+ 
+     LangevinMiddleIntegrator integrator(300, 25, 0.001);
+-    Context context(system, integrator, platform);
+-    context.setPositions(positions);
+-    context.setVelocitiesToTemperature(targetTemperature);
++    integrator.setRandomNumberSeed(20261024);
++    Context context(system, integrator, platform);
++    context.setPositions(positions);
++    context.setVelocitiesToTemperature(targetTemperature, 20261024);
+     auto velocities = context.getState(State::Velocities).getVelocities();
+     double kineticEnergy = 0;
+     for(const auto &v : velocities) kineticEnergy += 0.5 * v.dot(v);
+@@ -294,6 +300,7 @@
+     System system;
+     system.addParticle(1.0);
+     LangevinMiddleIntegrator integrator(0.0, 1.0, 0.01);
++    integrator.setRandomNumberSeed(20261024);
+     integrator.setIntegrationForceGroups(1<<1);
+     CustomExternalForce* f1 = new CustomExternalForce("x");
+     f1->addParticle(0);

@@ -1,0 +1,20 @@
+[
+  {
+    "variant": "baseline",
+    "test": "TestVirtualSiteSnapshot.exe",
+    "returncode": 0,
+    "stdout": "Virtual-site snapshots match legacy identity/order, RTTI, arbitrary parents, ignored local weights, nonfinite weights and immutable ownership\n",
+    "stderr": "",
+    "seconds": 0.022919299997738563,
+    "exe_sha256": "f5a707d86ac13c3a43414e49c689da0b0f9d76080219a4f5107c7b4a7051512b"
+  },
+  {
+    "variant": "candidate",
+    "test": "TestVirtualSiteSnapshot.exe",
+    "returncode": 0,
+    "stdout": "Virtual-site snapshots match legacy identity/order, RTTI, arbitrary parents, ignored local weights, nonfinite weights and immutable ownership\n",
+    "stderr": "",
+    "seconds": 0.02256159999888041,
+    "exe_sha256": "f5a707d86ac13c3a43414e49c689da0b0f9d76080219a4f5107c7b4a7051512b"
+  }
+]

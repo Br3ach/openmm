@@ -1,0 +1,79 @@
+{
+  "reviewer": "independent_reviewer (separate agent from implementing root)",
+  "review_date": "2026-10-24",
+  "branch": "fastxml-experimental-20261024",
+  "base_commit": "0fe8ca2f27f0c38650d9d9ea904d935b00cf9bda",
+  "design_review_before_each_implementation": true,
+  "final_release_approved": true,
+  "reviewed_scopes": [
+    "Compact immutable VirtualSiteInfo snapshots",
+    "Sorted-offset atom-order validation",
+    "Bounded CUDA RNG checkpoint transfers",
+    "Sequential atom-reordering field staging"
+  ],
+  "reviewed_runtime_source_sha256": {
+    "platforms/common/src/ComputeContext.cpp": "320dd1d4ca6266430c37ed838c1dd2ccfa4e6f6373536a18136ed7302f8297b0",
+    "platforms/common/src/VirtualSiteSnapshot.h": "13b852221fe6e4b95e96576a29da25a3f1d5ca8c095223090f2a9fc8b323cc9c",
+    "platforms/common/src/IntegrationUtilities.cpp": "88a01f59dce0cf7563ee2602ca7850206b5ad27068fd1802f0bb499fa33efd93",
+    "platforms/cuda/src/CudaCheckpointUtilities.h": "a3fe52ac9a02a91e67d2af8d20afd986dd17b0d7fb845a36a93c74640e0a9816",
+    "platforms/cuda/sharedTarget/CMakeLists.txt": "a3362b9496e04f2f0a7836abbc8203fd16c63d6f33cdbecc51504dd2909c1993",
+    "platforms/cuda/staticTarget/CMakeLists.txt": "7934e33c821d226ec48c9ce3982efd67173c2af29b420a3a93e6e6eee81e88b5"
+  },
+  "candidate_cuda_dll_sha256": "2cdfee475469713e3c504c88df0518f3796dcd1e041eb584674cb34f29af826b",
+  "unchanged_core_dll_sha256": "eb55cc454620e043858683fe0bea28dd9f77b0b32f3a5b4a72f713f2fcdeb751",
+  "independent_checks": [
+    "Reviewed final code, private headers, shared/static CMake feature selection, ownership/order/stream/padding/listener invariants and public ABI.",
+    "Reran rebuilt final snapshot oracle in both directories: two passes.",
+    "Reran eight selected GPU processes: paired mixed grown-RNG saves/self-replays, both cross-plugin loads, chunk/error/nondefault-stream checks, periodic invalid-order repair, nonperiodic reordered continuation and isolated package PME; all passed.",
+    "Independently compared full saved RNG checkpoint bytes and continuation hashes across both DLLs.",
+    "Recomputed every median/range from 30 benchmark records with 10 excluded warmups and every sampled-phase statistic from six records with two excluded warmups.",
+    "Verified runtime/stage/caller hashes, 531 equal CUDA export names/ordinals, staged DLL/import libraries, 199 unchanged public headers/notices, installation text and corrected reporting."
+  ],
+  "addressed_findings": [
+    "Parent-count accumulation converted to size_t before addition.",
+    "CUDA chunk helper synchronizes owning current stream and rejects incomplete reads before upload.",
+    "External sampling uses start/end acknowledgments and joins sampler before verification allocations; actual intervals are reported.",
+    "Documentation encoding corrected and benchmark pre-run GPU load distinguished from earlier heavily loaded correctness runs."
+  ],
+  "measured_results": {
+    "synthetic_particles": 2000000,
+    "snapshot_post_constructor_working_set_mib": [
+      586.8828125,
+      545.98828125
+    ],
+    "five_validations_seconds": [
+      1.1594599,
+      0.3083915
+    ],
+    "rng_save_lifetime_peak_mib": [
+      711.0390625,
+      633.79296875
+    ],
+    "rng_load_lifetime_peak_mib": [
+      711.36328125,
+      633.8125
+    ],
+    "reorder_lifetime_peak_mib": [
+      1251.1640625,
+      1250.72265625
+    ],
+    "reorder_observed_sampled_phase_max_median_mib": [
+      1227.625,
+      1098.92578125
+    ]
+  },
+  "limitations": [
+    "Phase-specific savings are not additive. Startup working set is not a measured long-running MD average, and lifetime highwater includes earlier construction.",
+    "RNG timing uses Windows NUL output and synthetic bounded zero input; it is not disk/compression/full-checkpoint/FAH wrap-up throughput.",
+    "Reorder phase includes setPositions, computeVirtualSites and three forced reorders. No meaningful reorder speedup established; lifetime peak is essentially unchanged.",
+    "Requested 1ms sampling produced about 15.6ms intervals and 21-27 samples per trial. Sampled maxima are lower-bound observations of phase peaks; their difference is not a lower bound on exact savings.",
+    "One original baseline LangevinMiddle single stochastic temperature failure is preserved. Controlled integrator/initial-temperature seed suites passed separately; one massless initialization remains unseeded.",
+    "Partial transfer/reordering failures are not transactional. Existing ForceInfo destructor/ownership issue remains deferred; no cleanup/vtable repair is included.",
+    "No actual FAH work unit, PPD, end-to-end startup/wrap-up or VRAM saving established. OpenCL/HIP and full static CUDA runtime are unvalidated; compilation checks only.",
+    "Tested Windows RTX5090, driver621.01, CUDA13.4.92; other hardware/driver configurations unvalidated."
+  ],
+  "delivery_conditions": [
+    "Commit the reviewed four-change chain on the experimental branch from the stated base; preserve stable branch655c38e.",
+    "Fill actual release commit/hash metadata after commit, copy this approval to validation/cuda-ram, regenerate checksums and verify archive without changing reviewed binaries."
+  ]
+}

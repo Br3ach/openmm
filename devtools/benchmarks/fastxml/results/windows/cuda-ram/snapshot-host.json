@@ -1,0 +1,14 @@
+[
+  {
+    "variant": "baseline",
+    "returncode": 0,
+    "stdout": "Virtual-site snapshots match legacy identity/order, RTTI, arbitrary parents, ignored local weights, nonfinite weights and immutable ownership\n",
+    "stderr": ""
+  },
+  {
+    "variant": "candidate",
+    "returncode": 0,
+    "stdout": "Virtual-site snapshots match legacy identity/order, RTTI, arbitrary parents, ignored local weights, nonfinite weights and immutable ownership\n",
+    "stderr": ""
+  }
+]

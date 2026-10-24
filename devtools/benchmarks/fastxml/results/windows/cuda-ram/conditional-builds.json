@@ -1,0 +1,14 @@
+[
+  {
+    "path": "fallback",
+    "returncode": 0,
+    "stdout": "IntegrationUtilities.cpp\n",
+    "stderr": ""
+  },
+  {
+    "path": "cuda-static",
+    "returncode": 0,
+    "stdout": "IntegrationUtilities.cpp\n",
+    "stderr": ""
+  }
+]

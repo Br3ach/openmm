@@ -1,0 +1,17 @@
+{
+  "changed": [
+    "platforms/cuda/sharedTarget/CMakeLists.txt",
+    "platforms/cuda/staticTarget/CMakeLists.txt",
+    "platforms/cuda/tests/TestCudaMoleculeGroups.cpp",
+    "platforms/common/src/ComputeContext.cpp",
+    "platforms/common/src/IntegrationUtilities.cpp"
+  ],
+  "added": [
+    "tests/TestVirtualSiteSnapshot.cpp",
+    "platforms/cuda/src/CudaCheckpointUtilities.h",
+    "platforms/cuda/tests/TestCudaCheckpointChunks.cpp",
+    "platforms/cuda/tests/TestCudaNonperiodicReordering.cpp",
+    "platforms/common/src/VirtualSiteSnapshot.h",
+    "devtools/benchmarks/fastxml/BenchmarkCudaHostMemory.cpp"
+  ]
+}

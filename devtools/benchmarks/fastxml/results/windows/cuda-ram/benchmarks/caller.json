@@ -1,0 +1,5 @@
+{
+  "source": "devtools/benchmarks/fastxml/BenchmarkCudaHostMemory.cpp",
+  "sha256": "9a9a9f850b1a583563d691f64454149c6be16a3c786105f8e3f0f891d870c757",
+  "phase_scope": "setPositions+computeVirtualSites+3forcedreorders; process_lifetime highwater before verification"
+}

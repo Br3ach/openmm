@@ -1,0 +1,9 @@
+{
+  "precisions": [
+    "mixed"
+  ],
+  "processes": 8,
+  "cross_plugin_rng_and_continuation_equal": true,
+  "checkpoint_bytes": 17846087,
+  "checkpoint_sha256": "cdb21ceb02994cedc21e9721c8c39112b231750e0f0fdff596da196daa6a5fd0"
+}

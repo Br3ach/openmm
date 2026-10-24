@@ -1,0 +1,8 @@
+{
+  "platforms/common/src/ComputeContext.cpp": "320dd1d4ca6266430c37ed838c1dd2ccfa4e6f6373536a18136ed7302f8297b0",
+  "platforms/common/src/VirtualSiteSnapshot.h": "13b852221fe6e4b95e96576a29da25a3f1d5ca8c095223090f2a9fc8b323cc9c",
+  "platforms/common/src/IntegrationUtilities.cpp": "88a01f59dce0cf7563ee2602ca7850206b5ad27068fd1802f0bb499fa33efd93",
+  "platforms/cuda/src/CudaCheckpointUtilities.h": "a3fe52ac9a02a91e67d2af8d20afd986dd17b0d7fb845a36a93c74640e0a9816",
+  "platforms/cuda/sharedTarget/CMakeLists.txt": "a3362b9496e04f2f0a7836abbc8203fd16c63d6f33cdbecc51504dd2909c1993",
+  "platforms/cuda/staticTarget/CMakeLists.txt": "7934e33c821d226ec48c9ce3982efd67173c2af29b420a3a93e6e6eee81e88b5"
+}
