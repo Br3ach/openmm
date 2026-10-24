@@ -2,7 +2,6 @@
 #include "openmm/State.h"
 #include "openmm/System.h"
 #include "openmm/internal/AssertionUtilities.h"
-#include "openmm/serialization/StateProxy.h"
 #include "openmm/serialization/SystemProxy.h"
 #include "openmm/serialization/XmlSerializer.h"
 #include <cstdlib>
@@ -48,13 +47,20 @@ private:
     const SerializationProxy* original;
 };
 
-class CountingStateProxy : public StateProxy {
+class CountingStateProxy : public SerializationProxy {
 public:
+    // Delegate through the registry: StateProxy itself is not exported on Windows.
+    explicit CountingStateProxy(const SerializationProxy& original) : SerializationProxy("State"), original(original) {}
     mutable int calls = 0;
+    void serialize(const void* object, SerializationNode& node) const override {
+        original.serialize(object, node);
+    }
     void* deserialize(const SerializationNode& node) const override {
         ++calls;
-        return StateProxy::deserialize(node);
+        return original.deserialize(node);
     }
+private:
+    const SerializationProxy& original;
 };
 
 class MarkerSystemProxy : public SystemProxy {
@@ -79,7 +85,7 @@ static void testCustomStateReader() {
     State state = builder.getState();
     stringstream stream;
     XmlSerializer::serialize(&state, "State", stream);
-    CountingStateProxy proxy;
+    CountingStateProxy proxy(SerializationProxy::getProxy(typeid(State)));
     ProxyGuard<State> guard(&proxy);
     unique_ptr<State> copy(XmlSerializer::deserialize<State>(stream));
     ASSERT_EQUAL(1, proxy.calls);

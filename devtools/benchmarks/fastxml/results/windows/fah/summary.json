@@ -1,0 +1,38 @@
+[
+  {
+    "kind": "system",
+    "variant": "candidate",
+    "particles": 7950256,
+    "samples": 3,
+    "read_seconds_median": 15.9655698,
+    "peak_working_set_kib_median": 1535964,
+    "peak_scope": "process_lifetime"
+  },
+  {
+    "kind": "system",
+    "variant": "baseline",
+    "particles": 7950256,
+    "samples": 3,
+    "read_seconds_median": 15.5787029,
+    "peak_working_set_kib_median": 1536188,
+    "peak_scope": "process_lifetime"
+  },
+  {
+    "kind": "state",
+    "variant": "candidate",
+    "particles": 7950256,
+    "samples": 3,
+    "read_seconds_median": 21.133916,
+    "peak_working_set_kib_median": 567716,
+    "peak_scope": "process_lifetime"
+  },
+  {
+    "kind": "state",
+    "variant": "baseline",
+    "particles": 7950256,
+    "samples": 3,
+    "read_seconds_median": 21.3324358,
+    "peak_working_set_kib_median": 567688,
+    "peak_scope": "process_lifetime"
+  }
+]

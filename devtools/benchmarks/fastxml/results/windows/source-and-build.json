@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-24",
+  "baseline_commit": "655c38e9179d984f095f32d811d3eceed7c69534",
+  "candidate_runtime_commit": "617b8051c35ba4e86143e9e9b011a7f21633044f",
+  "runtime_source_changes_in_followup": false,
+  "os": "Native Windows x64",
+  "host_version": "10.0.26300",
+  "cpu": "AMD Ryzen 7 9800X3D",
+  "installed_ram_gib": 31.41,
+  "compiler": "MSVC 19.51.36260 x64",
+  "windows_sdk": "10.0.28000.0",
+  "cmake": "4.3.1-msvc1",
+  "python": "3.14.7",
+  "build_method": "CMake-generated Visual Studio 18 2026 x64 Release source list and per-file definitions invoked directly through cl/link after native CMake build-driver attempts stalled in this sandbox.",
+  "compile_flags": [
+    "/O2",
+    "/Ob2",
+    "/MD",
+    "/EHsc",
+    "/std:c++14",
+    "/W2",
+    "/wd4305",
+    "/wd4244"
+  ],
+  "plugins": "Reference only; CUDA, OpenCL, HIP, CPU, Amoeba, RPMD, Drude, PME, wrappers and examples disabled.",
+  "baseline_build": "Recompiled original FastXmlDeserializer.cpp and XmlSerializer.cpp using original FastStateXml.h and XmlSerializer.h; reused 262 unchanged translation-unit objects. Compiled callers separately against matching headers and import libraries.",
+  "peak_metric": "GetProcessMemoryInfo PeakWorkingSetSize, process lifetime including setup, no allocator trimming or peak reset.",
+  "process_memory_limit_mib": 6144,
+  "timing_caveat": "Shared desktop; warm files; three fresh-process samples per comparison; synthetic writes to NUL; round-trip verification writes actual files.",
+  "source_sha256": {
+    "serialization/src/XmlSerializer.cpp": "790d460a9cf6b3fbd6f0c2b5ff6ae43b89e04bbd1effa8d6c7376308a17b68fe",
+    "serialization/src/FastXmlDeserializer.cpp": "727542be9d6067b9b3e4aa51a9d0a3c41cde24e2ca339827e81a41a08b1f4e45",
+    "serialization/src/FastStateXml.h": "b1562100d019f744e597171880ebe9880ddc0ac88216c6e56c864e1ffb07b657",
+    "serialization/include/openmm/serialization/XmlSerializer.h": "32e0d33c68a457e3611921285f1f27db74763a3a5215a699c552b57a2a1e32f1",
+    "serialization/tests/TestFastXmlProxyOverrides.cpp": "1efb09dd56c54831ce109a0fc50dcbab8f7629a63b10784871ceafd1b391eb9f",
+    "devtools/benchmarks/fastxml/BenchmarkXmlMemory.cpp": "34189cb3c7f229eb75316a82b32d14b79bb5c9afa094141b470bf079e5703674",
+    "devtools/benchmarks/fastxml/BenchmarkWindowsFahXml.cpp": "f5c331bbfcd4506c25c7c1d39572eedd6494de0aa11ac648a6df9a2e29f3d97e",
+    "devtools/benchmarks/fastxml/run_benchmark.py": "656b4b5754bbedb5c9a1942c07f0ff6179aaa24440b536d0987ec93f9d3c2c53",
+    "devtools/benchmarks/fastxml/run_windows_fah.py": "a57dc9892803120d8a88610d52950a4bdceda3d5d50636849a3ac556e79e3b04"
+  }
+}

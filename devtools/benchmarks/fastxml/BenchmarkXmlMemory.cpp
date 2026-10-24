@@ -15,11 +15,42 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#ifdef _WIN32
+#define NOMINMAX
+#include <windows.h>
+#include <psapi.h>
+#else
 #include <sys/resource.h>
+#endif
 #include <vector>
 using namespace OpenMM;
 using namespace std;
 
+#ifdef _WIN32
+static void enforceMemoryLimit() {
+    // Keep the job handle alive until process exit so the limit covers the entire run.
+    static HANDLE job = CreateJobObjectA(NULL, NULL);
+    JOBOBJECT_EXTENDED_LIMIT_INFORMATION limits = {};
+    limits.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_PROCESS_MEMORY;
+    limits.ProcessMemoryLimit = static_cast<SIZE_T>(6)*1024*1024*1024;
+    if (!job || !SetInformationJobObject(job, JobObjectExtendedLimitInformation, &limits, sizeof(limits)) ||
+        !AssignProcessToJobObject(job, GetCurrentProcess()))
+        throw runtime_error("Cannot enforce Windows benchmark memory limit");
+}
+static PROCESS_MEMORY_COUNTERS memoryCounters() {
+    PROCESS_MEMORY_COUNTERS counters = {};
+    if (!GetProcessMemoryInfo(GetCurrentProcess(), &counters, sizeof(counters)))
+        throw runtime_error("Cannot read Windows process memory metrics");
+    return counters;
+}
+static long statusKB(const string& field) {
+    const auto counters = memoryCounters();
+    return static_cast<long>((field == "VmHWM" ? counters.PeakWorkingSetSize : counters.WorkingSetSize)/1024);
+}
+static void resetPeak() {} // Windows exposes a lifetime peak, which cannot be reset.
+static void trimSetupAllocations() {} // Keep native allocator behavior in this measurement.
+static long lifetimePeakKB() { return statusKB("VmHWM"); }
+#else
 static long statusKB(const string& field) {
     ifstream f("/proc/self/status");
     string line;
@@ -32,6 +63,15 @@ static void resetPeak() {
     ofstream f("/proc/self/clear_refs"); f<<"5\n"; f.close();
     if (!f) throw runtime_error("Cannot reset Linux RSS high-water mark");
 }
+static void enforceMemoryLimit() {} // The Linux runner applies RLIMIT_AS.
+static void trimSetupAllocations() { malloc_trim(0); }
+static long lifetimePeakKB() {
+    rusage usage;
+    if (getrusage(RUSAGE_SELF, &usage) != 0)
+        throw runtime_error("Cannot read lifetime RSS high-water mark");
+    return usage.ru_maxrss;
+}
+#endif
 static uint64_t digest=1469598103934665603ULL;
 template<class T> static void hashValue(const T& v) {
     const unsigned char* p=reinterpret_cast<const unsigned char*>(&v);
@@ -104,13 +144,14 @@ static void checkSystem(const System& s,int n,bool fallback) {
 }
 int main(int argc,char** argv) {
     try {
+        enforceMemoryLimit();
         if(argc!=6) throw runtime_error("usage: bench operation kind count path input_mode");
         string op=argv[1],kind=argv[2],path=argv[4],inputMode=argv[5];
         int n=stoi(argv[3]);bool state=kind.rfind("state",0)==0, forces=kind=="state-pvf", fallback=kind=="system-fallback";
         unique_ptr<State> st;unique_ptr<System> sy;
         if(op=="write" || op=="generate") {
             if(state) st=makeState(n,forces);else sy=makeSystem(n,fallback);
-            malloc_trim(0); // Discard released setup allocations before measuring serialization.
+            trimSetupAllocations(); // Discard released setup allocations where supported.
         }
         long baseline=statusKB("VmRSS");resetPeak();
         auto start=chrono::steady_clock::now();
@@ -132,9 +173,14 @@ int main(int argc,char** argv) {
         }
         double elapsed=chrono::duration<double>(chrono::steady_clock::now()-start).count();
         long peak=statusKB("VmHWM"),retained=statusKB("VmRSS");
-        rusage ru;getrusage(RUSAGE_SELF,&ru);
+        const long lifetimePeak = lifetimePeakKB();
         // Validation is deliberately outside the timed and memory-measured interval.
         if(state) checkState(*st,n,forces);else checkSystem(*sy,n,fallback);
-        cout<<setprecision(9)<<"{\"seconds\":"<<elapsed<<",\"baseline_kib\":"<<baseline<<",\"peak_kib\":"<<peak<<",\"retained_kib\":"<<retained<<",\"lifetime_peak_kib\":"<<ru.ru_maxrss<<",\"digest\":\""<<hex<<digest<<"\"}"<<endl;
+#ifdef _WIN32
+        const char* peakScope = "process_lifetime";
+#else
+        const char* peakScope = "operation";
+#endif
+        cout<<setprecision(9)<<"{\"seconds\":"<<elapsed<<",\"baseline_kib\":"<<baseline<<",\"peak_kib\":"<<peak<<",\"retained_kib\":"<<retained<<",\"lifetime_peak_kib\":"<<lifetimePeak<<",\"peak_scope\":\""<<peakScope<<"\",\"digest\":\""<<hex<<digest<<"\"}"<<endl;
     } catch(const exception& e) {cerr<<e.what()<<endl;return 1;}
 }

@@ -1,0 +1,20 @@
+{
+  "project": 18289,
+  "run": 319,
+  "clone": 1,
+  "generation": 0,
+  "files": {
+    "system.xml": {
+      "bytes": 1927759124,
+      "sha256": "d5cbb77e71562ee19d9640ea9bef52136b10b108278b6e9b3c892a8cf7a755a2",
+      "compressed_bytes": 55168248,
+      "compressed_sha256": "e84f48b7972d5e2aa1bbf0d0741abeb1ccd64816e379cb940bb18a0a7d4bc1db"
+    },
+    "state.xml": {
+      "bytes": 1947913030,
+      "sha256": "4cd3a29f88fe6bebbe8ffabeecd7c6f0ebb125b52728cb50464a6f4b856b88a1",
+      "compressed_bytes": 502090088,
+      "compressed_sha256": "b134958d638916239b798894e92c5c9d6d92ecd49a4e6986a4bed13b1945c8e3"
+    }
+  }
+}

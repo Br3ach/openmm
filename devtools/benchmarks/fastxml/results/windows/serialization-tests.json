@@ -1,0 +1,275 @@
+[
+  {
+    "test": "TestFastSystemXmlWrite",
+    "returncode": 0,
+    "seconds": 10.606090100000074,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestFastXmlFallback",
+    "returncode": 0,
+    "seconds": 1.1358083000013721,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestFastXmlProxyOverrides",
+    "returncode": 0,
+    "seconds": 0.7198129000007611,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestFastXmlSerialization",
+    "returncode": 0,
+    "seconds": 0.8593471000003774,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializationNode",
+    "returncode": 0,
+    "seconds": 0.1837863999990077,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeAndersenThermostat",
+    "returncode": 0,
+    "seconds": 0.17735990000073798,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeATMForce",
+    "returncode": 0,
+    "seconds": 0.18405910000001313,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCMAPTorsion",
+    "returncode": 0,
+    "seconds": 0.17736370000056922,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCMMotionRemover",
+    "returncode": 0,
+    "seconds": 0.18378170000141836,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomAngleForce",
+    "returncode": 0,
+    "seconds": 0.19010499999967578,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomBondForce",
+    "returncode": 0,
+    "seconds": 0.17929980000008072,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomCentroidBondForce",
+    "returncode": 0,
+    "seconds": 0.1816467000007833,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomCompoundBondForce",
+    "returncode": 0,
+    "seconds": 0.18900550000034855,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomCVForce",
+    "returncode": 0,
+    "seconds": 0.1827644999993936,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomExternalForce",
+    "returncode": 0,
+    "seconds": 0.1784109999989596,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomGBForce",
+    "returncode": 0,
+    "seconds": 0.18762109999988752,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomHbondForce",
+    "returncode": 0,
+    "seconds": 0.18116249999911815,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomManyParticleForce",
+    "returncode": 0,
+    "seconds": 0.17954789999930654,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomNonbondedForce",
+    "returncode": 0,
+    "seconds": 0.1787506000000576,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomTorsionForce",
+    "returncode": 0,
+    "seconds": 0.17913379999845347,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeCustomVolumeForce",
+    "returncode": 0,
+    "seconds": 0.1766102999990835,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeDPDIntegrator",
+    "returncode": 0,
+    "seconds": 0.1800057000000379,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeGayBerneForce",
+    "returncode": 0,
+    "seconds": 0.17899670000042534,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeGBSAOBCForce",
+    "returncode": 0,
+    "seconds": 0.18222610000157147,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeHarmonicAngleForce",
+    "returncode": 0,
+    "seconds": 0.18192509999971662,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeHarmonicBondForce",
+    "returncode": 0,
+    "seconds": 0.18493060000037076,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeIntegrator",
+    "returncode": 0,
+    "seconds": 0.1796799000003375,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeMonteCarloAnisotropicBarostat",
+    "returncode": 0,
+    "seconds": 0.18407419999857666,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeMonteCarloBarostat",
+    "returncode": 0,
+    "seconds": 0.17766130000018165,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeMonteCarloFlexibleBarostat",
+    "returncode": 0,
+    "seconds": 0.17475940000076662,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeMonteCarloMembraneBarostat",
+    "returncode": 0,
+    "seconds": 0.1802191999995557,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeNonbondedForce",
+    "returncode": 0,
+    "seconds": 0.17984980000073847,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeNoseHooverIntegrator",
+    "returncode": 0,
+    "seconds": 0.18012819999967178,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializePeriodicTorsionForce",
+    "returncode": 0,
+    "seconds": 0.1765211999991152,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeRBTorsionForce",
+    "returncode": 0,
+    "seconds": 0.18205020000095828,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeRMSDForce",
+    "returncode": 0,
+    "seconds": 0.1860086999986379,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeState",
+    "returncode": 0,
+    "seconds": 0.19320740000148362,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeSystem",
+    "returncode": 0,
+    "seconds": 0.1858394999999291,
+    "stdout": "Done\n",
+    "stderr": ""
+  },
+  {
+    "test": "TestSerializeTabulatedFunctions",
+    "returncode": 0,
+    "seconds": 0.18085359999895445,
+    "stdout": "Done\n",
+    "stderr": ""
+  }
+]

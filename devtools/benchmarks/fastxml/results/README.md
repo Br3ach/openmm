@@ -16,3 +16,5 @@ Medians of three fresh-process runs. RAM is peak resident memory, in MiB. Both h
 The System fixtures contain 500,000 particles; the State contains 1,000,000 particles with positions and velocities. The late-fallback fixture appends a small CustomBondForce. See the parent README for methodology and limitations.
 
 39/39 serialization tests passed. All three checked large XML outputs were byte-identical. Unsupported force subtrees may still be large; scanner-incompatible XML retains full fallback. Caller recompilation is required for the new System writer. These results do not measure simulation throughput or memory compression.
+
+Native Windows results and real FAH XML validation: [windows/README.md](windows/README.md).

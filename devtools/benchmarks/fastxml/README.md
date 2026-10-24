@@ -71,10 +71,11 @@ fragment and rewind boundaries across 1 MiB buffers; nonzero document offsets;
 preserved stream suffixes; denied local rewinds; and single invocation of a
 throwing custom proxy.
 
-See `results/` for the measured baseline/candidate runs, source-file hashes and
-validation outcomes. These are real executions on synthetic inputs. They do not
-reproduce a specific Folding@home work unit, CUDA Context setup, Windows memory
-management or OS memory compression.
+See `results/` for the original Linux baseline/candidate runs, source-file
+hashes and validation outcomes. Native Windows synthetic measurements and
+serialization of real Folding@home project 18289 inputs are in
+[`results/windows/`](results/windows/). Neither set measures CUDA Context setup,
+simulation throughput, or OS memory compression.
 
 ## Reproduce the memory benchmark (Linux)
 
@@ -122,3 +123,51 @@ Every run validates counts and hashes the synthetic numerical data. Candidate
 XML output is also checked byte-for-byte against the baseline fixtures after
 timing. Source and outputs are not included in elapsed time. Shared-host timing
 variation remains possible; raw runs, medians and ranges are retained.
+
+## Reproduce native Windows measurements
+
+Use an x64 Visual Studio Developer PowerShell, a Release OpenMM DLL build,
+Python 3.11+, and the same CPU-only options described above. Compile the current
+benchmark source twice, once against each checkout's headers and import library.
+Keep each executable beside its matching OpenMM DLL. For example:
+
+```powershell
+cl /nologo /O2 /MD /EHsc /std:c++17 /I"$sourceDir/openmmapi/include" /I"$sourceDir/olla/include" /I"$sourceDir/serialization/include" /Fe:"$buildDir/Release/BenchmarkXmlMemory.exe" /Fo:"$buildDir/BenchmarkXmlMemory.obj" "$benchmarkSource/BenchmarkXmlMemory.cpp" "$buildDir/Release/OpenMM.lib" Psapi.lib
+python "$benchmarkSource/run_benchmark.py" --baseline "$baselineExe" --candidate "$candidateExe" --output "$resultsDir"
+```
+
+The Windows harness enforces a 6 GiB per-process committed-memory limit with a
+Job Object. This differs from the Linux virtual-address-space limit. A failure to
+establish the limit aborts the run. Peak RAM uses PeakWorkingSetSize, which is a
+process-lifetime high-water mark. Windows cannot reset it, and this harness does
+not trim setup allocations. Consequently write peaks include fixture-construction
+peaks. The raw records and summaries label the peak scope explicitly. Do not
+compare Windows peaks directly with the operation-reset Linux RSS measurements.
+
+### Validate actual FAH XML copies
+
+BenchmarkWindowsFahXml.cpp reads uncompressed System or State XML directly from
+a file and optionally writes a round trip. Compile it using the same command
+above, replacing the source and executable names. This harness also accepts a
+configurable per-process committed-memory limit.
+
+Copy and decompress stable FAH inputs into a separate fixture directory first.
+Do not read an actively changing checkpoint. Then run:
+
+```powershell
+python "$benchmarkSource/run_windows_fah.py" --baseline "$baselineFahExe" --candidate "$candidateFahExe" --system "$fixtures/system.xml" --state "$fixtures/state.xml" --output "$resultsDir"
+```
+
+The runner alternates three fresh-process reads of both versions, warms each
+file before measurement, and separately checks a complete candidate round trip.
+Its SHA-256 comparison permits only the root openmmVersion attribute to change.
+All other XML bytes must match. This accommodates inputs produced by an older
+OpenMM version; it is deliberately stricter than general semantic XML equality.
+Temporary round-trip outputs are removed after successful verification.
+Original FAH XML and binary checkpoints are not included in the results.
+
+These measurements validate serialization of real work-unit inputs. They do not
+run a CUDA Context, integrate a trajectory, replace the FAH core, measure PPD, or
+include BZip2 decompression in the serializer timings. In particular, a work unit
+whose forces already fit the original fast reader need not gain from the new
+per-force fallback.

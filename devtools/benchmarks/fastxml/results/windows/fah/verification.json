@@ -1,0 +1,41 @@
+[
+  {
+    "kind": "system",
+    "fast": 1,
+    "particles": 7950256,
+    "read_seconds": 12.5480971,
+    "write_seconds": 15.0466506,
+    "baseline_working_set_kib": 5476,
+    "read_peak_working_set_kib": 1535340,
+    "read_private_kib": 1620848,
+    "lifetime_peak_working_set_kib": 1538588,
+    "peak_scope": "process_lifetime",
+    "constraints": 5955638,
+    "forces": 6,
+    "input_bytes": 1927759124,
+    "output_bytes": 1927759126,
+    "output_sha256": "88c1f607f88a6553a4b7d206ee4cea5b838272afced0e9e3ba5f19724aea3762",
+    "normalized_input_sha256": "88c1f607f88a6553a4b7d206ee4cea5b838272afced0e9e3ba5f19724aea3762",
+    "equal_after_root_version_normalization": true
+  },
+  {
+    "kind": "state",
+    "fast": 1,
+    "particles": 7950256,
+    "read_seconds": 23.0485493,
+    "write_seconds": 30.8955881,
+    "baseline_working_set_kib": 5444,
+    "read_peak_working_set_kib": 567728,
+    "read_private_kib": 564028,
+    "lifetime_peak_working_set_kib": 568888,
+    "peak_scope": "process_lifetime",
+    "data_types": 15,
+    "velocities": 7950256,
+    "step_count": 599989,
+    "input_bytes": 1947913030,
+    "output_bytes": 1947913032,
+    "output_sha256": "a648b81887e0712b52c48cf47aa90ac5dda02c72a5641959dfb9e23c5d52f6e3",
+    "normalized_input_sha256": "a648b81887e0712b52c48cf47aa90ac5dda02c72a5641959dfb9e23c5d52f6e3",
+    "equal_after_root_version_normalization": true
+  }
+]

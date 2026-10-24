@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
-"""Compare two BenchmarkXmlMemory executables in fresh Linux processes."""
+"""Compare two BenchmarkXmlMemory executables in fresh Linux or Windows processes."""
 import argparse
 import collections
 import hashlib
 import json
 import os
 from pathlib import Path
-import resource
+import sys
 import statistics
 import subprocess
+
+if sys.platform != "win32":
+    import resource
 
 
 def address_space_limit():
@@ -37,7 +40,7 @@ def main():
     def execute(variant, operation, kind, count, path):
         p = subprocess.run([str(binaries[variant]), operation, kind, str(count), str(path), 'file'],
                            capture_output=True, text=True, timeout=180, env=env,
-                           preexec_fn=address_space_limit)
+                           preexec_fn=address_space_limit if sys.platform != 'win32' else None)
         if p.returncode:
             raise RuntimeError(f'{variant} {operation} {kind}: {p.stderr}')
         return json.loads(p.stdout)
@@ -60,7 +63,7 @@ def main():
                 for repeat in range(args.repeats):
                     order = ['baseline', 'candidate'] if repeat%2 == 0 else ['candidate', 'baseline']
                     for variant in order:
-                        path = fixtures/f'{kind}-{count}.xml' if operation == 'read' else Path('/dev/null')
+                        path = fixtures/f'{kind}-{count}.xml' if operation == 'read' else Path(os.devnull)
                         if operation == 'read':
                             with path.open('rb') as f:
                                 while f.read(4*1024*1024):
@@ -78,7 +81,8 @@ def main():
     summary = []
     for (kind, operation, variant), rows in groups.items():
         item = dict(kind=kind, operation=operation, variant=variant,
-                    particles=rows[0]['particles'], samples=len(rows))
+                    particles=rows[0]['particles'], samples=len(rows),
+                    peak_scope=rows[0].get('peak_scope', 'operation' if sys.platform != 'win32' else 'process_lifetime'))
         for metric in ['seconds', 'baseline_kib', 'peak_kib', 'retained_kib']:
             values = [r[metric] for r in rows]
             item[metric+'_median'] = statistics.median(values)

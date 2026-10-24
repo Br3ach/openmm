@@ -1,0 +1,20 @@
+{
+  "read": {
+    "seconds": 0.6421797,
+    "baseline_kib": 5896,
+    "peak_kib": 81916,
+    "retained_kib": 69228,
+    "lifetime_peak_kib": 81916,
+    "peak_scope": "process_lifetime",
+    "digest": "8a65e1e2e1d55ae9"
+  },
+  "write": {
+    "seconds": 8.3865589,
+    "baseline_kib": 68332,
+    "peak_kib": 1411820,
+    "retained_kib": 73936,
+    "lifetime_peak_kib": 1411820,
+    "peak_scope": "process_lifetime",
+    "digest": "cf5d5f1ba6c32f45"
+  }
+}
