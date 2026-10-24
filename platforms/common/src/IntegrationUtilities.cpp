@@ -26,6 +26,9 @@
 
 #include "openmm/common/IntegrationUtilities.h"
 #include "SettleConstraintNeighbors.h"
+#ifdef OPENMM_CUDA_CHECKPOINT_STREAMING
+#include "CudaCheckpointUtilities.h"
+#endif
 #include "openmm/common/ComputeContext.h"
 #include "openmm/common/ContextSelector.h"
 #include "CommonKernelSources.h"
@@ -849,24 +852,34 @@ void IntegrationUtilities::createCheckpoint(ostream& stream) {
     if (!random.isInitialized())
         return;
     stream.write((char*) &randomPos, sizeof(int));
+#ifdef OPENMM_CUDA_CHECKPOINT_STREAMING
+    detail::writeCudaCheckpointArray(random, stream);
+    detail::writeCudaCheckpointArray(randomSeed, stream);
+#else
     vector<mm_float4> randomVec;
     random.download(randomVec);
     stream.write((char*) &randomVec[0], sizeof(mm_float4)*random.getSize());
     vector<mm_int4> randomSeedVec;
     randomSeed.download(randomSeedVec);
     stream.write((char*) &randomSeedVec[0], sizeof(mm_int4)*randomSeed.getSize());
+#endif
 }
 
 void IntegrationUtilities::loadCheckpoint(istream& stream) {
     if (!random.isInitialized())
         return;
     stream.read((char*) &randomPos, sizeof(int));
+#ifdef OPENMM_CUDA_CHECKPOINT_STREAMING
+    detail::readCudaCheckpointArray(random, stream);
+    detail::readCudaCheckpointArray(randomSeed, stream);
+#else
     vector<mm_float4> randomVec(random.getSize());
     stream.read((char*) &randomVec[0], sizeof(mm_float4)*random.getSize());
     random.upload(randomVec);
     vector<mm_int4> randomSeedVec(randomSeed.getSize());
     stream.read((char*) &randomSeedVec[0], sizeof(mm_int4)*randomSeed.getSize());
     randomSeed.upload(randomSeedVec);
+#endif
 }
 
 double IntegrationUtilities::computeKineticEnergy(double timeShift) {
