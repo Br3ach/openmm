@@ -1,0 +1,29 @@
+{
+  "baseline_commit": "655c38e9179d984f095f32d811d3eceed7c69534",
+  "candidate": "source files in this commit",
+  "date": "2026-10-24",
+  "environment": {
+    "platform": "Linux x86-64, AMD EPYC 9V74 shared host",
+    "compiler": "GCC 13.3.0",
+    "build": "Release, -O3 -DNDEBUG",
+    "container_memory_limit_bytes": 8589934592,
+    "swap": false,
+    "cuda": false,
+    "caller_recompiled": true
+  },
+  "source_sha256": {
+    "serialization/include/openmm/serialization/XmlSerializer.h": "32e0d33c68a457e3611921285f1f27db74763a3a5215a699c552b57a2a1e32f1",
+    "serialization/src/FastStateXml.h": "b1562100d019f744e597171880ebe9880ddc0ac88216c6e56c864e1ffb07b657",
+    "serialization/src/FastXmlDeserializer.cpp": "727542be9d6067b9b3e4aa51a9d0a3c41cde24e2ca339827e81a41a08b1f4e45",
+    "serialization/src/XmlSerializer.cpp": "790d460a9cf6b3fbd6f0c2b5ff6ae43b89e04bbd1effa8d6c7376308a17b68fe",
+    "serialization/tests/TestFastSystemXmlWrite.cpp": "79201754927ec34b006c6adb046390de1222f74c7031fa4c9ed0005563be1b9c",
+    "serialization/tests/TestFastXmlFallback.cpp": "f219bca1e59fcf1bda7c3fc936172c235877a92d0d7ba7e0e4ea91e3b41222f9",
+    "serialization/tests/TestFastXmlProxyOverrides.cpp": "6766caae4c9895a2fe362fb3cbe471b20391598a7e9be61f78f9536c69fda420",
+    "serialization/tests/TestFastXmlSerialization.cpp": "6c66a15f95d6f79b249931e297a4767c71d194f417f045f30bf37cb0e58f34a1",
+    "devtools/benchmarks/fastxml/BenchmarkXmlMemory.cpp": "47bd41628ba8f60a76f3b202447fb1c2bc6e66b73b398748486cde2d0d9261f9",
+    "devtools/benchmarks/fastxml/run_benchmark.py": "c30f5bb3515b2227edcd25fc9172710219bb7bc5a4584fd47e0104df19735b1f"
+  },
+  "serialization_tests_passed": 39,
+  "serialization_tests_total": 39,
+  "independent_review": "approved, design and implementation"
+}

@@ -60,8 +60,8 @@ private:
     bool hadValue;
 };
 
-// A seekable stream buffer that can be told to fail a specific seekg(pos)
-// operation.  This makes fast-path fallback/rewind behavior observable without
+// A seekable stream buffer that fails seekg(pos) from a selected call onward.
+// This makes fast-path fallback/rewind behavior observable without
 // depending on the stock parser's treatment of deliberately non-canonical XML.
 class FailOnSeekStringBuf : public stringbuf {
 public:
@@ -72,7 +72,7 @@ public:
 protected:
     pos_type seekpos(pos_type position, ios_base::openmode mode = ios_base::in | ios_base::out) override {
         ++seekCount;
-        if (seekCount == failOnSeek)
+        if (seekCount >= failOnSeek)
             return pos_type(off_type(-1));
         return stringbuf::seekpos(position, mode);
     }
@@ -455,7 +455,7 @@ static void testHistoricalNonbondedVersions() {
 
 static void testCanonicalBooleanAndCheckedRewind() {
     // Canonical OpenMM boolean properties are emitted as numeric 0/1.  Make a
-    // supported v2 force non-canonical, then arrange for the fallback rewind to
+    // supported v2 force non-canonical, then arrange for fallback rewinds to
     // fail.  If the fast parser incorrectly accepts textual "true", it returns
     // successfully and this test fails; rejecting it reaches the checked rewind
     // and produces the expected OpenMMException.
@@ -473,7 +473,8 @@ static void testCanonicalBooleanAndCheckedRewind() {
     xml.replace(boolPos, canonical.size(), "usesPeriodic=\"true\"");
 
     setFastXml(true);
-    FailOnSeekStringBuf boolBuffer(xml, 4); // probe x2, pre-fast rewind, fallback rewind
+    // Reject both a local force rewind and any subsequent whole-root retry.
+    FailOnSeekStringBuf boolBuffer(xml, 4); // probe x2, pre-fast rewind, first fallback rewind
     istream boolStream(&boolBuffer);
     assertThrowsOpenMM([&]() {
         unique_ptr<System> copy(XmlSerializer::deserialize<System>(boolStream));

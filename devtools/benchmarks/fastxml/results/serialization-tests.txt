@@ -1,0 +1,83 @@
+Test project /workspace/scratch/95d3221014eb/build-benchmark/serialization/tests
+      Start 13: TestSerializeCustomCentroidBondForce
+      Start  1: TestFastSystemXmlWrite
+ 1/39 Test #13: TestSerializeCustomCentroidBondForce .........   Passed    0.00 sec
+      Start  4: TestFastXmlSerialization
+ 2/39 Test  #4: TestFastXmlSerialization .....................   Passed    0.76 sec
+      Start  2: TestFastXmlFallback
+ 3/39 Test  #2: TestFastXmlFallback ..........................   Passed    0.48 sec
+      Start  3: TestFastXmlProxyOverrides
+ 4/39 Test  #3: TestFastXmlProxyOverrides ....................   Passed    0.17 sec
+      Start  8: TestSerializeCMAPTorsion
+ 5/39 Test  #8: TestSerializeCMAPTorsion .....................   Passed    0.01 sec
+      Start 37: TestSerializeState
+ 6/39 Test #37: TestSerializeState ...........................   Passed    0.02 sec
+      Start  9: TestSerializeCMMotionRemover
+ 7/39 Test  #9: TestSerializeCMMotionRemover .................   Passed    0.01 sec
+      Start  6: TestSerializeATMForce
+ 8/39 Test  #6: TestSerializeATMForce ........................   Passed    0.00 sec
+      Start 39: TestSerializeTabulatedFunctions
+ 9/39 Test #39: TestSerializeTabulatedFunctions ..............   Passed    0.00 sec
+      Start  7: TestSerializeAndersenThermostat
+10/39 Test  #7: TestSerializeAndersenThermostat ..............   Passed    0.00 sec
+      Start 27: TestSerializeIntegrator
+11/39 Test #27: TestSerializeIntegrator ......................   Passed    0.00 sec
+      Start 10: TestSerializeCustomAngleForce
+12/39 Test #10: TestSerializeCustomAngleForce ................   Passed    0.00 sec
+      Start 38: TestSerializeSystem
+13/39 Test #38: TestSerializeSystem ..........................   Passed    0.01 sec
+      Start 11: TestSerializeCustomBondForce
+14/39 Test #11: TestSerializeCustomBondForce .................   Passed    0.00 sec
+      Start 18: TestSerializeCustomManyParticleForce
+15/39 Test #18: TestSerializeCustomManyParticleForce .........   Passed    0.00 sec
+      Start 15: TestSerializeCustomExternalForce
+16/39 Test #15: TestSerializeCustomExternalForce .............   Passed    0.00 sec
+      Start 28: TestSerializeMonteCarloAnisotropicBarostat
+17/39 Test #28: TestSerializeMonteCarloAnisotropicBarostat ...   Passed    0.00 sec
+      Start 14: TestSerializeCustomCompoundBondForce
+18/39 Test #14: TestSerializeCustomCompoundBondForce .........   Passed    0.00 sec
+      Start 16: TestSerializeCustomGBForce
+19/39 Test #16: TestSerializeCustomGBForce ...................   Passed    0.00 sec
+      Start  5: TestSerializationNode
+20/39 Test  #5: TestSerializationNode ........................   Passed    0.00 sec
+      Start 29: TestSerializeMonteCarloBarostat
+21/39 Test #29: TestSerializeMonteCarloBarostat ..............   Passed    0.00 sec
+      Start 12: TestSerializeCustomCVForce
+22/39 Test #12: TestSerializeCustomCVForce ...................   Passed    0.00 sec
+      Start 30: TestSerializeMonteCarloFlexibleBarostat
+23/39 Test #30: TestSerializeMonteCarloFlexibleBarostat ......   Passed    0.00 sec
+      Start 21: TestSerializeCustomVolumeForce
+24/39 Test #21: TestSerializeCustomVolumeForce ...............   Passed    0.00 sec
+      Start 24: TestSerializeGayBerneForce
+25/39 Test #24: TestSerializeGayBerneForce ...................   Passed    0.00 sec
+      Start 25: TestSerializeHarmonicAngleForce
+26/39 Test #25: TestSerializeHarmonicAngleForce ..............   Passed    0.00 sec
+      Start 26: TestSerializeHarmonicBondForce
+27/39 Test #26: TestSerializeHarmonicBondForce ...............   Passed    0.00 sec
+      Start 23: TestSerializeGBSAOBCForce
+28/39 Test #23: TestSerializeGBSAOBCForce ....................   Passed    0.00 sec
+      Start 17: TestSerializeCustomHbondForce
+29/39 Test #17: TestSerializeCustomHbondForce ................   Passed    0.00 sec
+      Start 31: TestSerializeMonteCarloMembraneBarostat
+30/39 Test #31: TestSerializeMonteCarloMembraneBarostat ......   Passed    0.00 sec
+      Start 22: TestSerializeDPDIntegrator
+31/39 Test #22: TestSerializeDPDIntegrator ...................   Passed    0.01 sec
+      Start 33: TestSerializeNoseHooverIntegrator
+32/39 Test #33: TestSerializeNoseHooverIntegrator ............   Passed    0.00 sec
+      Start 36: TestSerializeRMSDForce
+33/39 Test #36: TestSerializeRMSDForce .......................   Passed    0.00 sec
+      Start 19: TestSerializeCustomNonbondedForce
+34/39 Test #19: TestSerializeCustomNonbondedForce ............   Passed    0.01 sec
+      Start 34: TestSerializePeriodicTorsionForce
+35/39 Test #34: TestSerializePeriodicTorsionForce ............   Passed    0.00 sec
+      Start 20: TestSerializeCustomTorsionForce
+36/39 Test #20: TestSerializeCustomTorsionForce ..............   Passed    0.00 sec
+      Start 32: TestSerializeNonbondedForce
+37/39 Test #32: TestSerializeNonbondedForce ..................   Passed    0.00 sec
+      Start 35: TestSerializeRBTorsionForce
+38/39 Test #35: TestSerializeRBTorsionForce ..................   Passed    0.00 sec
+39/39 Test  #1: TestFastSystemXmlWrite .......................   Passed    2.17 sec
+
+100% tests passed out of 39
+
+Total Test time (real) =   2.17 sec

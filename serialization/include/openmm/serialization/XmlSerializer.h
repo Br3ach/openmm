@@ -37,6 +37,7 @@
 #include "openmm/OpenMMException.h"
 #include "openmm/internal/windowsExport.h"
 #include <iosfwd>
+#include <typeinfo>
 
 namespace OpenMM {
 
@@ -56,6 +57,8 @@ public:
     template <class T>
     static void serialize(const T* object, const std::string& rootName, std::ostream& stream) {
         const SerializationProxy& proxy = SerializationProxy::getProxy(typeid(*object));
+        if (trySerializeSystem(object, typeid(*object), rootName, proxy, stream))
+            return;
         SerializationNode node;
         node.setName(rootName);
         proxy.serialize(object, node);
@@ -88,6 +91,9 @@ public:
     }
 private:
     class StreamReader;
+    static bool trySerializeSystem(const void* object, const std::type_info& type,
+                                   const std::string& rootName, const SerializationProxy& proxy,
+                                   std::ostream& stream);
     static void serialize(const SerializationNode& node, std::ostream& stream);
     static void* deserializeStream(std::istream& stream);
     static void encodeNode(const SerializationNode& node, std::ostream& stream, int depth);

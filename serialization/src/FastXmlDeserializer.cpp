@@ -17,6 +17,13 @@
 #include "openmm/System.h"
 #include "openmm/Vec3.h"
 #include "openmm/VirtualSite.h"
+#include "openmm/serialization/XmlSerializer.h"
+#include "openmm/serialization/CMMotionRemoverProxy.h"
+#include "openmm/serialization/HarmonicAngleForceProxy.h"
+#include "openmm/serialization/HarmonicBondForceProxy.h"
+#include "openmm/serialization/MonteCarloBarostatProxy.h"
+#include "openmm/serialization/NonbondedForceProxy.h"
+#include "openmm/serialization/PeriodicTorsionForceProxy.h"
 #include <cstdint>
 #include <cstring>
 #include <istream>
@@ -42,7 +49,8 @@ public:
         if (source == NULL)
             throw OpenMMException("XmlSerializer: XML stream has no stream buffer");
         try {
-            if (source->pubseekoff(0, ios_base::cur, ios_base::in) == streampos(streamoff(-1)))
+            bufferStart = source->pubseekoff(0, ios_base::cur, ios_base::in);
+            if (bufferStart == streampos(streamoff(-1)))
                 throw OpenMMException("XmlSerializer: fast XML path requires a seekable stream");
         }
         catch (const ios_base::failure&) {
@@ -55,6 +63,26 @@ public:
             return false;
         value = buffer[pos++];
         return true;
+    }
+
+    // Track the logical position without seeking for every XML tag.  The
+    // underlying stream can be up to one input buffer ahead of this position.
+    streampos position() const {
+        return bufferStart+static_cast<streamoff>(pos);
+    }
+
+    void seek(streampos position) {
+        streampos restored;
+        try {
+            restored = source->pubseekpos(position, ios_base::in);
+        }
+        catch (const ios_base::failure&) {
+            throw OpenMMException("XmlSerializer: failed to rewind XML subtree");
+        }
+        if (restored != position)
+            throw OpenMMException("XmlSerializer: failed to rewind XML subtree");
+        bufferStart = restored;
+        pos = end = 0;
     }
 
     void finish() {
@@ -70,15 +98,19 @@ public:
         }
         if (restored == streampos(streamoff(-1)))
             throw OpenMMException("XmlSerializer: failed to restore XML stream position");
+        bufferStart = restored;
         pos = end = 0;
     }
 
 private:
     streambuf* source;
+    streampos bufferStart;
     vector<char> buffer;
     size_t pos, end;
 
     bool refill() {
+        bufferStart += static_cast<streamoff>(pos);
+        pos = end = 0;
         streamsize got;
         try {
             got = source->sgetn(&buffer[0], static_cast<streamsize>(buffer.size()));
@@ -98,7 +130,7 @@ private:
 
 class FastXmlTagReader {
 public:
-    explicit FastXmlTagReader(istream& stream) : input(stream), firstByte(true) {
+    explicit FastXmlTagReader(istream& stream) : input(stream), firstByte(true), tagStart(streampos(streamoff(-1))) {
         tag.reserve(256);
     }
 
@@ -122,6 +154,7 @@ public:
             if (c != '<')
                 throw OpenMMException("XmlSerializer: unexpected text in XML");
 
+            const streampos opening = input.position()-streamoff(1);
             char nextChar;
             if (!input.get(nextChar))
                 throw OpenMMException("XmlSerializer: truncated XML markup");
@@ -141,6 +174,7 @@ public:
                 throw OpenMMException("XmlSerializer: unsupported XML declaration");
             }
 
+            tagStart = opening;
             tag.clear();
             tag.push_back('<');
             tag.push_back(nextChar);
@@ -163,6 +197,18 @@ public:
         throw OpenMMException("XmlSerializer: unexpected end of XML");
     }
 
+    streampos getTagStart() const {
+        return tagStart;
+    }
+
+    void seek(streampos position) {
+        input.seek(position);
+        tag.clear();
+        tagStart = streampos(streamoff(-1));
+        // Subtrees cannot begin with a document BOM.
+        firstByte = false;
+    }
+
     void finish() {
         input.finish();
     }
@@ -172,6 +218,7 @@ private:
     FastXmlInput input;
     string tag;
     bool firstByte;
+    streampos tagStart;
 
     static bool isSpace(char c) {
         return c == ' ' || c == '\t' || c == '\r' || c == '\n';
@@ -1271,19 +1318,72 @@ static Force* parseForceStreaming(FastXmlTagReader& reader, const FastXmlTag& op
     if (opening.closing || !fastXmlNameEquals(opening, "Force"))
         throw OpenMMException("XmlSerializer: malformed Force element");
     const string type = fastXmlString(opening, "type");
-    if (type == "NonbondedForce")
+    if (type == "NonbondedForce" &&
+            typeid(SerializationProxy::getProxy(type)) == typeid(NonbondedForceProxy))
         return parseNonbondedForceStreaming(reader, opening);
-    if (type == "HarmonicBondForce")
+    if (type == "HarmonicBondForce" &&
+            typeid(SerializationProxy::getProxy(type)) == typeid(HarmonicBondForceProxy))
         return parseHarmonicBondForceStreaming(reader, opening);
-    if (type == "HarmonicAngleForce")
+    if (type == "HarmonicAngleForce" &&
+            typeid(SerializationProxy::getProxy(type)) == typeid(HarmonicAngleForceProxy))
         return parseHarmonicAngleForceStreaming(reader, opening);
-    if (type == "PeriodicTorsionForce")
+    if (type == "PeriodicTorsionForce" &&
+            typeid(SerializationProxy::getProxy(type)) == typeid(PeriodicTorsionForceProxy))
         return parsePeriodicTorsionForceStreaming(reader, opening);
-    if (type == "CMMotionRemover")
+    if (type == "CMMotionRemover" &&
+            typeid(SerializationProxy::getProxy(type)) == typeid(CMMotionRemoverProxy))
         return parseCMMotionRemoverStreaming(reader, opening);
-    if (type == "MonteCarloBarostat")
+    if (type == "MonteCarloBarostat" &&
+            typeid(SerializationProxy::getProxy(type)) == typeid(MonteCarloBarostatProxy))
         return parseMonteCarloBarostatStreaming(reader, opening);
     throw OpenMMException(string("XmlSerializer: unsupported Force type '")+type+"'");
+}
+
+/**
+ * Reparse only the current force through its registered proxy.  The generic
+ * XmlSerializer must receive an isolated stream: its legacy reader seeks to
+ * absolute offset zero and buffers its complete input.  Keeping the fragment
+ * force-scoped bounds the temporary tree and XML copies to this force, rather
+ * than the entire System.
+ *
+ * The tag reader ignores comments and processing instructions, as do generic
+ * SerializationNodes.  XML constructs it cannot represent (for example text
+ * or CDATA) still use XmlSerializer's whole-document compatibility fallback.
+ */
+static Force* parseForceWithProxy(FastXmlTagReader& reader, streampos start) {
+    reader.seek(start);
+    stringstream fragment;
+    vector<string> elements;
+    bool first = true;
+    do {
+        const string& text = reader.next();
+        FastXmlTag tag = parseFastXmlTag(text);
+        const string name(text, tag.nameStart, tag.nameLength);
+        if (first) {
+            if (tag.closing || name != "Force")
+                throw OpenMMException("XmlSerializer: malformed Force subtree");
+            first = false;
+        }
+        if (tag.closing) {
+            if (elements.empty() || elements.back() != name)
+                throw OpenMMException("XmlSerializer: mismatched Force subtree closing tag");
+            elements.pop_back();
+        }
+        else if (!tag.empty)
+            elements.push_back(name);
+        fragment << text << '\n';
+    } while (!elements.empty());
+    if (!fragment)
+        throw OpenMMException("XmlSerializer: failed to buffer Force subtree");
+    try {
+        return XmlSerializer::deserialize<Force>(fragment);
+    }
+    catch (const OpenMMException&) {
+        // A complete subtree has reached its registered proxy.  Retrying the
+        // whole System would invoke a failing plugin a second time and retain
+        // stock-scale memory costs.  Preserve and propagate its original error.
+        throw FastXmlProxyException(std::current_exception());
+    }
 }
 
 static void parseSystemForcesStreaming(FastXmlTagReader& reader, const FastXmlTag& opening,
@@ -1299,8 +1399,19 @@ static void parseSystemForcesStreaming(FastXmlTagReader& reader, const FastXmlTa
                 throw OpenMMException("XmlSerializer: unexpected closing tag in Forces");
             return;
         }
-        unique_ptr<Force> force(parseForceStreaming(reader, tag));
-        system.addForce(force.release());
+        const streampos start = reader.getTagStart();
+        unique_ptr<Force> force;
+        try {
+            force.reset(parseForceStreaming(reader, tag));
+        }
+        catch (const OpenMMException&) {
+            // This also handles supported force types with historical or
+            // noncanonical schema features, and replaced registered proxies.
+            // The partial direct object has already unwound before reparsing.
+            force.reset(parseForceWithProxy(reader, start));
+        }
+        system.addForce(force.get());
+        force.release();
     }
 }
 

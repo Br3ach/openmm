@@ -35,13 +35,28 @@
 #include <map>
 #include "FastStateXml.h"
 #include "openmm/State.h"
+#include "openmm/System.h"
+#include "openmm/Platform.h"
+#include "openmm/VirtualSite.h"
+#include "openmm/NonbondedForce.h"
+#include "openmm/HarmonicBondForce.h"
+#include "openmm/HarmonicAngleForce.h"
+#include "openmm/PeriodicTorsionForce.h"
+#include "openmm/serialization/StateProxy.h"
+#include "openmm/serialization/SystemProxy.h"
+#include "openmm/serialization/NonbondedForceProxy.h"
+#include "openmm/serialization/HarmonicBondForceProxy.h"
+#include "openmm/serialization/HarmonicAngleForceProxy.h"
+#include "openmm/serialization/PeriodicTorsionForceProxy.h"
 #include "openmm/Vec3.h"
 
 #include <cstdio>
 #include <cstdlib>
 #include <istream>
+#include <locale>
 #include <ostream>
 #include <streambuf>
+#include <sstream>
 #include <vector>
 
 using namespace OpenMM;
@@ -108,6 +123,12 @@ public:
         buffer.push_back(value);
     }
 
+    void integer(int value) {
+        char formatted[32];
+        std::snprintf(formatted, sizeof(formatted), "%d", value);
+        text(formatted);
+    }
+
     void real(double value) {
         char formatted[32];
         g_fmt(formatted, value);
@@ -138,7 +159,7 @@ private:
         }
         catch (...) {
         }
-        throw OpenMMException("XmlSerializer: error writing fast State XML");
+        throw OpenMMException("XmlSerializer: error writing fast XML");
     }
 
     void writeExact(const char* data, size_t size) {
@@ -388,6 +409,313 @@ static void serializeStateDirect(const SerializationNode& node, const State& sta
     out.text(node.getName());
     out.text(">\n");
     out.flush();
+}
+
+// Emit transient metadata or a single fallback force without retaining siblings.
+static void writeXmlIndent(FastXmlOutput& out, int depth) {
+    for (int i = 0; i < depth; ++i)
+        out.character('\t');
+}
+
+static void writeXmlOpening(FastXmlOutput& out, const SerializationNode& node,
+                            int depth, bool hasChildren) {
+    writeXmlIndent(out, depth);
+    out.character('<');
+    out.text(node.getName());
+    for (const auto& property : node.getProperties()) {
+        out.character(' ');
+        appendEncoded(out, property.first);
+        out.text("=\"");
+        appendEncoded(out, property.second);
+        out.character('"');
+    }
+    out.text(hasChildren ? ">\n" : "/>\n");
+}
+
+static void writeXmlClosing(FastXmlOutput& out, const char* name, int depth) {
+    writeXmlIndent(out, depth);
+    out.text("</"); out.text(name); out.text(">\n");
+}
+
+static void writeXmlNode(FastXmlOutput& out, const SerializationNode& node, int depth) {
+    writeXmlOpening(out, node, depth, !node.getChildren().empty());
+    if (!node.getChildren().empty()) {
+        for (const auto& child : node.getChildren())
+            writeXmlNode(out, child, depth+1);
+        writeXmlClosing(out, node.getName().c_str(), depth);
+    }
+}
+
+static void writeXmlSection(FastXmlOutput& out, const char* name, int depth, int count) {
+    writeXmlIndent(out, depth);
+    out.character('<'); out.text(name); out.text(count == 0 ? "/>\n" : ">\n");
+}
+
+static SerializationNode forceHeader(const Force& force, const char* type, int version) {
+    SerializationNode node;
+    node.setName("Force");
+    node.setStringProperty("type", type).setIntProperty("version", version);
+    node.setIntProperty("forceGroup", force.getForceGroup()).setStringProperty("name", force.getName());
+    return node;
+}
+
+static void writeNonbondedForce(FastXmlOutput& out, const NonbondedForce& force) {
+    SerializationNode node = forceHeader(force, "NonbondedForce", 4);
+    node.setIntProperty("method", (int) force.getNonbondedMethod());
+    node.setDoubleProperty("cutoff", force.getCutoffDistance());
+    node.setBoolProperty("useSwitchingFunction", force.getUseSwitchingFunction());
+    node.setDoubleProperty("switchingDistance", force.getSwitchingDistance());
+    node.setDoubleProperty("ewaldTolerance", force.getEwaldErrorTolerance());
+    node.setDoubleProperty("rfDielectric", force.getReactionFieldDielectric());
+    node.setIntProperty("dispersionCorrection", force.getUseDispersionCorrection());
+    node.setIntProperty("exceptionsUsePeriodic", force.getExceptionsUsePeriodicBoundaryConditions());
+    node.setBoolProperty("includeDirectSpace", force.getIncludeDirectSpace());
+    double alpha;
+    int nx, ny, nz;
+    force.getPMEParameters(alpha, nx, ny, nz);
+    node.setDoubleProperty("alpha", alpha);
+    node.setIntProperty("nx", nx);
+    node.setIntProperty("ny", ny);
+    node.setIntProperty("nz", nz);
+    force.getLJPMEParameters(alpha, nx, ny, nz);
+    node.setDoubleProperty("ljAlpha", alpha);
+    node.setIntProperty("ljnx", nx);
+    node.setIntProperty("ljny", ny);
+    node.setIntProperty("ljnz", nz);
+    node.setIntProperty("recipForceGroup", force.getReciprocalSpaceForceGroup());
+    writeXmlOpening(out, node, 2, true);
+    writeXmlSection(out, "GlobalParameters", 3, force.getNumGlobalParameters());
+    for (int i = 0; i < force.getNumGlobalParameters(); ++i) {
+        out.text("\t\t\t\t<Parameter default=\""); out.real(force.getGlobalParameterDefaultValue(i));
+        out.text("\" name=\""); appendEncoded(out, force.getGlobalParameterName(i)); out.text("\"/>\n");
+    }
+    if (force.getNumGlobalParameters() != 0)
+        writeXmlClosing(out, "GlobalParameters", 3);
+
+    writeXmlSection(out, "ParticleOffsets", 3, force.getNumParticleParameterOffsets());
+    for (int i = 0; i < force.getNumParticleParameterOffsets(); ++i) {
+        int particle; double q, sig, eps; string parameter;
+        force.getParticleParameterOffset(i, parameter, particle, q, sig, eps);
+        out.text("\t\t\t\t<Offset eps=\""); out.real(eps);
+        out.text("\" parameter=\""); appendEncoded(out, parameter);
+        out.text("\" particle=\""); out.integer(particle);
+        out.text("\" q=\""); out.real(q); out.text("\" sig=\""); out.real(sig); out.text("\"/>\n");
+    }
+    if (force.getNumParticleParameterOffsets() != 0)
+        writeXmlClosing(out, "ParticleOffsets", 3);
+
+    writeXmlSection(out, "ExceptionOffsets", 3, force.getNumExceptionParameterOffsets());
+    for (int i = 0; i < force.getNumExceptionParameterOffsets(); ++i) {
+        int exception; double q, sig, eps; string parameter;
+        force.getExceptionParameterOffset(i, parameter, exception, q, sig, eps);
+        out.text("\t\t\t\t<Offset eps=\""); out.real(eps);
+        out.text("\" exception=\""); out.integer(exception);
+        out.text("\" parameter=\""); appendEncoded(out, parameter);
+        out.text("\" q=\""); out.real(q); out.text("\" sig=\""); out.real(sig); out.text("\"/>\n");
+    }
+    if (force.getNumExceptionParameterOffsets() != 0)
+        writeXmlClosing(out, "ExceptionOffsets", 3);
+
+    writeXmlSection(out, "Particles", 3, force.getNumParticles());
+    for (int i = 0; i < force.getNumParticles(); ++i) {
+        double q, sig, eps; force.getParticleParameters(i, q, sig, eps);
+        out.text("\t\t\t\t<Particle eps=\""); out.real(eps);
+        out.text("\" q=\""); out.real(q); out.text("\" sig=\""); out.real(sig); out.text("\"/>\n");
+    }
+    if (force.getNumParticles() != 0)
+        writeXmlClosing(out, "Particles", 3);
+
+    writeXmlSection(out, "Exceptions", 3, force.getNumExceptions());
+    for (int i = 0; i < force.getNumExceptions(); ++i) {
+        int p1, p2; double q, sig, eps; force.getExceptionParameters(i, p1, p2, q, sig, eps);
+        out.text("\t\t\t\t<Exception eps=\""); out.real(eps);
+        out.text("\" p1=\""); out.integer(p1); out.text("\" p2=\""); out.integer(p2);
+        out.text("\" q=\""); out.real(q); out.text("\" sig=\""); out.real(sig); out.text("\"/>\n");
+    }
+    if (force.getNumExceptions() != 0)
+        writeXmlClosing(out, "Exceptions", 3);
+    writeXmlClosing(out, "Force", 2);
+}
+
+static void writeHarmonicBondForce(FastXmlOutput& out, const HarmonicBondForce& force) {
+    SerializationNode node = forceHeader(force, "HarmonicBondForce", 2);
+    node.setBoolProperty("usesPeriodic", force.usesPeriodicBoundaryConditions());
+    writeXmlOpening(out, node, 2, true);
+    writeXmlSection(out, "Bonds", 3, force.getNumBonds());
+    for (int i = 0; i < force.getNumBonds(); ++i) {
+        int p1, p2; double d, k; force.getBondParameters(i, p1, p2, d, k);
+        out.text("\t\t\t\t<Bond d=\""); out.real(d); out.text("\" k=\""); out.real(k);
+        out.text("\" p1=\""); out.integer(p1); out.text("\" p2=\""); out.integer(p2); out.text("\"/>\n");
+    }
+    if (force.getNumBonds() != 0)
+        writeXmlClosing(out, "Bonds", 3);
+    writeXmlClosing(out, "Force", 2);
+}
+
+static void writeHarmonicAngleForce(FastXmlOutput& out, const HarmonicAngleForce& force) {
+    SerializationNode node = forceHeader(force, "HarmonicAngleForce", 2);
+    node.setBoolProperty("usesPeriodic", force.usesPeriodicBoundaryConditions());
+    writeXmlOpening(out, node, 2, true);
+    writeXmlSection(out, "Angles", 3, force.getNumAngles());
+    for (int i = 0; i < force.getNumAngles(); ++i) {
+        int p1, p2, p3; double a, k; force.getAngleParameters(i, p1, p2, p3, a, k);
+        out.text("\t\t\t\t<Angle a=\""); out.real(a); out.text("\" k=\""); out.real(k);
+        out.text("\" p1=\""); out.integer(p1); out.text("\" p2=\""); out.integer(p2);
+        out.text("\" p3=\""); out.integer(p3); out.text("\"/>\n");
+    }
+    if (force.getNumAngles() != 0)
+        writeXmlClosing(out, "Angles", 3);
+    writeXmlClosing(out, "Force", 2);
+}
+
+static void writePeriodicTorsionForce(FastXmlOutput& out, const PeriodicTorsionForce& force) {
+    SerializationNode node = forceHeader(force, "PeriodicTorsionForce", 2);
+    node.setBoolProperty("usesPeriodic", force.usesPeriodicBoundaryConditions());
+    writeXmlOpening(out, node, 2, true);
+    writeXmlSection(out, "Torsions", 3, force.getNumTorsions());
+    for (int i = 0; i < force.getNumTorsions(); ++i) {
+        int p1, p2, p3, p4, periodicity; double phase, k;
+        force.getTorsionParameters(i, p1, p2, p3, p4, periodicity, phase, k);
+        out.text("\t\t\t\t<Torsion k=\""); out.real(k);
+        out.text("\" p1=\""); out.integer(p1); out.text("\" p2=\""); out.integer(p2);
+        out.text("\" p3=\""); out.integer(p3); out.text("\" p4=\""); out.integer(p4);
+        out.text("\" periodicity=\""); out.integer(periodicity);
+        out.text("\" phase=\""); out.real(phase); out.text("\"/>\n");
+    }
+    if (force.getNumTorsions() != 0)
+        writeXmlClosing(out, "Torsions", 3);
+    writeXmlClosing(out, "Force", 2);
+}
+
+static void writeSystemForce(FastXmlOutput& out, const Force& force) {
+    const SerializationProxy& proxy = SerializationProxy::getProxy(typeid(force));
+    // A replacement proxy or derived force can define a different schema.
+    // Only bypass the exact built-in force/proxy pair.
+    if (typeid(force) == typeid(NonbondedForce) && typeid(proxy) == typeid(NonbondedForceProxy))
+        writeNonbondedForce(out, static_cast<const NonbondedForce&>(force));
+    else if (typeid(force) == typeid(HarmonicBondForce) && typeid(proxy) == typeid(HarmonicBondForceProxy))
+        writeHarmonicBondForce(out, static_cast<const HarmonicBondForce&>(force));
+    else if (typeid(force) == typeid(HarmonicAngleForce) && typeid(proxy) == typeid(HarmonicAngleForceProxy))
+        writeHarmonicAngleForce(out, static_cast<const HarmonicAngleForce&>(force));
+    else if (typeid(force) == typeid(PeriodicTorsionForce) && typeid(proxy) == typeid(PeriodicTorsionForceProxy))
+        writePeriodicTorsionForce(out, static_cast<const PeriodicTorsionForce&>(force));
+    else {
+        SerializationNode node;
+        node.setName("Force");
+        proxy.serialize(&force, node);
+        if (node.hasProperty("type"))
+            throw OpenMMException(proxy.getTypeName()+" created node with reserved property 'type'");
+        node.setStringProperty("type", proxy.getTypeName());
+        writeXmlNode(out, node, 2);
+    }
+}
+
+static void writeSystemParticle(FastXmlOutput& out, const System& system, int i) {
+    if (!system.isVirtualSite(i)) {
+        out.text("\t\t<Particle mass=\""); out.real(system.getParticleMass(i)); out.text("\"/>\n");
+        return;
+    }
+    SerializationNode particle;
+    particle.setName("Particle");
+    particle.setDoubleProperty("mass", system.getParticleMass(i));
+    const VirtualSite& vsite = system.getVirtualSite(i);
+    if (typeid(vsite) == typeid(TwoParticleAverageSite)) {
+        const TwoParticleAverageSite& site = dynamic_cast<const TwoParticleAverageSite&>(vsite);
+        particle.createChildNode("TwoParticleAverageSite").setIntProperty("p1", site.getParticle(0)).setIntProperty("p2", site.getParticle(1)).setDoubleProperty("w1", site.getWeight(0)).setDoubleProperty("w2", site.getWeight(1));
+    }
+    else if (typeid(vsite) == typeid(ThreeParticleAverageSite)) {
+        const ThreeParticleAverageSite& site = dynamic_cast<const ThreeParticleAverageSite&>(vsite);
+        particle.createChildNode("ThreeParticleAverageSite").setIntProperty("p1", site.getParticle(0)).setIntProperty("p2", site.getParticle(1)).setIntProperty("p3", site.getParticle(2)).setDoubleProperty("w1", site.getWeight(0)).setDoubleProperty("w2", site.getWeight(1)).setDoubleProperty("w3", site.getWeight(2));
+    }
+    else if (typeid(vsite) == typeid(OutOfPlaneSite)) {
+        const OutOfPlaneSite& site = dynamic_cast<const OutOfPlaneSite&>(vsite);
+        particle.createChildNode("OutOfPlaneSite").setIntProperty("p1", site.getParticle(0)).setIntProperty("p2", site.getParticle(1)).setIntProperty("p3", site.getParticle(2)).setDoubleProperty("w12", site.getWeight12()).setDoubleProperty("w13", site.getWeight13()).setDoubleProperty("wc", site.getWeightCross());
+    }
+    else if (typeid(vsite) == typeid(LocalCoordinatesSite)) {
+        const LocalCoordinatesSite& site = dynamic_cast<const LocalCoordinatesSite&>(vsite);
+        int numParticles = site.getNumParticles();
+        vector<double> wo, wx, wy;
+        site.getOriginWeights(wo);
+        site.getXWeights(wx);
+        site.getYWeights(wy);
+        Vec3 p = site.getLocalPosition();
+        SerializationNode& siteNode = particle.createChildNode("LocalCoordinatesSite");
+        siteNode.setDoubleProperty("pos1", p[0]).setDoubleProperty("pos2", p[1]).setDoubleProperty("pos3", p[2]);
+        for (int j = 0; j < numParticles; j++) {
+            stringstream ss;
+            ss << (j+1);
+            string index = ss.str();
+            siteNode.setIntProperty("p"+index, site.getParticle(j));
+            siteNode.setDoubleProperty("wo"+index, wo[j]);
+            siteNode.setDoubleProperty("wx"+index, wx[j]);
+            siteNode.setDoubleProperty("wy"+index, wy[j]);
+        }
+    }
+    writeXmlNode(out, particle, 2);
+}
+
+static void serializeSystemDirect(const SerializationNode& node, const System& system, ostream& stream) {
+    FastXmlOutput out(stream);
+    out.text("<?xml version=\"1.0\" ?>\n");
+    writeXmlOpening(out, node, 0, true);
+    Vec3 a, b, c;
+    system.getDefaultPeriodicBoxVectors(a, b, c);
+    SerializationNode box;
+    box.setName("PeriodicBoxVectors");
+    box.createChildNode("A").setDoubleProperty("x", a[0]).setDoubleProperty("y", a[1]).setDoubleProperty("z", a[2]);
+    box.createChildNode("B").setDoubleProperty("x", b[0]).setDoubleProperty("y", b[1]).setDoubleProperty("z", b[2]);
+    box.createChildNode("C").setDoubleProperty("x", c[0]).setDoubleProperty("y", c[1]).setDoubleProperty("z", c[2]);
+    writeXmlNode(out, box, 1);
+    writeXmlSection(out, "Particles", 1, system.getNumParticles());
+    for (int i = 0; i < system.getNumParticles(); ++i)
+        writeSystemParticle(out, system, i);
+    if (system.getNumParticles() != 0)
+        writeXmlClosing(out, "Particles", 1);
+    writeXmlSection(out, "Constraints", 1, system.getNumConstraints());
+    for (int i = 0; i < system.getNumConstraints(); ++i) {
+        int p1, p2; double d; system.getConstraintParameters(i, p1, p2, d);
+        out.text("\t\t<Constraint d=\""); out.real(d);
+        out.text("\" p1=\""); out.integer(p1); out.text("\" p2=\""); out.integer(p2); out.text("\"/>\n");
+    }
+    if (system.getNumConstraints() != 0)
+        writeXmlClosing(out, "Constraints", 1);
+    writeXmlSection(out, "Forces", 1, system.getNumForces());
+    for (int i = 0; i < system.getNumForces(); ++i)
+        writeSystemForce(out, system.getForce(i));
+    if (system.getNumForces() != 0)
+        writeXmlClosing(out, "Forces", 1);
+    writeXmlClosing(out, node.getName().c_str(), 0);
+    out.flush();
+}
+
+bool XmlSerializer::trySerializeSystem(const void* object, const std::type_info& type,
+                                       const std::string& rootName, const SerializationProxy& proxy,
+                                       std::ostream& stream) {
+    // Dispatch before building a proxy tree.  This deliberately leaves direct
+    // proxy calls, nested System nodes, clone(), custom roots, derived Systems
+    // and replacement proxies untouched.  Callers must be rebuilt to use this
+    // new entry point; existing binaries keep their previous writer behavior.
+    if (rootName != "System" || type != typeid(System) || typeid(proxy) != typeid(SystemProxy) ||
+            !fastXmlEnabledByEnvironment())
+        return false;
+    const char* value = std::getenv("OPENMM_FAST_SYSTEM_WRITE");
+    if (value != NULL && (std::strcmp(value, "0") == 0 ||
+            std::strcmp(value, "false") == 0 || std::strcmp(value, "FALSE") == 0 ||
+            std::strcmp(value, "off") == 0 || std::strcmp(value, "OFF") == 0))
+        return false;
+    // Stock integer properties use locale-sensitive stringstreams.  Keep
+    // unusual global locales on that path instead of changing their output.
+    if (std::locale() != std::locale::classic())
+        return false;
+    const System& system = *reinterpret_cast<const System*>(object);
+    if (system.getNumParticles() < 100000 && system.getNumConstraints() < 100000)
+        return false;
+    SerializationNode node;
+    node.setName(rootName);
+    node.setIntProperty("version", 1).setStringProperty("type", "System");
+    node.setStringProperty("openmmVersion", Platform::getOpenMMVersion());
+    serializeSystemDirect(node, system, stream);
+    return true;
 }
 
 void XmlSerializer::serialize(const SerializationNode& node, std::ostream& stream) {
@@ -730,11 +1058,16 @@ void* XmlSerializer::deserializeStream(std::istream& stream) {
         rewindXmlStreamOrThrow(stream, start);
 
         try {
-            if (haveRoot && rootName == "State" && type == "State")
+            if (haveRoot && rootName == "State" && type == "State" &&
+                    typeid(SerializationProxy::getProxy(type)) == typeid(StateProxy))
                 return deserializeStateXmlFast(stream);
 
-            if (haveRoot && rootName == "System" && type == "System")
+            if (haveRoot && rootName == "System" && type == "System" &&
+                    typeid(SerializationProxy::getProxy(type)) == typeid(SystemProxy))
                 return deserializeSystemXmlFast(stream);
+        }
+        catch (const FastXmlProxyException& e) {
+            std::rethrow_exception(e.exception);
         }
         catch (const OpenMMException&) {
             // The fast readers intentionally support only the schemas that are

@@ -1,0 +1,20 @@
+[
+  {
+    "kind": "system",
+    "particles": 500000,
+    "sha256": "3c0ec5caa99f1a4b5c5c00d2de5fe3229712fa88d78870c565db2d6255231220",
+    "byte_identical": true
+  },
+  {
+    "kind": "system-fallback",
+    "particles": 500000,
+    "sha256": "8b186ecfbc8d5eafe4dea3113bedfc7177dbb20a106d9fad350ddd9a74e359c8",
+    "byte_identical": true
+  },
+  {
+    "kind": "state-pv",
+    "particles": 1000000,
+    "sha256": "c01ceddabc595c1e0542f1eebd05e791e0573d1feda66bce941a0dfb3c2c8acc",
+    "byte_identical": true
+  }
+]
