@@ -26,6 +26,7 @@
 
 #include "openmm/common/ComputeContext.h"
 #include "MoleculeConnectivity.h"
+#include "VirtualSiteSnapshot.h"
 #include "openmm/common/ContextSelector.h"
 #include "openmm/System.h"
 #include "openmm/VirtualSite.h"
@@ -141,65 +142,19 @@ string ComputeContext::intToString(int value) const {
  */
 class ComputeContext::VirtualSiteInfo : public ComputeForceInfo {
 public:
-    VirtualSiteInfo(const System& system) {
-        for (int i = 0; i < system.getNumParticles(); i++) {
-            if (system.isVirtualSite(i)) {
-                const VirtualSite& vsite = system.getVirtualSite(i);
-                siteTypes.push_back(&typeid(vsite));
-                vector<int> particles;
-                particles.push_back(i);
-                for (int j = 0; j < vsite.getNumParticles(); j++)
-                    particles.push_back(vsite.getParticle(j));
-                siteParticles.push_back(particles);
-                vector<double> weights;
-                if (dynamic_cast<const TwoParticleAverageSite*>(&vsite) != NULL) {
-                    // A two particle average.
-
-                    const TwoParticleAverageSite& site = dynamic_cast<const TwoParticleAverageSite&>(vsite);
-                    weights.push_back(site.getWeight(0));
-                    weights.push_back(site.getWeight(1));
-                }
-                else if (dynamic_cast<const ThreeParticleAverageSite*>(&vsite) != NULL) {
-                    // A three particle average.
-
-                    const ThreeParticleAverageSite& site = dynamic_cast<const ThreeParticleAverageSite&>(vsite);
-                    weights.push_back(site.getWeight(0));
-                    weights.push_back(site.getWeight(1));
-                    weights.push_back(site.getWeight(2));
-                }
-                else if (dynamic_cast<const OutOfPlaneSite*>(&vsite) != NULL) {
-                    // An out of plane site.
-
-                    const OutOfPlaneSite& site = dynamic_cast<const OutOfPlaneSite&>(vsite);
-                    weights.push_back(site.getWeight12());
-                    weights.push_back(site.getWeight13());
-                    weights.push_back(site.getWeightCross());
-                }
-                siteWeights.push_back(weights);
-            }
-        }
+    VirtualSiteInfo(const System& system) : sites(system) {
     }
     int getNumParticleGroups() {
-        return siteTypes.size();
+        return sites.getNumParticleGroups();
     }
     void getParticlesInGroup(int index, std::vector<int>& particles) {
-        particles = siteParticles[index];
+        sites.getParticlesInGroup(index, particles);
     }
     bool areGroupsIdentical(int group1, int group2) {
-        if (siteTypes[group1] != siteTypes[group2])
-            return false;
-        int numParticles = siteWeights[group1].size();
-        if (siteWeights[group2].size() != numParticles)
-            return false;
-        for (int i = 0; i < numParticles; i++)
-            if (siteWeights[group1][i] != siteWeights[group2][i])
-                return false;
-        return true;
+        return sites.areGroupsIdentical(group1, group2);
     }
 private:
-    vector<const type_info*> siteTypes;
-    vector<vector<int> > siteParticles;
-    vector<vector<double> > siteWeights;
+    detail::VirtualSiteSnapshot sites;
 };
 
 void ComputeContext::findMoleculeGroups() {
