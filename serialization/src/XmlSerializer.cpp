@@ -331,9 +331,8 @@ static void serializeStateDirect(const SerializationNode& node, const State& sta
     // XmlSerializer<T> template subsequently added type="State".  Iterating
     // the property map preserves the same deterministic attribute ordering as
     // the stock encodeNode() implementation.
-    const map<string, string> properties = node.getProperties();
-    for (map<string, string>::const_iterator prop = properties.begin();
-         prop != properties.end(); ++prop) {
+    for (map<string, string>::const_iterator prop = node.getProperties().begin();
+         prop != node.getProperties().end(); ++prop) {
         if (prop->first == FAST_STATE_COOKIE_PROPERTY)
             continue;
         out.character(' ');
