@@ -29,6 +29,7 @@
 
 #include "openmm/OpenMMException.h"
 #include "openmm/State.h"
+#include <utility>
 
 using namespace OpenMM;
 using namespace std;
@@ -99,12 +100,16 @@ SerializationNode& State::updateIntegratorParameters() {
 int State::getDataTypes() const {
     return types;
 }
-State::State(double time, long long stepCount) : types(0), time(time), stepCount(stepCount), ke(0), pe(0), hasBoxVectors(false) {
+State::State(double time, long long stepCount) : types(0), time(time), ke(0), pe(0), stepCount(stepCount), hasBoxVectors(false) {
 }
-State::State() : types(0), time(0.0), ke(0), pe(0), hasBoxVectors(false) {
+State::State() : types(0), time(0.0), ke(0), pe(0), stepCount(0), hasBoxVectors(false) {
 }
 void State::setPositions(const std::vector<Vec3>& pos) {
     positions = pos;
+    types |= Positions;
+}
+void State::setPositions(std::vector<Vec3>&& pos) {
+    positions = std::move(pos);
     types |= Positions;
 }
 
@@ -112,14 +117,26 @@ void State::setVelocities(const std::vector<Vec3>& vel) {
     velocities = vel;
     types |= Velocities;
 }
+void State::setVelocities(std::vector<Vec3>&& vel) {
+    velocities = std::move(vel);
+    types |= Velocities;
+}
 
 void State::setForces(const std::vector<Vec3>& force) {
     forces = force;
     types |= Forces;
 }
+void State::setForces(std::vector<Vec3>&& force) {
+    forces = std::move(force);
+    types |= Forces;
+}
 
 void State::setParameters(const std::map<std::string, double>& params) {
     parameters = params;
+    types |= Parameters;
+}
+void State::setParameters(std::map<std::string, double>&& params) {
+    parameters = std::move(params);
     types |= Parameters;
 }
 
@@ -147,21 +164,36 @@ State::StateBuilder::StateBuilder(double time, long long stepCount) : state(time
 State State::StateBuilder::getState() {
     return state;
 }
+State State::StateBuilder::takeState() {
+    return std::move(state);
+}
 
 void State::StateBuilder::setPositions(const std::vector<Vec3>& pos) {
     state.setPositions(pos);
+}
+void State::StateBuilder::setPositions(std::vector<Vec3>&& pos) {
+    state.setPositions(std::move(pos));
 }
 
 void State::StateBuilder::setVelocities(const std::vector<Vec3>& vel) {
     state.setVelocities(vel);
 }
+void State::StateBuilder::setVelocities(std::vector<Vec3>&& vel) {
+    state.setVelocities(std::move(vel));
+}
 
 void State::StateBuilder::setForces(const std::vector<Vec3>& force) {
     state.setForces(force);
 }
+void State::StateBuilder::setForces(std::vector<Vec3>&& force) {
+    state.setForces(std::move(force));
+}
 
 void State::StateBuilder::setParameters(const std::map<std::string, double>& params) {
     state.setParameters(params);
+}
+void State::StateBuilder::setParameters(std::map<std::string, double>&& params) {
+    state.setParameters(std::move(params));
 }
 
 void State::StateBuilder::setEnergyParameterDerivatives(const std::map<std::string, double>& derivs) {
