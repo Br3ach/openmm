@@ -32,8 +32,10 @@
 #include "openmm/NonbondedForce.h"
 #include "openmm/System.h"
 #include "openmm/Context.h"
+#include "openmm/CustomExternalForce.h"
 #include "openmm/CustomIntegrator.h"
 #include "openmm/LangevinIntegrator.h"
+#include "openmm/VerletIntegrator.h"
 #include "openmm/AndersenThermostat.h"
 #include "openmm/MonteCarloBarostat.h"
 #include "openmm/serialization/XmlSerializer.h"
@@ -217,10 +219,35 @@ void testIntegratorParameters() {
     ASSERT_EQUAL_VEC(Vec3(1.0, 2.0, 3.0), values[0], 1e-6);
 }
 
+void testContextStateTransfer() {
+    System system;
+    system.addParticle(1.0);
+    system.setDefaultPeriodicBoxVectors(Vec3(4, 0, 0), Vec3(0, 4, 0), Vec3(0, 0, 4));
+    CustomExternalForce* force = new CustomExternalForce("lambda*x");
+    force->addGlobalParameter("lambda", 2.0);
+    force->addParticle(0);
+    system.addForce(force);
+    VerletIntegrator integrator(0.001);
+    Context context(system, integrator);
+    context.setPositions({Vec3(4.25, 0.2, 0.3)});
+    context.setVelocities({Vec3(0.1, 0.2, 0.3)});
+
+    State state = context.getState(State::Positions | State::Velocities | State::Forces |
+                                   State::Energy | State::Parameters, true);
+    ASSERT_EQUAL_VEC(Vec3(0.25, 0.2, 0.3), state.getPositions()[0], 1e-12);
+    ASSERT_EQUAL_VEC(Vec3(0.1, 0.2, 0.3), state.getVelocities()[0], 1e-12);
+    ASSERT_EQUAL_VEC(Vec3(-2, 0, 0), state.getForces()[0], 1e-12);
+    ASSERT_EQUAL(2.0, state.getParameters().at("lambda"));
+    ASSERT_EQUAL(8.5, state.getPotentialEnergy());
+    ASSERT_EQUAL_VEC(Vec3(4.25, 0.2, 0.3),
+                     context.getState(State::Positions).getPositions()[0], 1e-12);
+}
+
 int main() {
     try {
         testSerialization();
         testIntegratorParameters();
+        testContextStateTransfer();
     }
     catch(const exception& e) {
         cout << "exception: " << e.what() << endl;  
