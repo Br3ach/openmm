@@ -161,9 +161,15 @@ static void compareStates(const State& expected, const State& found) {
 static State createLargeState() {
     const int count = 100000; // Activates the production direct-State writer threshold.
     vector<Vec3> positions;
+    vector<Vec3> velocities, forces;
     positions.reserve(count);
-    for (int i = 0; i < count; ++i)
+    velocities.reserve(count);
+    forces.reserve(count);
+    for (int i = 0; i < count; ++i) {
         positions.push_back(Vec3(0.001*i, -0.002*i, 0.003*i));
+        velocities.push_back(Vec3(-0.004*i, 0.005*i, -0.006*i));
+        forces.push_back(Vec3(0.007*i, -0.008*i, 0.009*i));
+    }
 
     map<string, double> parameters;
     parameters["alpha"] = 1.25;
@@ -172,6 +178,8 @@ static State createLargeState() {
     State::StateBuilder builder(2.5, 1234567890123LL);
     builder.setPeriodicBoxVectors(Vec3(4.0, 0.1, 0.2), Vec3(0.0, 5.0, 0.3), Vec3(0.0, 0.0, 6.0));
     builder.setPositions(std::move(positions));
+    builder.setVelocities(std::move(velocities));
+    builder.setForces(std::move(forces));
     builder.setParameters(std::move(parameters));
     builder.setEnergy(7.25, -19.5);
     return builder.takeState();
@@ -179,6 +187,7 @@ static State createLargeState() {
 
 static void testLargeStateFastWriterAndReaderParity() {
     State state = createLargeState();
+    ASSERT_EQUAL(31, state.getDataTypes()); // Core28's full-State request: positions, velocities, forces, energy, parameters.
     setFastStateWrite(true);
 
     // The direct writer is intended to be schema-compatible with the stock
