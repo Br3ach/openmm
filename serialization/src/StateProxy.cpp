@@ -48,6 +48,7 @@ void StateProxy::serialize(const void* object, SerializationNode& node) const {
     const State& s = *reinterpret_cast<const State*>(object);
     node.setDoubleProperty("time", s.getTime());
     node.setLongProperty("stepCount", s.getStepCount());
+    node.getChildren().reserve(node.getChildren().size()+7);
     Vec3 a,b,c;
     s.getPeriodicBoxVectors(a,b,c);
     SerializationNode& boxVectorsNode = node.createChildNode("PeriodicBoxVectors");
@@ -69,7 +70,8 @@ void StateProxy::serialize(const void* object, SerializationNode& node) const {
     if ((s.getDataTypes()&State::Positions) != 0) {
         s.getPositions();
         SerializationNode& positionsNode = node.createChildNode("Positions");
-        vector<Vec3> statePositions = s.getPositions();
+        const vector<Vec3>& statePositions = s.getPositions();
+        positionsNode.getChildren().reserve(statePositions.size());
         for (int i=0; i<statePositions.size();i++) {
            positionsNode.createChildNode("Position").setDoubleProperty("x", statePositions[i][0]).setDoubleProperty("y", statePositions[i][1]).setDoubleProperty("z", statePositions[i][2]);
         }
@@ -77,7 +79,8 @@ void StateProxy::serialize(const void* object, SerializationNode& node) const {
     if ((s.getDataTypes()&State::Velocities) != 0) {
         s.getVelocities();
         SerializationNode& velocitiesNode = node.createChildNode("Velocities");
-        vector<Vec3> stateVelocities = s.getVelocities();
+        const vector<Vec3>& stateVelocities = s.getVelocities();
+        velocitiesNode.getChildren().reserve(stateVelocities.size());
         for (int i=0; i<stateVelocities.size();i++) {
            velocitiesNode.createChildNode("Velocity").setDoubleProperty("x", stateVelocities[i][0]).setDoubleProperty("y", stateVelocities[i][1]).setDoubleProperty("z", stateVelocities[i][2]);
         }
@@ -85,7 +88,8 @@ void StateProxy::serialize(const void* object, SerializationNode& node) const {
     if ((s.getDataTypes()&State::Forces) != 0) {
         s.getForces();
         SerializationNode& forcesNode = node.createChildNode("Forces");
-        vector<Vec3> stateForces = s.getForces();
+        const vector<Vec3>& stateForces = s.getForces();
+        forcesNode.getChildren().reserve(stateForces.size());
         for (int i=0; i<stateForces.size();i++) {
             forcesNode.createChildNode("Force").setDoubleProperty("x", stateForces[i][0]).setDoubleProperty("y", stateForces[i][1]).setDoubleProperty("z", stateForces[i][2]);
         }

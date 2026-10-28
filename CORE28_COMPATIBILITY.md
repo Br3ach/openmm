@@ -6,7 +6,8 @@ Base: OpenMM tag `8.3.1`, commit `6e13f1361dcc3ffb581c7c97e3adfcc61257b813`.
 This branch backports the v5 streaming State/System XML readers and moves the
 large arrays through StateBuilder and Context::getState(). Existing State and
 SerializationNode layouts and existing method signatures remain unchanged.
-The ordinary complete-node XML writer remains unchanged. The v5 deferred
+The writer retains complete SerializationNode trees, with the local allocation
+improvements documented below. The v5 deferred
 writer is deliberately omitted: the unchanged Core28 executable invokes its
 inline serializer before a DLL-owned operation can establish a safe scope.
 
@@ -93,10 +94,43 @@ their Core28 peak-memory benefit has not been measured separately.
 Generated fixtures establish applicability, not support for every project,
 plugin, checkpoint or GPU. Natural-WU startup/performance and official-to-
 patched binary-checkpoint migration still need dedicated isolated tests.
-The normal writer retains 8.3.1's memory cost. Existing 8.3.1 behavior and
+The writer still retains complete particle-node trees and property maps.
+Existing 8.3.1 behavior and
 validation limitations outside the backported readers are unchanged.
 
-Final clean DLL SHA-256:
+Initial backport validation DLL SHA-256:
 `d263ad380f5316689148703d87aa8ac28a46a7eb02c15becda8108d7bc99e682`.
 The old-header probe, all 57 tests and all four Core28 input variants were
 rerun successfully against the clean rebuild. No diagnostic strings remain.
+
+## Writer allocation improvement (28 October 2026)
+
+StateProxy now reads particle arrays by const reference, reserves each particle
+section's known child count and reserves space for the seven possible appended
+State sections in the parent. Existing children are included in the parent
+reservation. This is a net four-line production increase; layouts, signatures,
+section ordering and XML representation are unchanged.
+
+All 57 tests and the original-header ABI probe passed. A new regression checks
+a prepopulated parent with all seven appended sections, including integrator
+parameters. Official Core28 completed the generated WU with exit 100; final
+State, integrator, XTC and TRR bytes match the official control.
+
+A separate executable compiled against original 8.3.1 headers serialized
+100,000-particle States through the baseline and optimized DLLs. Six runs per
+case/build were interleaved in alternating order, using separate processes.
+Time includes XML formatting and file output; memory includes State setup.
+XML files matched byte for byte for each case. Median measurements:
+
+| State contents | Baseline time | Optimized time | Baseline peak commit | Optimized peak commit |
+| --- | ---: | ---: | ---: | ---: |
+| Positions | 0.322 s | 0.194 s | 112.6 MiB | 61.2 MiB |
+| Positions, velocities, forces, parameters, energy | 0.983 s | 0.574 s | 231.3 MiB | 176.6 MiB |
+| All above plus integrator parameters | 1.104 s | 0.572 s | 343.6 MiB | 176.6 MiB |
+
+These synthetic serialization measurements are not predictions for a natural
+7.97-million-particle WU. They measure the combined reference/reservation
+change, not the separate contribution of each reservation.
+
+Writer-optimized DLL SHA-256:
+`f626478061e487fc3abbc7829bb0bdfb1441d332f80896a7657d4dd21060e91e`.

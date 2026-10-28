@@ -156,7 +156,7 @@ static void compareStates(const State& expected, const State& found) {
         ASSERT_EQUAL_CONTAINERS(expected.getParameters(), found.getParameters());
 }
 
-static State createLargeState() {
+static State createLargeState(bool integratorParameters=false) {
     const int count = 100000; // Exercise large arrays without a full reader tree.
     vector<Vec3> positions;
     vector<Vec3> velocities, forces;
@@ -180,6 +180,8 @@ static State createLargeState() {
     builder.setForces(std::move(forces));
     builder.setParameters(std::move(parameters));
     builder.setEnergy(7.25, -19.5);
+    if (integratorParameters)
+        builder.updateIntegratorParameters().setIntProperty("version", 17);
     return builder.takeState();
 }
 
@@ -553,10 +555,26 @@ static void testDirectProxyAndMovedArrays() {
     ASSERT_EQUAL(7, moved.getStepCount());
 }
 
+static void testPrepopulatedStateProxy() {
+    State state = createLargeState(true);
+    SerializationNode node;
+    node.setName("State");
+    node.createChildNode("Existing").setStringProperty("value", "preserved");
+    const SerializationProxy& proxy = SerializationProxy::getProxy(typeid(state));
+    proxy.serialize(&state, node);
+    ASSERT_EQUAL(8, node.getChildren().size());
+    ASSERT_EQUAL(string("preserved"), node.getChildren()[0].getStringProperty("value"));
+    ASSERT_EQUAL(17, node.getChildNode("IntegratorParameters").getIntProperty("version"));
+    unique_ptr<State> copy(reinterpret_cast<State*>(proxy.deserialize(node)));
+    compareStates(state, *copy);
+    ASSERT_EQUAL(serializeObject(state, "State", false), serializeObject(*copy, "State", false));
+}
+
 int main() {
     EnvironmentGuard fastXmlGuard("OPENMM_FAST_XML");
     try {
         testDirectProxyAndMovedArrays();
+        testPrepopulatedStateProxy();
         testLargeStateReaderParity();
         testSupportedSystemFastReaderParity();
         testUnsupportedForceFallback();
