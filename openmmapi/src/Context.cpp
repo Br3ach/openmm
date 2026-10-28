@@ -36,6 +36,7 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
+#include <utility>
 
 using namespace OpenMM;
 using namespace std;
@@ -102,14 +103,14 @@ State Context::getState(int types, bool enforcePeriodicBox, int groups) const {
         if (includeForces) {
             vector<Vec3> forces;
             impl->getForces(forces);
-            builder.setForces(forces);
+            builder.setForces(std::move(forces));
         }
     }
     if (types&State::Parameters) {
         map<string, double> params;
         for (auto& param : impl->parameters)
             params[param.first] = param.second;
-        builder.setParameters(params);
+        builder.setParameters(std::move(params));
     }
     if (types&State::ParameterDerivatives) {
         map<string, double> derivs;
@@ -140,17 +141,17 @@ State Context::getState(int types, bool enforcePeriodicBox, int groups) const {
                     positions[j] -= diff;
             }
         }
-        builder.setPositions(positions);
+        builder.setPositions(std::move(positions));
     }
     if (types&State::Velocities) {
         vector<Vec3> velocities;
         impl->getVelocities(velocities);
-        builder.setVelocities(velocities);
+        builder.setVelocities(std::move(velocities));
     }
     if (types&State::IntegratorParameters) {
         getIntegrator().serializeParameters(builder.updateIntegratorParameters());
     }
-    return builder.getState();
+    return builder.takeState();
 }
 
 void Context::setState(const State& state) {

@@ -31,6 +31,9 @@
 
 #include "openmm/serialization/XmlSerializer.h"
 #include "irrXML.h"
+#include "FastStateXml.h"
+#include <cstdlib>
+#include <vector>
 #include <cstring>
 #include <iostream>
 #include <map>
@@ -159,6 +162,255 @@ private:
 /**
  * Process an XML node, storing its content into a SerializationNode.
  */
+static bool fastXmlEnabledByEnvironment() {
+    const char* value = std::getenv("OPENMM_FAST_XML");
+    if (value == NULL)
+        return true;
+    return !(std::strcmp(value, "0") == 0 ||
+             std::strcmp(value, "false") == 0 ||
+             std::strcmp(value, "FALSE") == 0 ||
+             std::strcmp(value, "off") == 0 ||
+             std::strcmp(value, "OFF") == 0);
+}
+
+/**
+ * Safely inspect a bounded prefix of a seekable XML stream.
+ *
+ * irrXML reads the complete size advertised by IFileReadCallBack into one
+ * buffer before parsing it.  Feeding it a truncated prefix is therefore not
+ * safe: a construct such as a comment that begins inside the prefix and ends
+ * after it can make the bundled parser scan beyond that buffer.
+ *
+ * This scanner deliberately understands only enough XML syntax to identify a
+ * simple canonical OpenMM root element and its type attribute.  It bounds
+ * every access.  Any declaration it does not explicitly understand, any
+ * incomplete token at the prefix boundary, or any unusual encoding simply
+ * returns false so the caller uses OpenMM's stock XML parser.
+ */
+static bool isProbeNameChar(char c) {
+    return (c >= 'a' && c <= 'z') ||
+           (c >= 'A' && c <= 'Z') ||
+           (c >= '0' && c <= '9') ||
+           c == '_' || c == ':' || c == '-' || c == '.';
+}
+
+static bool isProbeSpace(char c) {
+    return c == ' ' || c == '\t' || c == '\r' || c == '\n';
+}
+
+static void rewindXmlStreamOrThrow(std::istream& stream, std::streampos start) {
+    // Rewinding is part of the compatibility contract for the opportunistic
+    // fast path.  Do it with exceptions temporarily disabled, then normalize
+    // any seek failure to OpenMMException instead of entering the stock parser
+    // with a failed stream.
+    const std::ios_base::iostate exceptionMask = stream.exceptions();
+    stream.exceptions(std::ios_base::goodbit);
+
+    bool rewound = false;
+    try {
+        stream.clear();
+        stream.seekg(start);
+        rewound = static_cast<bool>(stream);
+    }
+    catch (...) {
+        rewound = false;
+    }
+
+    // Restore the caller's exception mask only from a good state so
+    // exceptions(mask) itself cannot throw because of the failed rewind.
+    if (!rewound)
+        stream.clear();
+    stream.exceptions(exceptionMask);
+
+    if (!rewound)
+        throw OpenMMException("XmlSerializer: failed to rewind XML stream");
+}
+
+static bool startsWithAt(const vector<char>& data, size_t pos, const char* text) {
+    const size_t length = strlen(text);
+    return pos <= data.size() && length <= data.size()-pos &&
+           memcmp(&data[pos], text, length) == 0;
+}
+
+static bool skipUntil(const vector<char>& data, size_t& pos, const char* terminator) {
+    const size_t length = strlen(terminator);
+    while (pos <= data.size()) {
+        if (length <= data.size()-pos &&
+                memcmp(&data[pos], terminator, length) == 0) {
+            pos += length;
+            return true;
+        }
+        if (pos == data.size())
+            break;
+        ++pos;
+    }
+    return false;
+}
+
+static bool probeXmlRoot(std::istream& stream, std::streampos start,
+                         string& rootName, string& type) {
+    const size_t probeLimit = 64*1024;
+    vector<char> data(probeLimit);
+
+    // A normal short read sets eofbit/failbit.  Temporarily disable stream
+    // exceptions so probing a valid document shorter than probeLimit cannot
+    // throw when the caller has enabled failbit/badbit exceptions.  Restore
+    // both the original position and exception mask before returning.
+    const std::ios_base::iostate exceptionMask = stream.exceptions();
+    stream.exceptions(std::ios_base::goodbit);
+
+    stream.clear();
+    stream.seekg(start);
+    if (!stream) {
+        stream.clear();
+        stream.exceptions(exceptionMask);
+        return false;
+    }
+
+    stream.read(&data[0], static_cast<streamsize>(data.size()));
+    const streamsize count = stream.gcount();
+
+    // Reaching EOF during the bounded probe is normal.  Clear it before
+    // rewinding, then restore the caller's exception mask only after the stream
+    // is back in a good state so exceptions(mask) itself cannot throw.
+    stream.clear();
+    stream.seekg(start);
+    const bool rewound = static_cast<bool>(stream);
+    stream.clear();
+    stream.exceptions(exceptionMask);
+    if (!rewound || count <= 0)
+        return false;
+
+    data.resize(static_cast<size_t>(count));
+    size_t pos = 0;
+
+    // UTF-8 BOM is safe to skip.  Let the stock parser handle UTF-16/UTF-32 or
+    // any other encoding whose byte representation this small scanner does not
+    // understand.
+    if (data.size() >= 3 &&
+            static_cast<unsigned char>(data[0]) == 0xEF &&
+            static_cast<unsigned char>(data[1]) == 0xBB &&
+            static_cast<unsigned char>(data[2]) == 0xBF)
+        pos = 3;
+    else if ((data.size() >= 2 &&
+              ((static_cast<unsigned char>(data[0]) == 0xFF &&
+                static_cast<unsigned char>(data[1]) == 0xFE) ||
+               (static_cast<unsigned char>(data[0]) == 0xFE &&
+                static_cast<unsigned char>(data[1]) == 0xFF))) ||
+             (data.size() >= 4 &&
+              ((static_cast<unsigned char>(data[0]) == 0x00 &&
+                static_cast<unsigned char>(data[1]) == 0x00 &&
+                static_cast<unsigned char>(data[2]) == 0xFE &&
+                static_cast<unsigned char>(data[3]) == 0xFF) ||
+               (static_cast<unsigned char>(data[0]) == 0xFF &&
+                static_cast<unsigned char>(data[1]) == 0xFE &&
+                static_cast<unsigned char>(data[2]) == 0x00 &&
+                static_cast<unsigned char>(data[3]) == 0x00))))
+        return false;
+
+    // Skip whitespace, XML declarations/processing instructions, and complete
+    // comments.  For DOCTYPE or any other <! ...> declaration, conservatively
+    // fall back rather than implementing more XML grammar here.
+    while (true) {
+        while (pos < data.size() && isProbeSpace(data[pos]))
+            ++pos;
+        if (pos == data.size())
+            return false;
+
+        if (startsWithAt(data, pos, "<?")) {
+            pos += 2;
+            if (!skipUntil(data, pos, "?>"))
+                return false;
+            continue;
+        }
+
+        if (startsWithAt(data, pos, "<!--")) {
+            pos += 4;
+            if (!skipUntil(data, pos, "-->"))
+                return false;
+            continue;
+        }
+
+        if (startsWithAt(data, pos, "<!"))
+            return false;
+
+        break;
+    }
+
+    if (pos >= data.size() || data[pos] != '<')
+        return false;
+    ++pos;
+
+    if (pos >= data.size() || data[pos] == '/' || data[pos] == '?' ||
+            data[pos] == '!')
+        return false;
+
+    const size_t rootStart = pos;
+    while (pos < data.size() && isProbeNameChar(data[pos]))
+        ++pos;
+    if (pos == rootStart)
+        return false;
+    rootName.assign(&data[rootStart], pos-rootStart);
+
+    // We only need the fast path for the two canonical OpenMM root names.  A
+    // custom root can immediately use the stock path without scanning its
+    // attributes.
+    if (rootName != "State" && rootName != "System")
+        return true;
+
+    while (true) {
+        while (pos < data.size() && isProbeSpace(data[pos]))
+            ++pos;
+        if (pos == data.size())
+            return false;  // root start tag crosses the probe boundary
+
+        if (data[pos] == '>') {
+            ++pos;
+            return true;
+        }
+        if (data[pos] == '/') {
+            if (pos+1 >= data.size())
+                return false;
+            if (data[pos+1] != '>')
+                return false;
+            pos += 2;
+            return true;
+        }
+
+        const size_t nameStart = pos;
+        while (pos < data.size() && isProbeNameChar(data[pos]))
+            ++pos;
+        if (pos == nameStart)
+            return false;
+        const string attributeName(&data[nameStart], pos-nameStart);
+
+        while (pos < data.size() && isProbeSpace(data[pos]))
+            ++pos;
+        if (pos == data.size() || data[pos] != '=')
+            return false;
+        ++pos;
+
+        while (pos < data.size() && isProbeSpace(data[pos]))
+            ++pos;
+        if (pos == data.size() || (data[pos] != '"' && data[pos] != '\''))
+            return false;
+
+        const char quote = data[pos++];
+        const size_t valueStart = pos;
+        while (pos < data.size() && data[pos] != quote)
+            ++pos;
+        if (pos == data.size())
+            return false;  // attribute value crosses the probe boundary
+
+        if (attributeName == "type")
+            type.assign(&data[valueStart], pos-valueStart);
+        ++pos;
+    }
+}
+
+/**
+ * Process an XML node, storing its content into a SerializationNode.
+ */
 static void decodeNode(SerializationNode& node, IrrXMLReader& xml) {
     for (int i = 0; i < xml.getAttributeCount(); i++)
         node.setStringProperty(xml.getAttributeName(i), xml.getAttributeValue(i));
@@ -179,6 +431,53 @@ static void decodeNode(SerializationNode& node, IrrXMLReader& xml) {
 }
 
 void* XmlSerializer::deserializeStream(std::istream& stream) {
+    // Opportunistic fast path for canonical State/System XML.  It must never
+    // narrow XmlSerializer's accepted input: custom root names, unsupported
+    // force/plugin types, IntegratorParameters, or any other schema feature
+    // understood by the registered SerializationProxy path fall back to the
+    // original reader below.
+    std::streampos start = std::streampos(-1);
+    if (fastXmlEnabledByEnvironment() && stream.rdbuf() != NULL) {
+        try {
+            start = stream.rdbuf()->pubseekoff(0, ios_base::cur, ios_base::in);
+        }
+        catch (const ios_base::failure&) {
+            start = std::streampos(-1);
+        }
+    }
+    if (start != std::streampos(-1)) {
+        // Inspect at most 64 KiB with a bounds-checked scanner.  Do not
+        // hand a truncated prefix to irrXML: the bundled parser assumes its
+        // advertised buffer contains complete constructs and can scan beyond a
+        // truncated comment or processing instruction.
+        string rootName;
+        string type;
+        const bool haveRoot = probeXmlRoot(stream, start, rootName, type);
+
+        rewindXmlStreamOrThrow(stream, start);
+
+        try {
+            if (haveRoot && rootName == "State" && type == "State")
+                return deserializeStateXmlFast(stream);
+
+            if (haveRoot && rootName == "System" && type == "System")
+                return deserializeSystemXmlFast(stream);
+        }
+        catch (const OpenMMException&) {
+            // The fast readers intentionally support only the schemas that are
+            // profitable to specialize.  Fall through to the checked rewind
+            // below and preserve the behavior of the existing generic
+            // SerializationProxy reader.  If the document is genuinely
+            // invalid, that reader will report the normal deserialization error.
+        }
+
+        // A custom root name, unsupported schema, or fast-path parse failure
+        // belongs on the original reader.  Never enter it unless rewind is
+        // known to have succeeded.
+        rewindXmlStreamOrThrow(stream, start);
+    }
+
+
     SerializationNode root;
     StreamReader reader(stream);
     IrrXMLReader* xml = createIrrXMLReader(&reader);
