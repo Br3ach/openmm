@@ -15,6 +15,7 @@
 #include "openmm/PeriodicTorsionForce.h"
 #include "openmm/State.h"
 #include "openmm/System.h"
+#include "openmm/VirtualSite.h"
 #include "openmm/serialization/SerializationNode.h"
 #include "openmm/serialization/XmlSerializer.h"
 #include <algorithm>
@@ -298,6 +299,66 @@ static void testUnsupportedForceFallback() {
     ASSERT_EQUAL(1, copy->getNumForces());
     ASSERT(dynamic_cast<CustomBondForce*>(&copy->getForce(0)) != NULL);
     ASSERT_EQUAL(xml, serializeObject(*copy, "System", false));
+}
+
+static void testThreeParticleVirtualSiteAttributes() {
+    System system;
+    for (int i = 0; i < 4; ++i)
+        system.addParticle(i == 3 ? 0 : 12);
+    system.setVirtualSite(3, new ThreeParticleAverageSite(0, 1, 2, 0.125, 0.25, 0.625));
+    const string xml = serializeObject(system, "System", false);
+    const size_t start = xml.find("<ThreeParticleAverageSite");
+    ASSERT(start != string::npos);
+    const size_t length = xml.find("/>", start)+2-start;
+    const string attributes[] = {"p1=\"0\"", "p2=\"1\"", "p3=\"2\"", "w1=\".125\"", "w2=\".25\"", "w3=\".625\""};
+    const string canonical = "<ThreeParticleAverageSite p1=\"0\" p2=\"1\" p3=\"2\" w1=\".125\" w2=\".25\" w3=\".625\"";
+    const vector<string> valid = {
+        canonical+"/>",
+        "<ThreeParticleAverageSite w3='.625' p3='2' w2='2.5e-1' p1='+0' w1='0.125' p2='1'/>",
+        canonical+" ignored=\"not numeric\" ignored=\"still ignored\"/>",
+        canonical+"></ThreeParticleAverageSite>",
+        "<ThreeParticleAverageSite p1='-2147483648' p2='2147483647' p3='-1' w1='.125' w2='.25' w3='.625'/>"
+    };
+    for (const string& tag : valid) {
+        string input = xml;
+        input.replace(start, length, tag);
+        unique_ptr<System> stock = deserializeObject<System>(input, false);
+        const string expected = serializeObject(*stock, "System", false);
+        setFastXml(true);
+        // The fourth positional seek is fallback: prohibit silently using it.
+        FailOnSeekStringBuf buffer(input, 4);
+        istream stream(&buffer);
+        unique_ptr<System> fast(XmlSerializer::deserialize<System>(stream));
+        ASSERT_EQUAL(expected, serializeObject(*fast, "System", false));
+        setFastXml(true);
+        ShortRefillStringBuf shortBuffer(input, 7);
+        istream shortStream(&shortBuffer);
+        unique_ptr<System> split(XmlSerializer::deserialize<System>(shortStream));
+        ASSERT_EQUAL(expected, serializeObject(*split, "System", false));
+    }
+    vector<string> invalid;
+    for (const string& attribute : attributes) {
+        string missing = canonical;
+        missing.erase(missing.find(attribute), attribute.size());
+        invalid.push_back(missing+"/>");
+        invalid.push_back(canonical+" "+attribute+"/>");
+    }
+    invalid.push_back(canonical+" bad=unquoted/>");
+    invalid.push_back(canonical+"/garbage>");
+    for (const string& replacement : {"p1=\"2147483648\"", "p1=\"-2147483649\"", "p1=\"abc\"", "w1=\".125x\""}) {
+        string bad = canonical;
+        const string original = replacement[0] == 'p' ? attributes[0] : attributes[3];
+        bad.replace(bad.find(original), original.size(), replacement);
+        invalid.push_back(bad+"/>");
+    }
+    for (const string& tag : invalid) {
+        string input = xml;
+        input.replace(start, length, tag);
+        setFastXml(true);
+        FailOnSeekStringBuf buffer(input, 4);
+        istream stream(&buffer);
+        assertThrowsOpenMM([&]() { unique_ptr<System> copy(XmlSerializer::deserialize<System>(stream)); });
+    }
 }
 
 static void testEscapedStringFallback() {
@@ -727,6 +788,7 @@ int main() {
         testLegacyArraySizes();
         testLargeStateReaderParity();
         testSupportedSystemFastReaderParity();
+        testThreeParticleVirtualSiteAttributes();
         testUnsupportedForceFallback();
         testEscapedStringFallback();
         testIntegratorParametersFallback();

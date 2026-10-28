@@ -759,9 +759,23 @@ static void parseSystemVirtualSiteStreaming(FastXmlTagReader& reader, const Fast
         consumeLeafClose(reader, tag, "TwoParticleAverageSite");
     }
     else if (fastXmlNameEquals(tag, "ThreeParticleAverageSite")) {
-        system.setVirtualSite(particle, new ThreeParticleAverageSite(
-            fastXmlInt(tag, "p1"), fastXmlInt(tag, "p2"), fastXmlInt(tag, "p3"),
-            fastXmlDouble(tag, "w1"), fastXmlDouble(tag, "w2"), fastXmlDouble(tag, "w3")));
+        bool haveP1 = false, haveP2 = false, haveP3 = false;
+        bool haveW1 = false, haveW2 = false, haveW3 = false;
+        int p1 = 0, p2 = 0, p3 = 0;
+        double w1 = 0, w2 = 0, w3 = 0;
+        FastXmlAttributes attrs(tag);
+        FastXmlSpan name, value;
+        while (attrs.next(name, value)) {
+            if (fastXmlSpanEquals(name, "p1")) { markFastXmlAttributeSeen(haveP1, "p1"); p1 = fastXmlIntSpan(value, "p1"); }
+            else if (fastXmlSpanEquals(name, "p2")) { markFastXmlAttributeSeen(haveP2, "p2"); p2 = fastXmlIntSpan(value, "p2"); }
+            else if (fastXmlSpanEquals(name, "p3")) { markFastXmlAttributeSeen(haveP3, "p3"); p3 = fastXmlIntSpan(value, "p3"); }
+            else if (fastXmlSpanEquals(name, "w1")) { markFastXmlAttributeSeen(haveW1, "w1"); w1 = fastXmlDoubleSpan(value, "w1"); }
+            else if (fastXmlSpanEquals(name, "w2")) { markFastXmlAttributeSeen(haveW2, "w2"); w2 = fastXmlDoubleSpan(value, "w2"); }
+            else if (fastXmlSpanEquals(name, "w3")) { markFastXmlAttributeSeen(haveW3, "w3"); w3 = fastXmlDoubleSpan(value, "w3"); }
+        }
+        if (!haveP1 || !haveP2 || !haveP3 || !haveW1 || !haveW2 || !haveW3)
+            throw OpenMMException("XmlSerializer: incomplete ThreeParticleAverageSite element");
+        system.setVirtualSite(particle, new ThreeParticleAverageSite(p1, p2, p3, w1, w2, w3));
         consumeLeafClose(reader, tag, "ThreeParticleAverageSite");
     }
     else if (fastXmlNameEquals(tag, "OutOfPlaneSite")) {

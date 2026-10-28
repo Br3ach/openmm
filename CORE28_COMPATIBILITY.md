@@ -280,3 +280,68 @@ the stateless switch and dropping reuse, without a performance claim.
 
 Retained switch-only DLL SHA-256:
 `2c6ee7849720f93267c1632be88e728b4c38b2662aa6648685b6f64cf77f6ff5`.
+
+## Three-particle virtual-site parsing (28 October 2026)
+
+The two retained natural Systems contain 1,984,130 and 1,955,136
+ThreeParticleAverageSite elements respectively, and no other virtual-site
+types. The first input is 1,927,740,675 bytes, SHA-256
+`abda690dfe141b24284d7a9288840804eedf9603bcce5a5af607c3c1db481ca0`.
+
+Temporary timing of the complete virtual-site function attributed 1.898–2.007
+seconds of a 13.763–13.859-second parse to this path. The empty timer-pair
+calibration loop took 0.078 seconds for the same call count; summed empty
+clock gaps were 0.039 seconds. These are inclusive diagnostic estimates,
+including construction, allocation and leaf consumption. Timer overhead and
+changed inlining prevent precise attribution to attribute lookups alone.
+The diagnostic build's whole parse, excluding calibration, was comparable
+to the unchanged build; no diagnostic code is retained.
+
+The retained candidate replaces six complete attribute scans with one pass
+using the existing FastXmlAttributes iterator, duplicate checks and numeric
+converters. Only ThreeParticleAverageSite changes, at 14 net production lines.
+Required fields, ignored unknown attributes, construction and leaf handling
+are preserved. No class layouts, public interfaces or other site types change.
+
+Six sequential warm-cache baseline/candidate pairs used the same MSVC Release
+settings and natural System. Order alternated between pairs. Seconds:
+
+| Pair | First | Baseline wall | Candidate wall |
+| --- | --- | ---: | ---: |
+| 0 | Baseline | 14.033311 | 11.871398 |
+| 1 | Candidate | 13.798692 | 12.078169 |
+| 2 | Baseline | 14.003782 | 11.990353 |
+| 3 | Candidate | 14.642723 | 12.167744 |
+| 4 | Baseline | 14.052084 | 12.331912 |
+| 5 | Candidate | 14.050586 | 12.339392 |
+
+Median wall time fell from 14.041949 to 12.122957 seconds (13.7%); median
+CPU time fell from 13.984375 to 12.046875 seconds (13.9%). All six pairs
+improved. Median peak private commit was effectively unchanged, 1,710,802,944
+versus 1,710,718,976 bytes; median peak working set differed by only 38 KiB.
+These measure System parsing, not complete Core28 startup or GPU throughput.
+No cold-cache claim is made; caches were not flushed and live folding was
+not interrupted.
+
+Outside the timed interval, every virtual site's particle ordinal, three
+parent indices and three double-precision weights were hashed in host byte
+order with FNV-1a64. All twelve parses produced `cce611c4f214eca5`, with
+1,984,130 sites, 7,950,180 particles, 5,955,581 constraints and six forces.
+This digest is a regression comparison, not a cryptographic integrity check.
+
+One additional pair on the second retained System parsed in 14.216050 versus
+12.203553 seconds. Both builds returned 7,863,224 particles, 5,868,599
+constraints, six forces and 1,955,136 sites, with site digest
+`7f9db4271e813845`. This is a compatibility check and a single timing pair,
+separate from the six-pair benchmark above.
+
+All 57 existing tests, the Reference virtual-site scientific test and the
+original-header ABI runtime probe passed. Focused tests compare stock and
+fast-parsed System XML and prohibit silent fallback for valid cases. They
+cover attribute order, quotes, unknown and duplicate unknown attributes,
+explicit closing tags, seven-byte refills, missing/duplicate required fields,
+integer limits, invalid numbers and malformed attributes. The same focused
+test executable also passed against the original DLL.
+
+Validated candidate DLL SHA-256:
+`e7c72bd584eb7e97458eb26c519088e63ae2841a9523c84452b6f9b515bc0e89`.
