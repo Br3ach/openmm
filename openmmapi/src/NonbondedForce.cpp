@@ -155,7 +155,19 @@ void NonbondedForce::setParticleParameters(int index, double charge, double sigm
         lastChangedParticle = max(index, lastChangedParticle);
     }}
 
+// Reconstruct a discarded index without changing the exception records.
+void NonbondedForce::rebuildExceptionMap() {
+    map<pair<int, int>, int> rebuilt;
+    for (int i = 0; i < exceptions.size(); ++i) {
+        const ExceptionInfo& exception = exceptions[i];
+        rebuilt[pair<int, int>(exception.particle1, exception.particle2)] = i;
+    }
+    exceptionMap.swap(rebuilt);
+}
+
 int NonbondedForce::addException(int particle1, int particle2, double chargeProd, double sigma, double epsilon, bool replace) {
+    if (exceptionMap.empty() && !exceptions.empty())
+        rebuildExceptionMap();
     map<pair<int, int>, int>::iterator iter = exceptionMap.find(pair<int, int>(particle1, particle2));
     int newIndex;
     if (iter == exceptionMap.end())
@@ -191,6 +203,9 @@ void NonbondedForce::getExceptionParameters(int index, int& particle1, int& part
 
 void NonbondedForce::setExceptionParameters(int index, int particle1, int particle2, double chargeProd, double sigma, double epsilon) {
     ASSERT_VALID_INDEX(index, exceptions);
+    if (exceptionMap.empty() &&
+            (exceptions[index].particle1 != particle1 || exceptions[index].particle2 != particle2))
+        rebuildExceptionMap();
     exceptions[index].particle1 = particle1;
     exceptions[index].particle2 = particle2;
     exceptions[index].chargeProd = chargeProd;

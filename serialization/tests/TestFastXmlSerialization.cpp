@@ -6,6 +6,7 @@
 
 #include "openmm/internal/AssertionUtilities.h"
 #include "openmm/CMMotionRemover.h"
+#include "openmm/Context.h"
 #include "openmm/CustomBondForce.h"
 #include "openmm/HarmonicAngleForce.h"
 #include "openmm/HarmonicBondForce.h"
@@ -13,8 +14,10 @@
 #include "openmm/NonbondedForce.h"
 #include "openmm/OpenMMException.h"
 #include "openmm/PeriodicTorsionForce.h"
+#include "openmm/Platform.h"
 #include "openmm/State.h"
 #include "openmm/System.h"
+#include "openmm/VerletIntegrator.h"
 #include "openmm/VirtualSite.h"
 #include "openmm/serialization/SerializationNode.h"
 #include "openmm/serialization/XmlSerializer.h"
@@ -288,6 +291,80 @@ static void testSupportedSystemFastReaderParity() {
     const string fastRoundTrip = serializeObject(*fastCopy, "System", false);
     ASSERT_EQUAL(stockRoundTrip, fastRoundTrip);
     ASSERT_EQUAL(xml, fastRoundTrip);
+}
+
+static void testExceptionIndexReconstruction() {
+    unique_ptr<System> original = createSupportedSystem();
+    const string xml = serializeObject(*original, "System", false);
+    auto exercise = [&](NonbondedForce& force) {
+        assertThrowsOpenMM([&]() { force.setExceptionParameters(-1, 0, 1, 0, 1, 0); });
+        assertThrowsOpenMM([&]() { force.setExceptionParameters(force.getNumExceptions(), 0, 1, 0, 1, 0); });
+        force.setExceptionParameters(0, 0, 1, .5, .25, .125); // Numerical edit before any rebuild.
+        force.setExceptionParameters(0, 2, 3, .5, .25, .125);
+        // Preserve the stock lookup's historical keys after a parent edit.
+        ASSERT_EQUAL(1, force.addException(2, 3, .25, .5, .125));
+        assertThrowsOpenMM([&]() { force.addException(1, 0, 0, 1, 0); });
+        ASSERT_EQUAL(0, force.addException(1, 0, .25, .5, .125, true));
+        ASSERT_EQUAL(2, force.addException(2, 2, 0, 1, 0));
+        assertThrowsOpenMM([&]() { force.addException(2, 2, 0, 1, 0); });
+        ASSERT_EQUAL(2, force.addException(2, 2, .5, 1, 0, true));
+        return serializeObject(force, "Force", false);
+    };
+    vector<string> expected;
+    for (bool fast : {false, true}) {
+        unique_ptr<System> system = deserializeObject<System>(xml, fast);
+        const NonbondedForce& source = dynamic_cast<const NonbondedForce&>(system->getForce(0));
+        ASSERT_EQUAL(xml, serializeObject(*system, "System", false)); // Reads/serialization before mutation.
+        NonbondedForce copied(source);
+        NonbondedForce assigned(source);
+        assigned.addException(1, 2, 0, 1, 0); // Assign over an indexed target.
+        assigned = source;
+        NonbondedForce toMove(source);
+        NonbondedForce moved(std::move(toMove));
+        NonbondedForce toMoveAssign(source), moveAssigned(source);
+        moveAssigned.addException(1, 2, 0, 1, 0);
+        moveAssigned = std::move(toMoveAssign);
+        vector<string> found;
+        for (NonbondedForce* force : {&copied, &assigned, &moved, &moveAssigned})
+            found.push_back(exercise(*force));
+        if (!fast)
+            expected = found;
+        else
+            ASSERT_EQUAL_CONTAINERS(expected, found);
+        NonbondedForce added(source);
+        assertThrowsOpenMM([&]() { added.addException(1, 0, 0, 1, 0); });
+        ASSERT_EQUAL(1, added.addException(1, 2, 0, 1, 0));
+    }
+}
+
+static void testExceptionContextUpdate() {
+    System original;
+    original.addParticle(12);
+    original.addParticle(12);
+    NonbondedForce* force = new NonbondedForce();
+    force->addParticle(0, .1, 0);
+    force->addParticle(0, .1, 0);
+    force->addException(0, 1, .5, .1, 0);
+    original.addForce(force);
+    const string xml = serializeObject(original, "System", false);
+    unique_ptr<System> stock = deserializeObject<System>(xml, false);
+    unique_ptr<System> fast = deserializeObject<System>(xml, true);
+    VerletIntegrator stockIntegrator(.001), fastIntegrator(.001);
+    Platform& platform = Platform::getPlatformByName("Reference");
+    Context stockContext(*stock, stockIntegrator, platform);
+    Context fastContext(*fast, fastIntegrator, platform);
+    const vector<Vec3> positions = {Vec3(0, 0, 0), Vec3(1, 0, 0)};
+    stockContext.setPositions(positions);
+    fastContext.setPositions(positions);
+    const int types = State::Energy | State::Forces;
+    compareStates(stockContext.getState(types), fastContext.getState(types));
+    const double before = fastContext.getState(types).getPotentialEnergy();
+    for (System* system : {stock.get(), fast.get()})
+        dynamic_cast<NonbondedForce&>(system->getForce(0)).setExceptionParameters(0, 0, 1, .75, .1, 0);
+    dynamic_cast<NonbondedForce&>(stock->getForce(0)).updateParametersInContext(stockContext);
+    dynamic_cast<NonbondedForce&>(fast->getForce(0)).updateParametersInContext(fastContext);
+    compareStates(stockContext.getState(types), fastContext.getState(types));
+    ASSERT(fastContext.getState(types).getPotentialEnergy() != before);
 }
 
 static void testUnsupportedForceFallback() {
@@ -958,6 +1035,8 @@ int main() {
         testLegacyArraySizes();
         testLargeStateReaderParity();
         testSupportedSystemFastReaderParity();
+        testExceptionIndexReconstruction();
+        testExceptionContextUpdate();
         testRegisteredProxyOverrides();
         testFileStreamPosition();
         testReadAheadRecovery();

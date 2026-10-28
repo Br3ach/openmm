@@ -34,6 +34,7 @@
 
 #include "Context.h"
 #include "Force.h"
+#include <iosfwd>
 #include <map>
 #include <set>
 #include <utility>
@@ -622,6 +623,8 @@ public:
 protected:
     ForceImpl* createImpl() const;
 private:
+    friend System* deserializeSystemXmlFast(std::istream&);
+    void rebuildExceptionMap();
     class ParticleInfo;
     class ExceptionInfo;
     class GlobalParameterInfo;

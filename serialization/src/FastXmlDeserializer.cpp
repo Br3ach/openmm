@@ -1418,7 +1418,14 @@ State* deserializeStateXmlFast(istream& stream) {
 }
 
 System* deserializeSystemXmlFast(istream& stream) {
-    return parseSystemXmlStreaming(stream);
+    unique_ptr<System> system(parseSystemXmlStreaming(stream));
+    // Only fresh forces from a completely successful parse may omit the index.
+    for (int i = 0; i < system->getNumForces(); ++i) {
+        NonbondedForce* force = dynamic_cast<NonbondedForce*>(&system->getForce(i));
+        if (force != NULL)
+            force->exceptionMap.clear();
+    }
+    return system.release();
 }
 
 } // namespace OpenMM
