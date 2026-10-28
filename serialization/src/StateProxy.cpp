@@ -34,6 +34,7 @@
 #include "openmm/State.h"
 #include "openmm/Vec3.h"
 #include <map>
+#include <utility>
 
 using namespace std;
 using namespace OpenMM;
@@ -119,7 +120,7 @@ void* StateProxy::deserialize(const SerializationNode& node) const {
             map<string, double> outStateParams;
             for (auto& param : child.getProperties())
                 outStateParams[param.first] = child.getDoubleProperty(param.first);
-            builder.setParameters(outStateParams);
+            builder.setParameters(std::move(outStateParams));
         }
         else if (child.getName() == "Energies") {
             double potentialEnergy = child.getDoubleProperty("PotentialEnergy");
@@ -128,24 +129,27 @@ void* StateProxy::deserialize(const SerializationNode& node) const {
         }
         else if (child.getName() == "Positions") {
             vector<Vec3> outPositions;
+            outPositions.reserve(child.getChildren().size());
             for (auto& particle : child.getChildren())
                 outPositions.push_back(Vec3(particle.getDoubleProperty("x"),particle.getDoubleProperty("y"),particle.getDoubleProperty("z")));
-            builder.setPositions(outPositions);
             arraySizes.push_back(outPositions.size());
+            builder.setPositions(std::move(outPositions));
         }
         else if (child.getName() == "Velocities") {
             vector<Vec3> outVelocities;
+            outVelocities.reserve(child.getChildren().size());
             for (auto& particle : child.getChildren())
                 outVelocities.push_back(Vec3(particle.getDoubleProperty("x"),particle.getDoubleProperty("y"),particle.getDoubleProperty("z")));
-            builder.setVelocities(outVelocities);
             arraySizes.push_back(outVelocities.size());
+            builder.setVelocities(std::move(outVelocities));
         }
         else if (child.getName() == "Forces") {
             vector<Vec3> outForces;
+            outForces.reserve(child.getChildren().size());
             for (auto& particle : child.getChildren())
                 outForces.push_back(Vec3(particle.getDoubleProperty("x"),particle.getDoubleProperty("y"),particle.getDoubleProperty("z")));
-            builder.setForces(outForces);
             arraySizes.push_back(outForces.size());
+            builder.setForces(std::move(outForces));
         }
         else if (child.getName() == "IntegratorParameters") {
             builder.updateIntegratorParameters() = child;
@@ -157,7 +161,5 @@ void* StateProxy::deserialize(const SerializationNode& node) const {
         }
     }
     builder.setPeriodicBoxVectors(outAVec, outBVec, outCVec);
-    State *s = new State();
-    *s = builder.getState();
-    return s;
+    return new State(builder.takeState());
 }

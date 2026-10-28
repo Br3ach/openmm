@@ -568,6 +568,40 @@ static void testPrepopulatedStateProxy() {
     unique_ptr<State> copy(reinterpret_cast<State*>(proxy.deserialize(node)));
     compareStates(state, *copy);
     ASSERT_EQUAL(serializeObject(state, "State", false), serializeObject(*copy, "State", false));
+    unique_ptr<State> again(reinterpret_cast<State*>(proxy.deserialize(node)));
+    compareStates(state, *again);
+    unique_ptr<State> fallback = deserializeObject<State>(serializeObject(state, "State", false), true);
+    compareStates(state, *fallback);
+    unique_ptr<State> clone(XmlSerializer::clone(state));
+    compareStates(state, *clone);
+}
+
+static void testLegacyArraySizes() {
+    State::StateBuilder builder(1.0, 4);
+    builder.setPeriodicBoxVectors(Vec3(1, 0, 0), Vec3(0, 1, 0), Vec3(0, 0, 1));
+    builder.setPositions(vector<Vec3>(2));
+    builder.setVelocities(vector<Vec3>(3));
+    State mismatched = builder.takeState();
+    const SerializationProxy& proxy = SerializationProxy::getProxy(typeid(mismatched));
+    SerializationNode node;
+    proxy.serialize(&mismatched, node);
+    assertThrowsOpenMM([&]() { unique_ptr<State> copy(reinterpret_cast<State*>(proxy.deserialize(node))); });
+    assertThrowsOpenMM([&]() { deserializeObject<State>(serializeObject(mismatched, "State", false), false); });
+
+    node.getChildNode("Velocities").getChildren().pop_back();
+    SerializationNode duplicate = node.getChildNode("Positions");
+    duplicate.getChildren().pop_back();
+    node.getChildren().push_back(duplicate);
+    assertThrowsOpenMM([&]() { unique_ptr<State> copy(reinterpret_cast<State*>(proxy.deserialize(node))); });
+
+    builder = State::StateBuilder(1.0, 4);
+    builder.setPeriodicBoxVectors(Vec3(1, 0, 0), Vec3(0, 1, 0), Vec3(0, 0, 1));
+    builder.setPositions(vector<Vec3>());
+    builder.setVelocities(vector<Vec3>());
+    State empty = builder.takeState();
+    unique_ptr<State> copy = deserializeObject<State>(serializeObject(empty, "State", false), false);
+    compareStates(empty, *copy);
+    ASSERT_EQUAL(State::Positions | State::Velocities, copy->getDataTypes());
 }
 
 int main() {
@@ -575,6 +609,7 @@ int main() {
     try {
         testDirectProxyAndMovedArrays();
         testPrepopulatedStateProxy();
+        testLegacyArraySizes();
         testLargeStateReaderParity();
         testSupportedSystemFastReaderParity();
         testUnsupportedForceFallback();

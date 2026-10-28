@@ -134,3 +134,35 @@ change, not the separate contribution of each reservation.
 
 Writer-optimized DLL SHA-256:
 `f626478061e487fc3abbc7829bb0bdfb1441d332f80896a7657d4dd21060e91e`.
+
+## Legacy State deserialization improvement (28 October 2026)
+
+The legacy StateProxy reader reserves each particle array from the child count,
+records its size before moving it into StateBuilder, moves the parameter map,
+and returns the constructed State through takeState(). Existing count checks,
+duplicate-section behavior and the const input tree are preserved. Production
+code grows by two lines. Successful fast-reader calls are unaffected.
+
+All 57 tests and the original-header ABI probe passed. Regressions cover unequal
+array lengths, unequal duplicate sections, empty-array flags, input-node reuse,
+IntegratorParameters fallback and cloning. Official Core28 completed the
+isolated generated WU with OPENMM_FAST_XML=0 and exit 100; final scientific
+and trajectory members are byte-identical to the official control.
+
+Six interleaved baseline/candidate runs per case used the same 100,000-particle
+inputs and MSVC build settings. For direct proxy deserialization from an
+identical prebuilt node tree, the full State median was 0.0697 -> 0.0644 s;
+process peak committed memory was 192.7 -> 183.6 MiB. With integrator parameters,
+medians were 0.0690 -> 0.0666 s with the same approximate memory reduction.
+These process peaks include construction of the retained source tree.
+
+Full legacy XML deserialization (OPENMM_FAST_XML=0) showed no material gain:
+the full State medians were 1.057 -> 1.086 s, with approximately 228 MiB peak
+commit in both builds. With integrator parameters both medians were 1.233 s
+and approximately 343 MiB. XML tree construction dominates these cases; no
+whole-startup speedup is claimed. The local change is retained for its measured
+direct-proxy memory reduction and removal of unnecessary copies without a new
+abstraction or altered validation behavior.
+
+Legacy-reader-optimized DLL SHA-256:
+`086c73eac15f447caf8752573b06aa97ea8d48676ad1f8ada62901365306f7bf`.
