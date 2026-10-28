@@ -92,7 +92,7 @@ their Core28 peak-memory benefit has not been measured separately.
 ## Remaining limits
 
 Generated fixtures establish applicability, not support for every project,
-plugin, checkpoint or GPU. Natural-WU startup/performance and official-to-
+plugin, checkpoint or GPU. Whole-Core28 startup/performance and official-to-
 patched binary-checkpoint migration still need dedicated isolated tests.
 The writer still retains complete particle-node trees and property maps.
 Existing 8.3.1 behavior and
@@ -166,3 +166,54 @@ abstraction or altered validation behavior.
 
 Legacy-reader-optimized DLL SHA-256:
 `086c73eac15f447caf8752573b06aa97ea8d48676ad1f8ada62901365306f7bf`.
+
+## Buffered tag-body appends (28 October 2026)
+
+FastXmlInput now scans contiguous buffer spans and appends each span to the
+existing tag string. It replaces the old per-character tag-body loop; prefix,
+whitespace, BOM, comment and declaration handling remain unchanged. Quote
+state survives refills. Scanning stops at the first unquoted '>' or the first
+byte beyond the existing tag-size limit, preserving consumption and rewind.
+The change adds one internal helper and is a net 17 production lines.
+
+All 57 tests and the original-header ABI probe pass. The new boundary suite
+also passes against the unchanged baseline DLL. It exercises both quote forms,
+quoted '>', opening/closing quotes and delimiters at 1 MiB boundaries +/-1,
+short refills of 1/2/3/7/31 bytes, BOM/comments/declarations, exact tag-size
+limits, truncation, and trailing newline/data. Its failed-rewind guard ensures
+successful cases use the fast reader rather than silently falling back.
+Existing tests compare canonical serialized State/System contents with the
+stock parser, including numeric/force properties and unsupported-schema fallback.
+
+Official Core28 completed the isolated generated WU for plain, gzip, bzip2
+and encrypted inputs, all with exit 100. Scientific/trajectory result members
+match the controls byte for byte where present; encrypted controls omit the
+final XML members as documented above. No installed FAH files were changed.
+
+Six same-session, interleaved baseline/candidate pairs parsed the retained
+1,927,740,675-byte natural System XML (SHA-256 abda690dfe141b24284d7a9288840804eedf9603bcce5a5af607c3c1db481ca0).
+The helper, text-mode ifstream, input, MSVC Release /O2 /Ob2 settings and machine
+were identical; no context or simulation was created. The direct fast-reader
+entry avoids conflating these measurements with a legacy fallback. All runs
+returned 7,950,180 particles, 5,955,581 constraints, six forces and 11,940,050
+nonbonded exceptions. Counts alone do not establish complete natural-System
+numerical equality; semantic/output checks above use the isolated test fixtures.
+
+| Natural System parsing | Baseline median | Optimized median |
+| --- | ---: | ---: |
+| Wall time | 17.377 s | 14.183 s |
+| CPU time | 17.070 s | 14.047 s |
+| Peak committed memory | 1.5933 GiB | 1.5933 GiB |
+
+Wall time decreased 18.4%, CPU time 17.7%; every pair favored the candidate.
+These same-session controls are the comparison, not earlier profiling timings
+from another session. No cache flush or CPU-frequency lock was applied; this
+is not a cold-cache or complete Core28 startup speedup claim.
+
+A separate six-pair 100,000-particle State check gave median wall times
+0.06437 -> 0.05409 s with effectively unchanged peak memory. Independent
+review found no actionable findings and supported retaining the localized
+change after these validation results.
+
+Tag-span DLL SHA-256:
+`7b134f840aab850dac640bd8fd761960391d20d07812be17f290730b929fa48d`.

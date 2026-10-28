@@ -17,6 +17,7 @@
 #include "openmm/System.h"
 #include "openmm/Vec3.h"
 #include "openmm/VirtualSite.h"
+#include <algorithm>
 #include <cstdint>
 #include <cstring>
 #include <istream>
@@ -55,6 +56,35 @@ public:
             return false;
         value = buffer[pos++];
         return true;
+    }
+
+    void readTagBody(string& tag, size_t maxBytes) {
+        char quote = 0;
+        while (true) {
+            if (pos == end && !refill())
+                throw OpenMMException("XmlSerializer: truncated XML tag");
+            const size_t start = pos;
+            const size_t stop = pos+min(end-pos, maxBytes-tag.size()+1);
+            bool complete = false;
+            while (pos < stop) {
+                const char c = buffer[pos++];
+                if (quote != 0) {
+                    if (c == quote)
+                        quote = 0;
+                }
+                else if (c == '\'' || c == '"')
+                    quote = c;
+                else if (c == '>') {
+                    complete = true;
+                    break;
+                }
+            }
+            if (pos-start > maxBytes-tag.size())
+                throw OpenMMException("XmlSerializer: XML tag is unreasonably large");
+            tag.append(&buffer[start], pos-start);
+            if (complete)
+                return;
+        }
     }
 
     void finish() {
@@ -144,21 +174,8 @@ public:
             tag.clear();
             tag.push_back('<');
             tag.push_back(nextChar);
-            char quote = 0;
-            while (input.get(c)) {
-                tag.push_back(c);
-                if (tag.size() > MAX_TAG_BYTES)
-                    throw OpenMMException("XmlSerializer: XML tag is unreasonably large");
-                if (quote != 0) {
-                    if (c == quote)
-                        quote = 0;
-                }
-                else if (c == '\'' || c == '"')
-                    quote = c;
-                else if (c == '>')
-                    return tag;
-            }
-            throw OpenMMException("XmlSerializer: truncated XML tag");
+            input.readTagBody(tag, MAX_TAG_BYTES);
+            return tag;
         }
         throw OpenMMException("XmlSerializer: unexpected end of XML");
     }

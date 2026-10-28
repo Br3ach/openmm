@@ -17,6 +17,7 @@
 #include "openmm/System.h"
 #include "openmm/serialization/SerializationNode.h"
 #include "openmm/serialization/XmlSerializer.h"
+#include <algorithm>
 #include <cstdlib>
 #include <iostream>
 #include <map>
@@ -86,6 +87,22 @@ private:
 static void setFastXml(bool enabled) {
     setEnvironment("OPENMM_FAST_XML", enabled ? "1" : "0");
 }
+
+class ShortRefillStringBuf : public FailOnSeekStringBuf {
+public:
+    ShortRefillStringBuf(const string& xml, streamsize limit) :
+            FailOnSeekStringBuf(xml, 4), limit(limit) {
+    }
+protected:
+    streamsize xsgetn(char* target, streamsize count) override {
+        // Limit only the fast reader's refills, leaving its root probe intact.
+        if (limit != 0 && count == 1024*1024)
+            count = min(count, limit);
+        return stringbuf::xsgetn(target, count);
+    }
+private:
+    streamsize limit;
+};
 
 
 template <class T>
@@ -533,6 +550,66 @@ static void testMalformedInputAndStreamPosition() {
     assertThrowsOpenMM([&]() { deserializeObject<State>(malformed, false); });
 }
 
+static void testTagBufferBoundaries() {
+    System system;
+    system.addParticle(1.0);
+    system.addParticle(1.0);
+    HarmonicBondForce* force = new HarmonicBondForce();
+    force->setName("quoted>name");
+    force->addBond(0, 1, 0.2, 10.0);
+    system.addForce(force);
+    const string canonical = serializeObject(system, "System", false);
+    string xml = canonical;
+    const size_t escaped = xml.find("quoted&gt;name");
+    ASSERT(escaped != string::npos);
+    xml.replace(escaped, string("quoted&gt;name").size(), "quoted>name");
+    const size_t start = xml.find("<Force ");
+    const size_t end = xml.find(">\n", start);
+    const size_t openQuote = xml.find("name=\"", start)+5;
+    const size_t closeQuote = xml.find('"', openQuote+1);
+    const size_t quotedEnd = xml.find('>', openQuote);
+    const size_t block = 1024*1024;
+    auto check = [&](const string& input, streamsize limit) {
+        // Any fallback hits the deliberately failing fourth positional rewind.
+        setFastXml(true);
+        ShortRefillStringBuf buffer(input+"TRAIL", limit);
+        istream stream(&buffer);
+        unique_ptr<System> copy(XmlSerializer::deserialize<System>(stream));
+        ASSERT_EQUAL(canonical, serializeObject(*copy, "System", false));
+        if (input.back() == '\n')
+            ASSERT_EQUAL('\n', stream.get());
+        char trailing[5];
+        stream.read(trailing, 5);
+        ASSERT_EQUAL(string("TRAIL"), string(trailing, 5));
+    };
+    for (char quote : {'"', '\''}) {
+        string quoted = xml;
+        quoted[openQuote] = quoted[closeQuote] = quote;
+        for (size_t marker : {openQuote, closeQuote, quotedEnd, end}) {
+            for (int delta = -1; delta <= 1; ++delta) {
+                string aligned = quoted;
+                aligned.insert(start, block+delta-marker, ' ');
+                check(aligned, 0);
+            }
+        }
+    }
+    string prefixed = xml;
+    prefixed.insert(start, "<!-- comment --><?probe instruction?>");
+    prefixed.insert(0, "\xEF\xBB\xBF");
+    for (streamsize limit : {1, 2, 3, 7, 31})
+        check(prefixed, limit);
+    for (int delta = -1; delta <= 1; ++delta) {
+        string sized = xml;
+        sized.insert(start+6, block+delta-(end-start+1), ' ');
+        if (delta <= 0)
+            check(sized, 0);
+        else
+            assertThrowsOpenMM([&]() { check(sized, 0); });
+    }
+    for (size_t cut : {closeQuote, end})
+        assertThrowsOpenMM([&]() { check(xml.substr(0, cut), 0); });
+}
+
 } // anonymous namespace
 
 static void testDirectProxyAndMovedArrays() {
@@ -619,6 +696,7 @@ int main() {
         testHistoricalNonbondedVersions();
         testCanonicalBooleanAndCheckedRewind();
         testMalformedInputAndStreamPosition();
+        testTagBufferBoundaries();
     }
     catch (const exception& e) {
         cout << "exception: " << e.what() << endl;
