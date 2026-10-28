@@ -234,3 +234,49 @@ Independent review found no actionable findings.
 
 DLL SHA-256:
 `c78d906a236db1a7c17131ee438e86bf69808ce871f35a7c7c6e7be3aa9d3b9d`.
+
+## XML escaping experiments (28 October 2026)
+
+The retained change replaces the five-character escape map with a switch,
+removing the mutable static map and its manual initialization flag (net three
+fewer production lines). Hexadecimal-reference pass-through, control-byte
+formatting and raw high-byte behavior are preserved, including existing
+handling of malformed references. This is a small stateless simplification;
+the measurements below do not establish a writer speedup.
+
+A separately evaluated string-reuse candidate cleared name/value per attribute
+inside a block ending before child recursion. It was rejected because its
+added scope and lifetime bookkeeping produced no consistent measured benefit.
+The retained code still uses the original per-attribute temporary strings.
+No direct-stream writer or packed-node representation was introduced.
+
+Each phase used six interleaved baseline/candidate pairs per 100,000-particle
+writer case. Time includes XML formatting and file output. Median seconds:
+
+| Case | Original map | Switch (phase 1) | Switch (phase 2 control) | Switch + reuse |
+| --- | ---: | ---: | ---: | ---: |
+| Positions | 0.23124 | 0.24232 | 0.27017 | 0.26256 |
+| Full State | 0.72147 | 0.73353 | 0.68981 | 0.67946 |
+| Full State + integrator parameters | 0.74928 | 0.74586 | 0.67482 | 0.67990 |
+
+Only compare columns within their phase; the separate phases had independent
+controls. Differences were mixed/small, and peak memory was effectively
+unchanged. The large-State XML files were byte-identical in both phases.
+
+The byte oracle serialized 781 inputs as both values and property names
+(1,562 documents), covering all bytes 0..255, empty/long strings, UTF-8,
+named/decimal/uppercase references, and malformed lowercase hexadecimal
+prefixes. Original, switch and reuse builds produced identical oracle bytes
+(SHA-256 c72ec793d9685663e456ba21d1de3e66ded0743889544980bcc8e89e313a0668).
+Regression tests also explicitly check the five escapes, all control bytes
+including embedded NUL, high bytes and the legacy reference quirks. These
+are byte comparisons; invalid XML output is not required to round-trip.
+
+All 57 tests and the original-header ABI probe passed on the retained build.
+The new test suite also passed against the unchanged baseline DLL. Official
+Core28 completed the generated plain-input WU with matching final scientific
+and trajectory member bytes. Independent review supported retaining only
+the stateless switch and dropping reuse, without a performance claim.
+
+Retained switch-only DLL SHA-256:
+`2c6ee7849720f93267c1632be88e728b4c38b2662aa6648685b6f64cf77f6ff5`.

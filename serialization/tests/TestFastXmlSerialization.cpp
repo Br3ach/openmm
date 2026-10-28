@@ -19,6 +19,7 @@
 #include "openmm/serialization/XmlSerializer.h"
 #include <algorithm>
 #include <cstdlib>
+#include <cstdio>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -610,6 +611,43 @@ static void testTagBufferBoundaries() {
         assertThrowsOpenMM([&]() { check(xml.substr(0, cut), 0); });
 }
 
+static void testAttributeEscaping() {
+    System system;
+    CustomBondForce* force = new CustomBondForce("ESCAPE_SENTINEL");
+    system.addForce(force);
+    const string pattern = serializeObject(system, "System", false);
+    const size_t offset = pattern.find("ESCAPE_SENTINEL");
+    ASSERT(offset != string::npos);
+    auto check = [&](const string& value, const string& escaped) {
+        force->setEnergyFunction(value);
+        string expected = pattern;
+        expected.replace(offset, string("ESCAPE_SENTINEL").size(), escaped);
+        ASSERT_EQUAL(expected, serializeObject(system, "System", false));
+    };
+    const pair<string, string> cases[] = {
+        {"", ""}, {"-1.234e-12", "-1.234e-12"},
+        {"&<>\"'", "&amp;&lt;&gt;&quot;&apos;"},
+        {"&#xA9;", "&#xA9;"}, {"&#x;", "&#x;"},
+        {"&#xZZ;", "&#xZZ;"}, {"&#x", "&#x"},
+        {"&#xA9", "&#xA9"}, {"&#xA9&", "&#xA9&amp;"},
+        {"&#xA9<", "&#xA9&lt;"}, {"&#xA9\"", "&#xA9&quot;"},
+        {"&#169;", "&amp;#169;"}, {"&#XA9;", "&amp;#XA9;"},
+        {"&amp;", "&amp;amp;"}, {"&&#x41;", "&amp;&#x41;"}
+    };
+    for (const auto& value : cases)
+        check(value.first, value.second);
+    for (unsigned int c = 0; c < 32; ++c) {
+        char reference[8];
+        snprintf(reference, sizeof(reference), "&#x%02X;", c);
+        check(string(1, static_cast<char>(c)), reference);
+    }
+    string highBytes;
+    for (unsigned int c = 128; c < 256; ++c)
+        highBytes += static_cast<char>(c);
+    check(highBytes, highBytes);
+    check("caf\xC3\xA9", "caf\xC3\xA9");
+}
+
 } // anonymous namespace
 
 static void testDirectProxyAndMovedArrays() {
@@ -697,6 +735,7 @@ int main() {
         testCanonicalBooleanAndCheckedRewind();
         testMalformedInputAndStreamPosition();
         testTagBufferBoundaries();
+        testAttributeEscaping();
     }
     catch (const exception& e) {
         cout << "exception: " << e.what() << endl;
