@@ -17,6 +17,12 @@
 #include "openmm/System.h"
 #include "openmm/Vec3.h"
 #include "openmm/VirtualSite.h"
+#include "openmm/serialization/CMMotionRemoverProxy.h"
+#include "openmm/serialization/HarmonicAngleForceProxy.h"
+#include "openmm/serialization/HarmonicBondForceProxy.h"
+#include "openmm/serialization/MonteCarloBarostatProxy.h"
+#include "openmm/serialization/NonbondedForceProxy.h"
+#include "openmm/serialization/PeriodicTorsionForceProxy.h"
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
@@ -90,16 +96,22 @@ public:
     void finish() {
         if (pos == end)
             return;
-        const streamoff unread = static_cast<streamoff>(end-pos);
-        streampos restored;
         try {
-            restored = source->pubseekoff(-unread, ios_base::cur, ios_base::in);
+            if (source->pubseekpos(bufferStart, ios_base::in) == streampos(streamoff(-1)))
+                throw OpenMMException("XmlSerializer: failed to restore XML stream position");
+            // Positions are opaque in text streams.  Replay decoded characters
+            // from the saved position rather than treating them as file bytes.
+            size_t remaining = pos;
+            while (remaining != 0) {
+                const streamsize got = source->sgetn(buffer.data(), static_cast<streamsize>(remaining));
+                if (got <= 0)
+                    throw OpenMMException("XmlSerializer: failed to restore XML stream position");
+                remaining -= static_cast<size_t>(got);
+            }
         }
         catch (const ios_base::failure&) {
             throw OpenMMException("XmlSerializer: failed to restore XML stream position");
         }
-        if (restored == streampos(streamoff(-1)))
-            throw OpenMMException("XmlSerializer: failed to restore XML stream position");
         pos = end = 0;
     }
 
@@ -107,10 +119,14 @@ private:
     streambuf* source;
     vector<char> buffer;
     size_t pos, end;
+    streampos bufferStart;
 
     bool refill() {
         streamsize got;
         try {
+            bufferStart = source->pubseekoff(0, ios_base::cur, ios_base::in);
+            if (bufferStart == streampos(streamoff(-1)))
+                throw OpenMMException("XmlSerializer: failed to save XML stream position");
             got = source->sgetn(&buffer[0], static_cast<streamsize>(buffer.size()));
         }
         catch (const ios_base::failure&) {
@@ -1302,19 +1318,20 @@ static Force* parseForceStreaming(FastXmlTagReader& reader, const FastXmlTag& op
     if (opening.closing || !fastXmlNameEquals(opening, "Force"))
         throw OpenMMException("XmlSerializer: malformed Force element");
     const string type = fastXmlString(opening, "type");
-    if (type == "NonbondedForce")
+    const type_info& proxyType = typeid(SerializationProxy::getProxy(type));
+    if (type == "NonbondedForce" && proxyType == typeid(NonbondedForceProxy))
         return parseNonbondedForceStreaming(reader, opening);
-    if (type == "HarmonicBondForce")
+    if (type == "HarmonicBondForce" && proxyType == typeid(HarmonicBondForceProxy))
         return parseHarmonicBondForceStreaming(reader, opening);
-    if (type == "HarmonicAngleForce")
+    if (type == "HarmonicAngleForce" && proxyType == typeid(HarmonicAngleForceProxy))
         return parseHarmonicAngleForceStreaming(reader, opening);
-    if (type == "PeriodicTorsionForce")
+    if (type == "PeriodicTorsionForce" && proxyType == typeid(PeriodicTorsionForceProxy))
         return parsePeriodicTorsionForceStreaming(reader, opening);
-    if (type == "CMMotionRemover")
+    if (type == "CMMotionRemover" && proxyType == typeid(CMMotionRemoverProxy))
         return parseCMMotionRemoverStreaming(reader, opening);
-    if (type == "MonteCarloBarostat")
+    if (type == "MonteCarloBarostat" && proxyType == typeid(MonteCarloBarostatProxy))
         return parseMonteCarloBarostatStreaming(reader, opening);
-    throw OpenMMException(string("XmlSerializer: unsupported Force type '")+type+"'");
+    throw OpenMMException(string("XmlSerializer: unsupported Force type or proxy '")+type+"'");
 }
 
 static void parseSystemForcesStreaming(FastXmlTagReader& reader, const FastXmlTag& opening,

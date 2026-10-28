@@ -345,3 +345,58 @@ test executable also passed against the original DLL.
 
 Validated candidate DLL SHA-256:
 `e7c72bd584eb7e97458eb26c519088e63ae2841a9523c84452b6f9b515bc0e89`.
+
+## Proxy and text-stream compatibility fixes (28 October 2026)
+
+Fast State/System dispatch now checks the exact dynamic type of the registered
+proxy against the existing built-in proxy class. The System reader performs
+the same check for each supported force it encounters. Overrides, including
+derived proxy classes, use the existing checked fallback and registered
+deserializer. An override of an unused force does not disable fast parsing.
+The registry itself and all public interfaces/layouts are unchanged.
+
+Read-ahead restoration previously subtracted an unread character count from a
+file position. Windows text-mode CRLF conversion made that incorrect: a tail
+of `\r\nTAIL\r\nSECOND\r\n` could become `AIL\nSECOND\n`. The reader now
+saves the opaque stream position before each refill and restores it before
+replaying the consumed decoded characters through the existing buffer.
+Replay handles positive short reads and rereads at most one 1 MiB buffer;
+failed saves, seeks or reads retain the existing error/fallback handling.
+There is no extra XML-sized buffer and no text/binary-mode heuristic.
+
+The two fixes add 21 net production lines. Tests now observe the legacy
+reader's end-position query instead of assuming that every fourth positional
+seek is fallback: successful fast restoration itself legitimately seeks.
+Coverage includes State, System and all six supported force proxy overrides;
+an unused override; Windows text/binary files with LF/CRLF XML, trailing data
+and buffer-spanning documents; short replay reads, replay EOF/read exceptions
+and a failed finish seek. All 57 tests, both Reference nonbonded/virtual-site
+scientific tests and the original-header ABI runtime probe passed.
+
+Four sequential warm-cache pairs compared the preceding commit `c95e8f2d`
+against the fixed build, alternating order on the same natural System:
+
+| Pair | First | Before wall (s) | After wall (s) |
+| --- | --- | ---: | ---: |
+| 0 | Before | 11.894577 | 11.828031 |
+| 1 | After | 12.010728 | 11.541027 |
+| 2 | Before | 12.078664 | 11.997217 |
+| 3 | After | 11.837520 | 12.036507 |
+
+Median wall time was 11.952653 versus 11.912624 seconds; CPU time was
+11.914063 versus 11.812500 seconds. Peak private commit was effectively
+unchanged (1,710,761,984 versus 1,710,798,848 bytes). This establishes no
+meaningful regression in this System-parsing workload, not a speedup claim.
+All eight runs retained the full virtual-site digest `cce611c4f214eca5`.
+
+Official Core28 completed fresh isolated generated WUs using plain, gzip,
+bzip2 and encrypted gzip XML, all with exit 100 and valid result packets.
+Returned State/Integrator XML and XTC/TRR members matched the retained official
+outputs byte for byte after decompression. The encrypted case retained the
+official omission of State/Integrator members and matched its trajectory
+members. Logs contain run-specific values and are not asserted byte-identical.
+These are tiny generated-WU checks, not natural-WU completion or throughput
+measurements. Installed FAH files and live WUs were not changed.
+
+Validated DLL SHA-256:
+`5b57067309e34d9c5ab98cca0e489e35159b7308df721b0146ac3f7e32e15b58`.

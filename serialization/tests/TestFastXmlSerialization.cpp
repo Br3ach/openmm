@@ -22,6 +22,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
+#include <fstream>
+#include <iterator>
 #include <map>
 #include <memory>
 #include <sstream>
@@ -70,10 +72,16 @@ private:
 class FailOnSeekStringBuf : public stringbuf {
 public:
     FailOnSeekStringBuf(const string& value, int failOnSeek) :
-            stringbuf(value, ios_base::in), failOnSeek(failOnSeek), seekCount(0) {
+            stringbuf(value, ios_base::in), failOnSeek(failOnSeek), seekCount(0), legacyReader(false) {
     }
+    bool usedLegacyReader() const { return legacyReader; }
 
 protected:
+    pos_type seekoff(off_type offset, ios_base::seekdir direction, ios_base::openmode mode) override {
+        if (direction == ios_base::end)
+            legacyReader = true;
+        return stringbuf::seekoff(offset, direction, mode);
+    }
     pos_type seekpos(pos_type position, ios_base::openmode mode = ios_base::in | ios_base::out) override {
         ++seekCount;
         if (seekCount == failOnSeek)
@@ -84,6 +92,7 @@ protected:
 private:
     int failOnSeek;
     int seekCount;
+    bool legacyReader;
 };
 
 static void setFastXml(bool enabled) {
@@ -93,7 +102,7 @@ static void setFastXml(bool enabled) {
 class ShortRefillStringBuf : public FailOnSeekStringBuf {
 public:
     ShortRefillStringBuf(const string& xml, streamsize limit) :
-            FailOnSeekStringBuf(xml, 4), limit(limit) {
+            FailOnSeekStringBuf(xml, 0), limit(limit) {
     }
 protected:
     streamsize xsgetn(char* target, streamsize count) override {
@@ -301,6 +310,165 @@ static void testUnsupportedForceFallback() {
     ASSERT_EQUAL(xml, serializeObject(*copy, "System", false));
 }
 
+class CountingProxy : public SerializationProxy {
+public:
+    CountingProxy(const type_info& type) : SerializationProxy(getProxy(type).getTypeName()),
+            calls(0), type(type), original(getProxy(type)) {
+        registerProxy(type, this);
+    }
+    ~CountingProxy() { registerProxy(type, &original); }
+    void serialize(const void* object, SerializationNode& node) const override {
+        original.serialize(object, node);
+    }
+    void* deserialize(const SerializationNode& node) const override {
+        ++calls;
+        return original.deserialize(node);
+    }
+    mutable int calls;
+private:
+    const type_info& type;
+    const SerializationProxy& original;
+};
+
+static void testRegisteredProxyOverrides() {
+    unique_ptr<System> system = createSupportedSystem();
+    const string xml = serializeObject(*system, "System", false);
+    {
+        CountingProxy proxy(typeid(System));
+        for (bool fast : {false, true}) {
+            unique_ptr<System> copy = deserializeObject<System>(xml, fast);
+            ASSERT_EQUAL(xml, serializeObject(*copy, "System", false));
+        }
+        ASSERT_EQUAL(2, proxy.calls);
+    }
+    State state = createLargeState();
+    const string stateXml = serializeObject(state, "State", false);
+    {
+        CountingProxy proxy(typeid(State));
+        for (bool fast : {false, true}) {
+            unique_ptr<State> copy = deserializeObject<State>(stateXml, fast);
+            compareStates(state, *copy);
+        }
+        ASSERT_EQUAL(2, proxy.calls);
+    }
+    for (int i = 0; i < system->getNumForces(); ++i) {
+        CountingProxy proxy(typeid(system->getForce(i)));
+        for (bool fast : {false, true}) {
+            unique_ptr<System> copy = deserializeObject<System>(xml, fast);
+            ASSERT_EQUAL(xml, serializeObject(*copy, "System", false));
+        }
+        ASSERT_EQUAL(2, proxy.calls);
+    }
+    System empty;
+    const string emptyXml = serializeObject(empty, "System", false);
+    CountingProxy unused(typeid(HarmonicBondForce));
+    setFastXml(true);
+    FailOnSeekStringBuf buffer(emptyXml, 0);
+    istream stream(&buffer);
+    unique_ptr<System> copy(XmlSerializer::deserialize<System>(stream));
+    ASSERT(!buffer.usedLegacyReader());
+    ASSERT_EQUAL(0, unused.calls);
+}
+
+static void testFileStreamPosition() {
+    State::StateBuilder builder(2.5, 7);
+    builder.setPeriodicBoxVectors(Vec3(1, 0, 0), Vec3(0, 1, 0), Vec3(0, 0, 1));
+    State state = builder.takeState();
+    System system;
+    system.addParticle(12);
+    const string tail = "\r\nTAIL\r\nSECOND\r\n";
+    const char* path = "TestFastXmlTextStream.xml";
+    try {
+        for (string xml : {serializeObject(state, "State", false), serializeObject(system, "System", false)}) {
+            xml.erase(xml.size()-1); // Start the known tail immediately after the root.
+            for (size_t padding : {size_t(0), size_t(1024*1024)}) {
+                string padded = xml;
+                padded.insert(padded.find("<PeriodicBoxVectors"), padding, ' ');
+                for (bool crlf : {false, true}) {
+                    string text;
+                    for (char c : padded) {
+                        if (crlf && c == '\n')
+                            text += '\r';
+                        text += c;
+                    }
+                    for (bool binary : {false, true}) {
+                        { ofstream output(path, ios_base::binary); output << text << tail; ASSERT(output.good()); }
+                        setFastXml(true);
+                        ifstream input(path, binary ? ios_base::binary : ios_base::in);
+                        if (xml.find("<State ") != string::npos) {
+                            unique_ptr<State> copy(XmlSerializer::deserialize<State>(input));
+                            compareStates(state, *copy);
+                        }
+                        else {
+                            unique_ptr<System> copy(XmlSerializer::deserialize<System>(input));
+                            ASSERT_EQUAL(12, copy->getParticleMass(0));
+                        }
+                        const string found((istreambuf_iterator<char>(input)), istreambuf_iterator<char>());
+#ifdef _WIN32
+                        ASSERT_EQUAL(binary ? tail : string("\nTAIL\nSECOND\n"), found);
+#else
+                        ASSERT_EQUAL(tail, found);
+#endif
+                    }
+                }
+            }
+        }
+    }
+    catch (...) {
+        remove(path);
+        throw;
+    }
+    ASSERT_EQUAL(0, remove(path));
+}
+
+static void testReadAheadRecovery() {
+    class ReplayStringBuf : public FailOnSeekStringBuf {
+    public:
+        ReplayStringBuf(const string& xml, int fault) : FailOnSeekStringBuf(xml, fault == 3 ? 4 : 0),
+                fault(fault), bodyRead(false), replay(false) {}
+    protected:
+        pos_type seekpos(pos_type position, ios_base::openmode mode) override {
+            if (bodyRead)
+                replay = true;
+            return FailOnSeekStringBuf::seekpos(position, mode);
+        }
+        streamsize xsgetn(char* target, streamsize count) override {
+            if (replay && !usedLegacyReader()) {
+                const int failure = fault;
+                fault = 0;
+                if (failure == 1)
+                    return 0;
+                if (failure == 2)
+                    throw ios_base::failure("injected replay failure");
+                count = min(count, streamsize(2));
+            }
+            if (count == 1024*1024)
+                bodyRead = true;
+            return stringbuf::xsgetn(target, count);
+        }
+    private:
+        int fault;
+        bool bodyRead, replay;
+    };
+    State::StateBuilder builder(2.5, 7);
+    builder.setPeriodicBoxVectors(Vec3(1, 0, 0), Vec3(0, 1, 0), Vec3(0, 0, 1));
+    State state = builder.takeState();
+    const string xml = serializeObject(state, "State", false);
+    // Short positive reads, zero read, read exception, and failed finish seek.
+    for (int fault : {0, 1, 2, 3}) {
+        setFastXml(true);
+        ReplayStringBuf buffer(xml+"TRAIL", fault);
+        istream stream(&buffer);
+        unique_ptr<State> copy(XmlSerializer::deserialize<State>(stream));
+        compareStates(state, *copy);
+        ASSERT_EQUAL(fault != 0, buffer.usedLegacyReader());
+        if (fault == 0) {
+            const string tail((istreambuf_iterator<char>(stream)), istreambuf_iterator<char>());
+            ASSERT_EQUAL(string("\nTRAIL"), tail);
+        }
+    }
+}
+
 static void testThreeParticleVirtualSiteAttributes() {
     System system;
     for (int i = 0; i < 4; ++i)
@@ -325,15 +493,16 @@ static void testThreeParticleVirtualSiteAttributes() {
         unique_ptr<System> stock = deserializeObject<System>(input, false);
         const string expected = serializeObject(*stock, "System", false);
         setFastXml(true);
-        // The fourth positional seek is fallback: prohibit silently using it.
-        FailOnSeekStringBuf buffer(input, 4);
+        FailOnSeekStringBuf buffer(input, 0);
         istream stream(&buffer);
         unique_ptr<System> fast(XmlSerializer::deserialize<System>(stream));
+        ASSERT(!buffer.usedLegacyReader());
         ASSERT_EQUAL(expected, serializeObject(*fast, "System", false));
         setFastXml(true);
         ShortRefillStringBuf shortBuffer(input, 7);
         istream shortStream(&shortBuffer);
         unique_ptr<System> split(XmlSerializer::deserialize<System>(shortStream));
+        ASSERT(!shortBuffer.usedLegacyReader());
         ASSERT_EQUAL(expected, serializeObject(*split, "System", false));
     }
     vector<string> invalid;
@@ -632,11 +801,12 @@ static void testTagBufferBoundaries() {
     const size_t quotedEnd = xml.find('>', openQuote);
     const size_t block = 1024*1024;
     auto check = [&](const string& input, streamsize limit) {
-        // Any fallback hits the deliberately failing fourth positional rewind.
+        // The legacy reader seeks to the end to determine the document size.
         setFastXml(true);
         ShortRefillStringBuf buffer(input+"TRAIL", limit);
         istream stream(&buffer);
         unique_ptr<System> copy(XmlSerializer::deserialize<System>(stream));
+        ASSERT(!buffer.usedLegacyReader());
         ASSERT_EQUAL(canonical, serializeObject(*copy, "System", false));
         if (input.back() == '\n')
             ASSERT_EQUAL('\n', stream.get());
@@ -788,6 +958,9 @@ int main() {
         testLegacyArraySizes();
         testLargeStateReaderParity();
         testSupportedSystemFastReaderParity();
+        testRegisteredProxyOverrides();
+        testFileStreamPosition();
+        testReadAheadRecovery();
         testThreeParticleVirtualSiteAttributes();
         testUnsupportedForceFallback();
         testEscapedStringFallback();

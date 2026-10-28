@@ -30,6 +30,8 @@
  * -------------------------------------------------------------------------- */
 
 #include "openmm/serialization/XmlSerializer.h"
+#include "openmm/serialization/StateProxy.h"
+#include "openmm/serialization/SystemProxy.h"
 #include "irrXML.h"
 #include "FastStateXml.h"
 #include <cstdlib>
@@ -454,10 +456,12 @@ void* XmlSerializer::deserializeStream(std::istream& stream) {
         rewindXmlStreamOrThrow(stream, start);
 
         try {
-            if (haveRoot && rootName == "State" && type == "State")
+            if (haveRoot && rootName == "State" && type == "State" &&
+                    typeid(SerializationProxy::getProxy(type)) == typeid(StateProxy))
                 return deserializeStateXmlFast(stream);
 
-            if (haveRoot && rootName == "System" && type == "System")
+            if (haveRoot && rootName == "System" && type == "System" &&
+                    typeid(SerializationProxy::getProxy(type)) == typeid(SystemProxy))
                 return deserializeSystemXmlFast(stream);
         }
         catch (const OpenMMException&) {
