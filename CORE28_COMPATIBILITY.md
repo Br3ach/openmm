@@ -217,3 +217,20 @@ change after these validation results.
 
 Tag-span DLL SHA-256:
 `7b134f840aab850dac640bd8fd761960391d20d07812be17f290730b929fa48d`.
+
+## In-place child-node construction (28 October 2026)
+
+SerializationNode::createChildNode() now uses emplace_back() instead of
+push_back(SerializationNode()), preserving subsequent name assignment and the
+returned reference. This is one replacement line with zero production growth.
+All 57 tests and the original-header ABI probe passed. Existing writer tests
+produced byte-identical XML for positions-only, full State and full State with
+integrator parameters in six interleaved baseline/candidate pairs each.
+Median writer times were respectively 0.23684 -> 0.23629 s, 0.67479 -> 0.69877 s
+and 0.70332 -> 0.68533 s. Memory was effectively unchanged. These mixed results
+do not establish a serialization speedup; the change is retained as a local
+direct-construction simplification, not a measured performance improvement.
+Independent review found no actionable findings.
+
+DLL SHA-256:
+`c78d906a236db1a7c17131ee438e86bf69808ce871f35a7c7c6e7be3aa9d3b9d`.
