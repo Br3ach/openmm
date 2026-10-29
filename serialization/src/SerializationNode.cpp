@@ -31,6 +31,7 @@
 
 #include "openmm/serialization/SerializationNode.h"
 #include "openmm/OpenMMException.h"
+#include "FastStateXml.h"
 #include <sstream>
 
 using namespace OpenMM;
@@ -92,7 +93,14 @@ const string& SerializationNode::getStringProperty(const string& name, const str
 }
 
 SerializationNode& SerializationNode::setStringProperty(const string& name, const string& value) {
-    properties[name] = value;
+    try {
+        properties[name] = value;
+    }
+    catch (...) {
+        // The pinned Core28 wrapper inserts type after StateProxy returns.
+        cancelCore28StateXml(this);
+        throw;
+    }
     return *this;
 }
 

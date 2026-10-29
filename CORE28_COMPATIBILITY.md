@@ -6,10 +6,10 @@ Base: OpenMM tag `8.3.1`, commit `6e13f1361dcc3ffb581c7c97e3adfcc61257b813`.
 This branch backports the v5 streaming State/System XML readers and moves the
 large arrays through StateBuilder and Context::getState(). Existing State and
 SerializationNode layouts and existing method signatures remain unchanged.
-The writer retains complete SerializationNode trees, with the local allocation
-improvements documented below. The v5 deferred
-writer is deliberately omitted: the unchanged Core28 executable invokes its
-inline serializer before a DLL-owned operation can establish a safe scope.
+The ordinary writer retains complete SerializationNode trees. A narrowly
+guarded adapter streams State arrays for the verified Windows Core28 8.3.1
+executable only; its compatibility boundary and measurements are documented
+below. No public layout or method signature is changed.
 
 The incompatible master changes are upstream commits `2fbed592` (State's
 hasBoxVectors member) and `6717a85c` (SerializationNode storage and property
@@ -94,7 +94,8 @@ their Core28 peak-memory benefit has not been measured separately.
 Generated fixtures establish applicability, not support for every project,
 plugin, checkpoint or GPU. Whole-Core28 startup/performance and official-to-
 patched binary-checkpoint migration still need dedicated isolated tests.
-The writer still retains complete particle-node trees and property maps.
+Outside the verified Core28 State adapter, the writer retains complete
+particle-node trees and property maps.
 Existing 8.3.1 behavior and
 validation limitations outside the backported readers are unchanged.
 
@@ -400,3 +401,70 @@ measurements. Installed FAH files and live WUs were not changed.
 
 Validated DLL SHA-256:
 `5b57067309e34d9c5ab98cca0e489e35159b7308df721b0146ac3f7e32e15b58`.
+
+
+## Fixed-binary Core28 State adapter (29 October 2026)
+
+This adapter is restricted to MSVC x64 and the official Core28 8.3.1 executable
+with SHA-256
+`9e27f4493c83a31e8fb0403248629909a67f8fc9c3a7ac6a41afa6dc93133436`.
+It verifies the on-disk image, the loaded serializer wrapper and both call
+sites. A verification failure, including an unavailable or overlong executable
+path, retains the ordinary complete-tree path before any deferral. The existing
+`OPENMM_FAST_XML=0` switch disables the adapter too.
+
+Only the built-in State proxy, its fresh canonical root, and the observed
+nonempty matching position/velocity/force arrays with State flags `0x1f` are
+eligible. The verified wrapper writes synchronously while that State remains
+alive. A thread-local handoff is consumed before output; allocation failure in
+the intervening type-property insertion cancels it without allocating.
+Replacement of the registered State proxy permanently disables future deferrals
+for that process, even if the original is restored. An existing handoff remains
+valid. This protects custom proxies that tail-call the built-in proxy. Ordinary
+direct proxy use still produces complete nodes; a similarly named user property
+alone never activates streaming.
+
+The adapter reuses XML escaping and double formatting, writes at most 4 MiB of
+buffered output through the original ostream, and preserves stream-state and
+exception-mask behavior. Core28 retains compression, checkpoint ordering,
+scientific checks and file ownership. SerializationNode constructors,
+destructors, copying and layout are unchanged. Windows SHA verification uses
+the operating system's `bcrypt.dll`; no additional library needs shipping.
+The adapter does not promise recovery from asynchronous faults or memory
+corruption. It is tied to this exact executable, not a general lazy-node API.
+
+Validation of optimized DLL SHA-256
+`358416fa766200c57a6d3083efa9d7f9ac49769fca5f2c1ef0b4553112417f15`:
+
+- All 57 non-Reference native tests and the Reference nonbonded/virtual-site
+  tests pass. Original-header ABI and API oracle probes pass, with unchanged
+  exports and all imports of the official executable and four plugins present.
+- Official Core28 with the final DLL completes a generated WU and a clean
+  pause (102), resume and completion (100). Decoded final State, integrator,
+  XTC and TRR match the retained controls byte for byte. DLL-only debugger
+  tracing confirms that the ordinary matched host actually registers a handoff.
+- Active custom proxy and restore-before-tail-call cases complete and match
+  their baseline outputs. The former reproduced a failure before the sticky
+  opt-out was added. A changed-executable negative control retains the tree.
+- Plain, gzip, bzip2 and encrypted generated inputs passed again on the final
+  optimized DLL and match retained official controls. Encrypted fixtures omit
+  final State/integrator members in both controls, so their State output parity
+  is not established by that test.
+- A separately linked diagnostic build of the same source exercises handoff
+  cancellation/reuse/nesting, thread isolation, registration/setter allocation
+  failures, reentrant new_handler behavior, byte formatting and ostream failures.
+  Diagnostic builds are not used for performance measurements.
+
+Three alternating baseline/candidate pairs on a generated 250,000-particle WU
+measured median total run time of 4.019 -> 2.580 seconds, peak private memory
+1483.21 -> 1033.30 MiB and peak working set 796.10 -> 363.53 MiB. These pairs
+precede only the proxy-history safeguard. A final-build confirmation pair gave
+3.931 -> 2.692 seconds, 1482.03 -> 1031.77 MiB private and 796.11 -> 362.18 MiB
+working set. Both final result XML members match byte for byte.
+
+These are warm-cache, isolated full-run measurements, including startup,
+validation, simulation and packaging, not timings of XML alone. The baseline
+is this branch's preceding DLL (`0e0f7ea6...`), not stock OpenMM. No cache eviction
+or live-installation modifications were used. Natural-WU peak savings, cold
+cache behavior and broad project compatibility remain unmeasured; the generated
+results must not be extrapolated into an 8-million-particle memory guarantee.

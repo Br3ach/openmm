@@ -33,6 +33,7 @@
 #include "openmm/Platform.h"
 #include "openmm/State.h"
 #include "openmm/Vec3.h"
+#include "FastStateXml.h"
 #include <map>
 #include <utility>
 
@@ -44,11 +45,14 @@ StateProxy::StateProxy() : SerializationProxy("State") {
 }
 
 void StateProxy::serialize(const void* object, SerializationNode& node) const {
+    const State& s = *reinterpret_cast<const State*>(object);
+    const bool defer = canDeferCore28StateXml(s, *this, node, OPENMM_XML_CALLER());
     node.setIntProperty("version", 1);
     node.setStringProperty("openmmVersion", Platform::getOpenMMVersion());
-    const State& s = *reinterpret_cast<const State*>(object);
     node.setDoubleProperty("time", s.getTime());
     node.setLongProperty("stepCount", s.getStepCount());
+    if (defer && deferCore28StateXml(s, node))
+        return;
     node.getChildren().reserve(node.getChildren().size()+7);
     Vec3 a,b,c;
     s.getPeriodicBoxVectors(a,b,c);

@@ -428,6 +428,20 @@ static void testRegisteredProxyOverrides() {
         }
         ASSERT_EQUAL(2, proxy.calls);
     }
+    {
+        class CookieProxy : public CountingProxy {
+        public:
+            CookieProxy() : CountingProxy(typeid(State)) {}
+            void serialize(const void* object, SerializationNode& node) const override {
+                CountingProxy::serialize(object, node);
+                node.setStringProperty("__OpenMMCore28State", "ordinary user data");
+            }
+        } proxy;
+        const string xml = serializeObject(state, "State", true);
+        ASSERT(xml.find("__OpenMMCore28State=\"ordinary user data\"") != string::npos);
+        unique_ptr<State> copy = deserializeObject<State>(xml, false);
+        compareStates(state, *copy);
+    }
     for (int i = 0; i < system->getNumForces(); ++i) {
         CountingProxy proxy(typeid(system->getForce(i)));
         for (bool fast : {false, true}) {
@@ -966,8 +980,13 @@ static void testDirectProxyAndMovedArrays() {
     proxy.serialize(&state, node);
     // Direct callers must receive a complete node, without a deferred handoff.
     ASSERT_EQUAL(state.getPositions().size(), node.getChildNode("Positions").getChildren().size());
+    ASSERT_EQUAL(state.getVelocities().size(), node.getChildNode("Velocities").getChildren().size());
+    ASSERT_EQUAL(state.getForces().size(), node.getChildNode("Forces").getChildren().size());
+    ASSERT(!node.hasProperty("__OpenMMCore28State"));
     unique_ptr<State> copy(reinterpret_cast<State*>(proxy.deserialize(node)));
     compareStates(state, *copy);
+    unique_ptr<State> cloned(XmlSerializer::clone(state));
+    compareStates(state, *cloned);
 
     vector<Vec3> positions(4, Vec3(1, 2, 3));
     const Vec3* storage = positions.data();

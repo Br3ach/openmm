@@ -31,6 +31,8 @@
 
 #include "openmm/serialization/SerializationProxy.h"
 #include "openmm/OpenMMException.h"
+#include "openmm/State.h"
+#include "FastStateXml.h"
 #include <typeinfo>
 
 using namespace OpenMM;
@@ -54,7 +56,12 @@ const string& SerializationProxy::getTypeName() const {
 }
 
 void SerializationProxy::registerProxy(const type_info& type, const SerializationProxy* proxy) {
-    getProxiesByType()[type.name()] = proxy;
+    const SerializationProxy*& registered = getProxiesByType()[type.name()];
+    // A custom proxy can tail-call the original with Core28's return address.
+    // Remember replacements, including ones restored before that tail call.
+    if (type == typeid(State) && registered != NULL)
+        disableCore28StateXml();
+    registered = proxy;
     getProxiesByName()[proxy->getTypeName()] = proxy;
 }
 

@@ -32,6 +32,7 @@
 #include "openmm/serialization/XmlSerializer.h"
 #include "openmm/serialization/StateProxy.h"
 #include "openmm/serialization/SystemProxy.h"
+#include "openmm/State.h"
 #include "irrXML.h"
 #include "FastStateXml.h"
 #include <cstdlib>
@@ -39,11 +40,157 @@
 #include <cstring>
 #include <iostream>
 #include <map>
+#include <cstdint>
+#include <cstdio>
+#include <atomic>
+#if defined(_WIN32) && defined(_MSC_VER) && defined(_M_X64)
+#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <bcrypt.h>
+#endif
 
 using namespace OpenMM;
 using namespace std;
 using namespace irr;
 using namespace io;
+
+extern "C" char* g_fmt(char*, double);
+static bool fastXmlEnabledByEnvironment();
+
+namespace {
+const char* core28Cookie = "__OpenMMCore28State";
+struct DeferredState {
+    const State* state;
+    const SerializationNode* node;
+    uint64_t generation;
+};
+thread_local DeferredState deferredState = {};
+thread_local uint64_t stateGeneration = 0;
+atomic<bool> stateProxyUnchanged(true);
+
+#if defined(_WIN32) && defined(_MSC_VER) && defined(_M_X64)
+// This is a fixed-binary adapter, not an alternative SerializationNode format.
+struct Core28Host {
+    const unsigned char* base;
+    unsigned char wrapper[0xafb9-0xad80];
+};
+
+static bool core28Hash(HANDLE file, const unsigned char* data, ULONG size, unsigned char digest[32]) {
+    BCRYPT_ALG_HANDLE algorithm = NULL;
+    BCRYPT_HASH_HANDLE hash = NULL;
+    unsigned char object[1024], buffer[8192];
+    ULONG length = 0, returned = 0;
+    bool ok = false;
+    do {
+        if (BCryptOpenAlgorithmProvider(&algorithm, BCRYPT_SHA256_ALGORITHM, NULL, 0) < 0 ||
+                BCryptGetProperty(algorithm, BCRYPT_OBJECT_LENGTH, reinterpret_cast<PUCHAR>(&length),
+                                  sizeof(length), &returned, 0) < 0 || length > sizeof(object) ||
+                BCryptCreateHash(algorithm, &hash, object, length, NULL, 0, 0) < 0)
+            break;
+        if (file != INVALID_HANDLE_VALUE) {
+            DWORD count;
+            while ((ok = ReadFile(file, buffer, sizeof(buffer), &count, NULL) != 0) && count != 0)
+                if (BCryptHashData(hash, buffer, count, 0) < 0) { ok = false; break; }
+        }
+        else
+            ok = BCryptHashData(hash, const_cast<PUCHAR>(data), size, 0) >= 0;
+        if (ok)
+            ok = BCryptFinishHash(hash, digest, 32, 0) >= 0;
+    } while (false);
+    if (hash != NULL) BCryptDestroyHash(hash);
+    if (algorithm != NULL) BCryptCloseAlgorithmProvider(algorithm, 0);
+    return ok;
+}
+
+static bool core28DigestMatches(const unsigned char digest[32], const char* hex) {
+    const char* digits = "0123456789abcdef";
+    for (int i = 0; i < 32; i++)
+        if (digits[digest[i]>>4] != hex[2*i] || digits[digest[i]&15] != hex[2*i+1])
+            return false;
+    return true;
+}
+
+static Core28Host inspectCore28Host() {
+    Core28Host host = {};
+    wchar_t path[MAX_PATH];
+    DWORD length = GetModuleFileNameW(NULL, path, sizeof(path)/sizeof(path[0]));
+    if (length == 0 || length >= sizeof(path)/sizeof(path[0]))
+        return host;
+    HANDLE file = CreateFileW(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_DELETE,
+                              NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (file == INVALID_HANDLE_VALUE)
+        return host;
+    LARGE_INTEGER size;
+    unsigned char digest[32];
+    bool matched = GetFileSizeEx(file, &size) && size.QuadPart == 2507776 &&
+        core28Hash(file, NULL, 0, digest) && core28DigestMatches(digest,
+        "9e27f4493c83a31e8fb0403248629909a67f8fc9c3a7ac6a41afa6dc93133436");
+    CloseHandle(file);
+    if (!matched)
+        return host;
+    const unsigned char* base = reinterpret_cast<const unsigned char*>(GetModuleHandleW(NULL));
+    const IMAGE_DOS_HEADER* dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(base);
+    if (dos->e_magic != IMAGE_DOS_SIGNATURE || dos->e_lfanew < 0 || dos->e_lfanew > 4096)
+        return host;
+    const IMAGE_NT_HEADERS64* pe = reinterpret_cast<const IMAGE_NT_HEADERS64*>(base+dos->e_lfanew);
+    if (pe->Signature != IMAGE_NT_SIGNATURE || pe->FileHeader.Machine != IMAGE_FILE_MACHINE_AMD64 ||
+            pe->OptionalHeader.SizeOfImage < 0xafb9 ||
+            !core28Hash(INVALID_HANDLE_VALUE, base+0xad80, sizeof(host.wrapper), digest) ||
+            !core28DigestMatches(digest,
+            "b3d29e3afd1715820203cee78d004b3ce8a48712d6e810dbe96ef454b2a226f9"))
+        return host;
+    memcpy(host.wrapper, base+0xad80, sizeof(host.wrapper));
+    host.base = base;
+    return host;
+}
+#endif
+
+static bool core28Caller(const void* caller, size_t rva) {
+#if defined(_WIN32) && defined(_MSC_VER) && defined(_M_X64)
+    const unsigned char* base = reinterpret_cast<const unsigned char*>(GetModuleHandleW(NULL));
+    if (caller != base+rva)
+        return false;
+    static const Core28Host host = inspectCore28Host();
+    return host.base == base &&
+        memcmp(host.wrapper, host.base+0xad80, sizeof(host.wrapper)) == 0;
+#else
+    return false;
+#endif
+}
+} // namespace
+
+bool OpenMM::canDeferCore28StateXml(const State& state, const StateProxy& proxy,
+        const SerializationNode& node, const void* caller) {
+    return stateProxyUnchanged.load(memory_order_relaxed) && fastXmlEnabledByEnvironment() &&
+        deferredState.node == NULL && core28Caller(caller, 0xadee) &&
+        typeid(proxy) == typeid(StateProxy) && state.getDataTypes() == 0x1f &&
+        node.getName() == "State" && node.getChildren().empty() && node.getProperties().empty() &&
+        !state.getPositions().empty() && state.getPositions().size() == state.getVelocities().size() &&
+        state.getPositions().size() == state.getForces().size();
+}
+
+bool OpenMM::deferCore28StateXml(const State& state, SerializationNode& node) {
+    if (deferredState.node != NULL)
+        return false;
+    if (++stateGeneration == 0) ++stateGeneration;
+    const uint64_t generation = stateGeneration;
+    char cookie[32];
+    snprintf(cookie, sizeof(cookie), "%llu", static_cast<unsigned long long>(generation));
+    node.setStringProperty(core28Cookie, cookie);
+    // Publish last: exceptions above leave no borrowed pointer behind.
+    deferredState = {&state, &node, generation};
+    return true;
+}
+
+void OpenMM::cancelCore28StateXml(const SerializationNode* node) noexcept {
+    if (deferredState.node == node)
+        deferredState = {};
+}
+
+void OpenMM::disableCore28StateXml() noexcept {
+    stateProxyUnchanged.store(false, memory_order_relaxed);
+}
 
 /**
  * Apply XML encoding to a string.  This is adapted from TinyXML (written by Lee Thomason).
@@ -108,7 +255,116 @@ static void encodeString(const string& str, string* outString) {
     }
 }
 
+namespace {
+// Reuse the bounded writer from the fast-XML work, with ordinary ostream
+// writes so stream state, exceptions and the caller's compression stay in charge.
+class FastXmlOutput {
+public:
+    explicit FastXmlOutput(ostream& stream) : stream(stream) {
+        if (stream.good())
+            buffer.reserve(limit);
+        else
+            stream.write("", 0); // Apply the ordinary ostream sentry and exception policy.
+    }
+    bool good() const { return stream.good(); }
+    void text(const char* value) { append(value, strlen(value)); }
+    void text(const string& value) { append(value.data(), value.size()); }
+    void real(double value) { char formatted[32]; g_fmt(formatted, value); text(formatted); }
+    void encoded(const string& value) { string encoded; encodeString(value, &encoded); text(encoded); }
+    void flush() {
+        if (!buffer.empty()) {
+            stream.write(buffer.data(), buffer.size());
+            buffer.clear();
+        }
+    }
+private:
+    enum { limit = 4*1024*1024 };
+    ostream& stream;
+    string buffer;
+    void append(const char* value, size_t size) {
+        if (!stream.good()) return;
+        while (size != 0) {
+            if (buffer.size() == limit) { flush(); if (!stream.good()) return; }
+            size_t count = min(size, limit-buffer.size());
+            buffer.append(value, count); value += count; size -= count;
+        }
+    }
+};
+
+static void writeVec3Section(FastXmlOutput& out, const char* name, const char* element, const vector<Vec3>& values) {
+    out.text("\t<"); out.text(name);
+    if (values.empty()) { out.text("/>\n"); return; }
+    out.text(">\n");
+    for (const Vec3& value : values) {
+        if (!out.good()) break;
+        out.text("\t\t<"); out.text(element);
+        out.text(" x=\""); out.real(value[0]); out.text("\" y=\""); out.real(value[1]);
+        out.text("\" z=\""); out.real(value[2]); out.text("\"/>\n");
+    }
+    out.text("\t</"); out.text(name); out.text(">\n");
+}
+
+static void serializeStateDirect(const SerializationNode& node, const State& state, ostream& stream) {
+    FastXmlOutput out(stream);
+    if (!out.good()) return;
+    out.text("<?xml version=\"1.0\" ?>\n<"); out.text(node.getName());
+    for (const auto& prop : node.getProperties()) {
+        if (prop.first == core28Cookie) continue;
+        out.text(" "); out.encoded(prop.first); out.text("=\""); out.encoded(prop.second); out.text("\"");
+    }
+    out.text(">\n\t<PeriodicBoxVectors>\n");
+    Vec3 box[3]; state.getPeriodicBoxVectors(box[0], box[1], box[2]);
+    const char* names[] = {"A", "B", "C"};
+    for (int i = 0; i < 3; i++) {
+        out.text("\t\t<"); out.text(names[i]); out.text(" x=\""); out.real(box[i][0]);
+        out.text("\" y=\""); out.real(box[i][1]); out.text("\" z=\""); out.real(box[i][2]); out.text("\"/>\n");
+    }
+    out.text("\t</PeriodicBoxVectors>\n");
+    const int types = state.getDataTypes();
+    if (types & State::Parameters) {
+        out.text("\t<Parameters");
+        for (const auto& param : state.getParameters()) {
+            out.text(" "); out.encoded(param.first); out.text("=\""); out.real(param.second); out.text("\"");
+        }
+        out.text("/>\n");
+    }
+    if (types & State::Energy) {
+        out.text("\t<Energies KineticEnergy=\""); out.real(state.getKineticEnergy());
+        out.text("\" PotentialEnergy=\""); out.real(state.getPotentialEnergy()); out.text("\"/>\n");
+    }
+    if (types & State::Positions) writeVec3Section(out, "Positions", "Position", state.getPositions());
+    if (types & State::Velocities) writeVec3Section(out, "Velocities", "Velocity", state.getVelocities());
+    if (types & State::Forces) writeVec3Section(out, "Forces", "Force", state.getForces());
+    out.text("</"); out.text(node.getName()); out.text(">\n"); out.flush();
+}
+} // namespace
+
+static const State* takeCore28StateXml(const SerializationNode& node) {
+    if (deferredState.node != &node)
+        return NULL; // Unrelated/nested nodes, including user cookie properties, are ordinary trees.
+    DeferredState pending = deferredState;
+    deferredState = {}; // Clear before any validation, allocation or output can throw.
+    char cookie[32];
+    snprintf(cookie, sizeof(cookie), "%llu", static_cast<unsigned long long>(pending.generation));
+    if (node.getName() != "State" ||
+            node.getStringProperty("type", "") != "State" || node.getStringProperty(core28Cookie, "") != cookie)
+        throw OpenMMException("XmlSerializer: invalid deferred Core28 State");
+    return pending.state;
+}
+
+bool OpenMM::writeCore28StateXml(const SerializationNode& node, ostream& stream, const void* caller) {
+    const State* state = takeCore28StateXml(node);
+    if (state == NULL)
+        return false;
+    if (!core28Caller(caller, 0xaf1f))
+        throw OpenMMException("XmlSerializer: invalid deferred Core28 caller");
+    serializeStateDirect(node, *state, stream);
+    return true;
+}
+
 void XmlSerializer::serialize(const SerializationNode& node, std::ostream& stream) {
+    if (writeCore28StateXml(node, stream, OPENMM_XML_CALLER()))
+        return;
     stream << "<?xml version=\"1.0\" ?>\n";
     encodeNode(node, stream, 0);
 }
