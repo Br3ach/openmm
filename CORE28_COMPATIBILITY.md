@@ -468,3 +468,80 @@ is this branch's preceding DLL (`0e0f7ea6...`), not stock OpenMM. No cache evict
 or live-installation modifications were used. Natural-WU peak savings, cold
 cache behavior and broad project compatibility remain unmeasured; the generated
 results must not be extrapolated into an 8-million-particle memory guarantee.
+
+
+## Compact exception validation during System loading (29 October 2026)
+
+The fast NonbondedForce reader now appends exception records in input order and
+checks separate canonical 64-bit pair keys with sort/adjacent_find at the end
+of the Exceptions section. Local keys are released at that return. This avoids
+building the ordered map only to clear it after parsing. Ordinary public
+mutation methods and existing lazy map reconstruction are unchanged. A narrow
+unexported append friend replaces the prior root-deserializer friendship;
+there is no new object state, public layout or dependency. Production change:
+22 lines added, 10 removed (net +12), plus focused tests.
+
+Duplicate pairs, including reversed duplicates and duplicate self pairs, reject
+the fast reader and use the existing checked rewind/stock fallback, preserving
+final legacy diagnostics. Records are
+never reordered, so parameter-offset indices remain intact. Allocation failure
+propagates rather than retrying through the stock reader; partial objects and
+local keys retain their existing scoped ownership.
+
+The full Windows Release build succeeded. New and existing fast XML regressions
+passed, covering multiple forces, both empty-section forms, original record and
+offset order, signed/extreme indices, duplicate/error parity, malformed tails,
+late unsupported-force fallback and failed fallback rewind. Original-header
+ABI/API and Context update tests passed; exports are unchanged and all official
+Core28/CPU/CUDA/OpenCL/PME imports remain satisfied. An isolated process-local
+allocation probe injected 24 key/record growth failures; each propagated
+bad_alloc and a subsequent valid parse reproduced all 128 records. Existing
+index-rebuild allocation-failure checks also passed.
+
+The full configured suite initially passed **114/116**. Existing stochastic
+temperature assertions failed in ReferenceCustomIntegrator and
+ReferenceNoseHooverIntegrator. Each passed three isolated candidate repeats.
+The unchanged baseline also failed the NoseHoover temperature assertion in a
+control repeat. Those sites exercise velocity initialization, without XML
+input; their code is unchanged. This supports stochastic variation, but does
+not establish the precise cause. Initial failures remain recorded; no seeds or
+tolerances were changed and this is not an all-green first-pass claim.
+
+Official Core28 completed all four generated input formats with fast XML enabled
+and disabled, fresh completion, clean pause/resume and checkpoint migration in
+both official/patched directions. Returned State/integrator/XTC/TRR members
+match controls; encrypted fixtures omit State/integrator XML in both controls.
+These are generated-fixture CUDA checks, not full native GPU backend suites.
+
+Three sequential warm-cache pairs on the retained natural System (7,950,180
+particles, 5,955,581 constraints, 11,940,050 exceptions, six forces) compared the
+exact preceding DLL from 6d32519f against the uninstrumented production build:
+
+| Pair | Baseline parsing (s) | Candidate parsing (s) |
+| --- | ---: | ---: |
+| 1 | 10.647 | 8.230 |
+| 2 | 12.289 | 9.946 |
+| 3 | 12.446 | 9.430 |
+
+| Median measurement | Baseline | Candidate |
+| --- | ---: | ---: |
+| System parsing | 12.289 s | 9.430 s |
+| CPU during parsing | 12.141 s | 9.234 s |
+| OS peak private commit | 1631.55 MiB | 1334.65 MiB |
+| Peak working set | 1503.77 MiB | 1136.45 MiB |
+| Retained private after parsing | 1006.81 MiB | 1000.16 MiB |
+
+Peak private saving is **296.89 MiB**; median parsing-time reduction is **23.26%**.
+All six complete ordered exception and virtual-site digests match retained
+values `8c191d7af47f2c04` and `cce611c4f214eca5`. Keys and record-vector growth
+still contribute transient overlap; the existing map release already provided
+most of the retained-memory saving. No full-document counting pass, heap trim
+or cache eviction was used. OS cumulative peak counters are captured after
+parsing, before read-only digest work. These measurements exclude Core28 packet
+decompression, Context construction, scientific checks and simulation, and do
+not establish this percentage for complete startup or every WU.
+
+Validated production DLL SHA-256:
+`93b172e77559b901734beb76b34e35b835761d5fcca5d57e3fe5208048df5d78`.
+Independent review found no outstanding actionable source or test issue and
+recommended retention after reviewing the measurements and disclosed limits.

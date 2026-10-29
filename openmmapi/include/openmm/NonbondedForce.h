@@ -623,7 +623,7 @@ public:
 protected:
     ForceImpl* createImpl() const;
 private:
-    friend System* deserializeSystemXmlFast(std::istream&);
+    friend void appendExceptionXmlFast(NonbondedForce&, int, int, double, double, double);
     void rebuildExceptionMap();
     class ParticleInfo;
     class ExceptionInfo;

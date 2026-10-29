@@ -27,6 +27,7 @@
 #include <iostream>
 #include <fstream>
 #include <iterator>
+#include <limits>
 #include <map>
 #include <memory>
 #include <sstream>
@@ -365,6 +366,87 @@ static void testExceptionContextUpdate() {
     dynamic_cast<NonbondedForce&>(fast->getForce(0)).updateParametersInContext(fastContext);
     compareStates(stockContext.getState(types), fastContext.getState(types));
     ASSERT(fastContext.getState(types).getPotentialEnergy() != before);
+}
+
+static void testCompactExceptionParsing() {
+    unique_ptr<System> original = createSupportedSystem();
+    NonbondedForce& first = dynamic_cast<NonbondedForce&>(original->getForce(0));
+    first.addException(2, 2, .1, .2, .3);
+    first.addException(3, 1, .4, .5, .6);
+    first.addException(numeric_limits<int>::min(), numeric_limits<int>::max(), .7, .8, .9);
+    first.addException(-1, 0, 1, 2, 3);
+    first.addExceptionParameterOffset("lambda", 2, .2, .3, .4);
+    for (bool empty : {true, false}) {
+        NonbondedForce* force = new NonbondedForce();
+        for (int i = 0; i < original->getNumParticles(); ++i)
+            force->addParticle(0, .1, 0);
+        if (!empty)
+            force->addException(1, 0, .1, .2, .3); // Same pair in another force is legal.
+        original->addForce(force);
+    }
+    string xml = serializeObject(*original, "System", false);
+    for (bool explicitEmpty : {false, true}) {
+        if (explicitEmpty) {
+            const size_t pos = xml.find("<Exceptions/>");
+            ASSERT(pos != string::npos);
+            xml.replace(pos, string("<Exceptions/>").size(), "<Exceptions></Exceptions>");
+        }
+        unique_ptr<System> stock = deserializeObject<System>(xml, false);
+        setFastXml(true);
+        FailOnSeekStringBuf buffer(xml, 0);
+        istream stream(&buffer);
+        unique_ptr<System> fast(XmlSerializer::deserialize<System>(stream));
+        ASSERT(!buffer.usedLegacyReader());
+        ASSERT_EQUAL(serializeObject(*stock, "System", false), serializeObject(*fast, "System", false));
+    }
+    CustomBondForce* unsupported = new CustomBondForce("0");
+    unsupported->addBond(0, 1, vector<double>());
+    original->addForce(unsupported); // Reject late, after compact exception parsing succeeded.
+    xml = serializeObject(*original, "System", false);
+    setFastXml(true);
+    FailOnSeekStringBuf buffer(xml, 0);
+    istream stream(&buffer);
+    unique_ptr<System> fallback(XmlSerializer::deserialize<System>(stream));
+    ASSERT(buffer.usedLegacyReader());
+    ASSERT_EQUAL(xml, serializeObject(*fallback, "System", false));
+}
+
+static void testCompactExceptionFallback() {
+    unique_ptr<System> original = createSupportedSystem();
+    const string xml = serializeObject(*original, "System", false);
+    auto outcome = [&](const string& input, bool fast) {
+        try {
+            unique_ptr<System> system = deserializeObject<System>(input, fast);
+            return string("accepted: ")+serializeObject(*system, "System", false);
+        }
+        catch (const OpenMMException& e) {
+            return string("rejected: ")+e.what();
+        }
+    };
+    for (auto pair : {make_pair(0, 1), make_pair(1, 0), make_pair(0, 0),
+                      make_pair(numeric_limits<int>::max(), numeric_limits<int>::min())}) {
+        string input = xml;
+        const size_t start = input.find("<Exceptions>");
+        const size_t end = input.find("</Exceptions>", start);
+        ASSERT(start != string::npos && end != string::npos);
+        const string record = "<Exception p1=\""+to_string(pair.first)+"\" p2=\""+
+                to_string(pair.second)+"\" q=\"0\" sig=\".1\" eps=\"0\"/>";
+        if (pair.first == pair.second || pair.first == numeric_limits<int>::max())
+            input.replace(start+string("<Exceptions>").size(), end-start-string("<Exceptions>").size(), record+record);
+        else
+            input.insert(end, record);
+        const string stockError = outcome(input, false);
+        ASSERT(stockError.find("rejected: ") == 0);
+        ASSERT_EQUAL(stockError, outcome(input, true));
+        string malformed = input;
+        malformed.replace(malformed.find("</System>"), string("</System>").size(), "</Wrong>");
+        ASSERT_EQUAL(outcome(malformed, false), outcome(malformed, true));
+        setFastXml(true);
+        FailOnSeekStringBuf buffer(input, 4); // Probe twice, pre-fast rewind, failed fallback rewind.
+        istream stream(&buffer);
+        assertThrowsOpenMM([&]() { unique_ptr<System> copy(XmlSerializer::deserialize<System>(stream)); });
+        ASSERT(!buffer.usedLegacyReader());
+    }
 }
 
 static void testUnsupportedForceFallback() {
@@ -1056,6 +1138,8 @@ int main() {
         testSupportedSystemFastReaderParity();
         testExceptionIndexReconstruction();
         testExceptionContextUpdate();
+        testCompactExceptionParsing();
+        testCompactExceptionFallback();
         testRegisteredProxyOverrides();
         testFileStreamPosition();
         testReadAheadRecovery();

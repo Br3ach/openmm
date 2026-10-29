@@ -41,6 +41,15 @@ using namespace std;
 
 extern "C" double strtod2(const char* s00, char** se);
 
+namespace OpenMM {
+
+// Only the fast reader's fresh forces use this path; the section validates pairs.
+void appendExceptionXmlFast(NonbondedForce& force, int p1, int p2, double q, double sig, double eps) {
+    force.exceptions.push_back(NonbondedForce::ExceptionInfo(p1, p2, q, sig, eps));
+}
+
+} // namespace OpenMM
+
 namespace {
 
 class FastXmlInput {
@@ -935,12 +944,18 @@ static void parseNonbondedSectionStreaming(FastXmlTagReader& reader, const FastX
         throw OpenMMException("XmlSerializer: malformed NonbondedForce section");
     if (opening.empty)
         return;
+    vector<uint64_t> exceptionKeys;
 
     while (true) {
         FastXmlTag tag = parseFastXmlTag(reader.next());
         if (tag.closing) {
             if (!fastXmlNameEquals(tag, sectionName))
                 throw OpenMMException("XmlSerializer: unexpected closing tag in NonbondedForce section");
+            if (kind == FAST_NB_EXCEPTIONS) {
+                sort(exceptionKeys.begin(), exceptionKeys.end());
+                if (adjacent_find(exceptionKeys.begin(), exceptionKeys.end()) != exceptionKeys.end())
+                    throw OpenMMException("XmlSerializer: duplicate NonbondedForce exception pair");
+            }
             return;
         }
         if (!fastXmlNameEquals(tag, elementName))
@@ -1038,7 +1053,11 @@ static void parseNonbondedSectionStreaming(FastXmlTagReader& reader, const FastX
                 }
                 if (!haveP1 || !haveP2 || !haveQ || !haveSig || !haveEps)
                     throw OpenMMException("XmlSerializer: incomplete NonbondedForce Exception element");
-                force.addException(p1, p2, q, sig, eps);
+                int lo = p1, hi = p2;
+                if (hi < lo)
+                    swap(lo, hi);
+                exceptionKeys.push_back((uint64_t(uint32_t(lo)) << 32) | uint32_t(hi));
+                appendExceptionXmlFast(force, p1, p2, q, sig, eps);
                 break;
             }
         }
@@ -1418,14 +1437,7 @@ State* deserializeStateXmlFast(istream& stream) {
 }
 
 System* deserializeSystemXmlFast(istream& stream) {
-    unique_ptr<System> system(parseSystemXmlStreaming(stream));
-    // Only fresh forces from a completely successful parse may omit the index.
-    for (int i = 0; i < system->getNumForces(); ++i) {
-        NonbondedForce* force = dynamic_cast<NonbondedForce*>(&system->getForce(i));
-        if (force != NULL)
-            force->exceptionMap.clear();
-    }
-    return system.release();
+    return parseSystemXmlStreaming(stream);
 }
 
 } // namespace OpenMM
